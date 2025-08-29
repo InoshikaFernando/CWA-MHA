@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Addition Practice</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; padding: 20px; background: #f0f8ff; }
+    h1 { color: #2c3e50; }
+    select, input, button { margin: 10px; padding: 8px; font-size: 16px; }
+    #question { font-size: 22px; margin: 20px 0; }
+    #feedback { font-size: 20px; font-weight: bold; }
+    .correct { color: green; }
+    .wrong { color: red; }
+    .score { font-size: 18px; margin-top: 15px; }
+    .final { font-size: 22px; color: #8e44ad; margin-top: 20px; font-weight: bold; }
+    .back-btn { margin-top: 20px; background: #e67e22; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 10px; }
+    .back-btn:hover { background: #d35400; }
+  </style>
+</head>
+<body>
+  <h1>➕ Addition Practice</h1>
+  
+  <label for="level">Choose Year Level:</label>
+  <select id="level" onchange="setLevel()">
+    <option value="1">Year 1 (1–10)</option>
+    <option value="2">Year 2 (1–20)</option>
+    <option value="3">Year 3 (1–50)</option>
+    <option value="4">Year 4 (1–100)</option>
+    <option value="5">Year 5 (1–500)</option>
+    <option value="6">Year 6 (1–1000)</option>
+    <option value="7">Year 7 (1–5000)</option>
+    <option value="8">Year 8 (1–10000)</option>
+  </select>
+  
+  <div id="question">Click "Next Question" to start</div>
+  
+  <input type="number" id="answer" placeholder="Your answer" disabled>
+  <button onclick="checkAnswer()" disabled id="checkBtn">Check</button>
+  <button onclick="nextQuestion()">Next Question</button>
+  
+  <div id="feedback"></div>
+  <div class="score" id="score"></div>
+  <div class="final" id="finalScore"></div>
+
+  <button class="back-btn" onclick="location.href='index.html'">⬅ Back to Topics</button>
+  
+  <script>
+    let num1, num2, correctAnswer;
+    let rangeMin = 1, rangeMax = 10;
+    let questionCount = 0, correctCount = 0, totalQuestions = 5;
+
+    function setLevel() {
+      let level = parseInt(document.getElementById('level').value);
+      switch (level) {
+        case 1: rangeMin = 1; rangeMax = 10; break;
+        case 2: rangeMin = 1; rangeMax = 20; break;
+        case 3: rangeMin = 1; rangeMax = 50; break;
+        case 4: rangeMin = 1; rangeMax = 100; break;
+        case 5: rangeMin = 1; rangeMax = 500; break;
+        case 6: rangeMin = 1; rangeMax = 1000; break;
+        case 7: rangeMin = 1; rangeMax = 5000; break;
+        case 8: rangeMin = 1; rangeMax = 10000; break;
+      }
+      resetQuiz();
+      nextQuestion();
+    }
+
+    function resetQuiz() {
+      questionCount = 0;
+      correctCount = 0;
+      document.getElementById('score').innerText = "";
+      document.getElementById('finalScore').innerText = "";
+    }
+
+    function nextQuestion() {
+      if (questionCount >= totalQuestions) {
+        document.getElementById('finalScore').innerText = 
+          `🎉 Quiz Finished! You got ${correctCount} out of ${totalQuestions} correct.`;
+        document.getElementById('answer').disabled = true;
+        document.getElementById('checkBtn').disabled = true;
+        return;
+      }
+
+      num1 = Math.floor(Math.random() * (rangeMax - rangeMin + 1)) + rangeMin;
+      num2 = Math.floor(Math.random() * (rangeMax - rangeMin + 1)) + rangeMin;
+      correctAnswer = num1 + num2;
+
+      document.getElementById('question').innerText = `Q${questionCount + 1}: What is ${num1} + ${num2}?`;
+      document.getElementById('answer').value = "";
+      document.getElementById('feedback').innerText = "";
+      document.getElementById('answer').disabled = false;
+      document.getElementById('checkBtn').disabled = false;
+    }
+
+    function checkAnswer() {
+      let userAnswer = parseInt(document.getElementById('answer').value);
+      let feedback = document.getElementById('feedback');
+
+      if (userAnswer === correctAnswer) {
+        feedback.innerText = "✅ Correct!";
+        feedback.className = "correct";
+        correctCount++;
+      } else {
+        feedback.innerText = `❌ Wrong. Correct answer is ${correctAnswer}`;
+        feedback.className = "wrong";
+      }
+
+      questionCount++;
+      document.getElementById('score').innerText = `Score: ${correctCount}/${questionCount}`;
+      document.getElementById('answer').disabled = true;
+      document.getElementById('checkBtn').disabled = true;
+    }
+  </script>
+</body>
+</html>
