@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Free Math Website</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+    input { margin: 5px; padding: 8px; }
+    button { padding: 8px 12px; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h1>Math Helper</h1>
+  <p>Enter two numbers to add:</p>
+  <input id="num1" type="number" placeholder="First number">
+  <input id="num2" type="number" placeholder="Second number">
+  <button onclick="add()">Add</button>
+  <h2 id="result"></h2>
+
+  <script>
+    function add() {
+      let a = parseFloat(document.getElementById('num1').value);
+      let b = parseFloat(document.getElementById('num2').value);
+      document.getElementById('result').innerText = "Result: " + (a + b);
+    }
+  </script>
+</body>
+</html>
