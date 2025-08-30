@@ -3,22 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Subtraction Practice</title>
+  <title>Division Practice</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <h1>➗ Division Practice</h1>
 
-  <h1>✖️ Multiplication Practice</h1>
   <label for="level">Choose Year Level:</label>
   <select id="level" onchange="setLevel()">
-    <option value="1">Year 1 (1–10)</option>
-    <option value="2">Year 2 (1–20)</option>
-    <option value="3">Year 3 (1–50)</option>
-    <option value="4">Year 4 (1–100)</option>
-    <option value="5">Year 5 (1–500)</option>
-    <option value="6">Year 6 (1–1000)</option>
-    <option value="7">Year 7 (1–5000)</option>
-    <option value="8">Year 8 (1–10000)</option>
+    <option value="1">Year 1</option>
+    <option value="2">Year 2</option>
+    <option value="3">Year 3</option>
+    <option value="4">Year 4</option>
+    <option value="5">Year 5</option>
+    <option value="6">Year 6</option>
+    <option value="7">Year 7</option>
+    <option value="8">Year 8</option>
   </select>
 
   <div id="question">Click "Next Question" to start</div>
@@ -31,13 +31,25 @@
   <div class="score" id="score"></div>
   <div class="final" id="finalScore"></div>
 
-  <button class="back-btn" onclick="location.href='index.html'">⬅ Back to Topics</button>
-  
+  <br>
+  <a href="index.html" class="back-btn">⬅ Back to Topics</a>
+
   <script>
     let num1, num2, correctAnswer;
     let rangeMin = 1, rangeMax = 10;
-    let allowedMultipliers = [1, 10];
+    let allowedDividers = [1, 10];
     let questionCount = 0, correctCount = 0, totalQuestions = 5;
+
+    const levelRanges = {
+      1: [1, 10],
+      2: [1, 20],
+      3: [10, 50],
+      4: [20, 100],
+      5: [50, 200],
+      6: [100, 500],
+      7: [200, 1000],
+      8: [500, 5000]
+    };
 
     function setLevel() {
       let level = parseInt(document.getElementById('level').value);
@@ -88,19 +100,21 @@
 
     function nextQuestion() {
       if (questionCount >= totalQuestions) {
-        document.getElementById('finalScore').innerText = 
+        document.getElementById('finalScore').innerText =
           `🎉 Quiz Finished! You got ${correctCount} out of ${totalQuestions} correct.`;
         document.getElementById('answer').disabled = true;
         document.getElementById('checkBtn').disabled = true;
         return;
       }
 
-      num1 = Math.floor(Math.random() * (rangeMax - rangeMin + 1)) + rangeMin;
-      num2 = allowedMultipliers[Math.floor(Math.random() * allowedMultipliers.length)];
+      // Generate clean division: num1 = num2 * multiplier
+      num2 = allowedDividers[Math.floor(Math.random() * allowedDividers.length)];
 
-      correctAnswer = num1 * num2;
+      let multiplier = Math.floor(Math.random() * (rangeMax - rangeMin + 1)) + rangeMin;
+      num1 = num2 * multiplier;
+      correctAnswer = num1 / num2;
 
-      document.getElementById('question').innerText = `Q${questionCount + 1}: What is ${num1} × ${num2}?`;
+      document.getElementById('question').innerText = `Q${questionCount + 1}: What is ${num1} ÷ ${num2}?`;
       document.getElementById('answer').value = "";
       document.getElementById('feedback').innerText = "";
       document.getElementById('answer').disabled = false;
