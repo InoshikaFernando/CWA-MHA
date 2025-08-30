@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Time Practice – Levels</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  :root { --brand: #1a73e8; }
+  body { font-family: Arial, sans-serif; background:#f7f7fb; color:#222; padding:20px; }
+  h1 { color: var(--brand); margin-bottom: 8px; }
+  .controls, .panel { background:#fff; padding:16px; border-radius:12px; box-shadow: 0 4px 14px rgba(0,0,0,0.06); margin-top:14px; }
+  .row { display:flex; flex-wrap: wrap; gap:12px; align-items:center; }
+  label { font-weight: 600; }
+  select, input, button { font-size:16px; padding:8px 10px; border:1px solid #ddd; border-radius:10px; }
+  button { background: var(--brand); color:#fff; border:none; cursor:pointer; }
+  button.secondary { background:#eee; color:#222; }
+  button:disabled { opacity:.6; cursor:not-allowed; }
+  .status { margin-top:10px; font-weight:700; }
+  .correct { color:#0a8a34; }
+  .wrong { color:#c62828; }
+  canvas { background:#fff; border-radius:16px; box-shadow: 0 4px 14px rgba(0,0,0,0.06); }
+  .hint { font-size: 13px; color:#555; }
+</style>
+</head>
+<body>
+
+<h1>Time Practice</h1>
+<p class="hint">Big arm = minute hand. Choose a level, then type the time you see.</p>
+
+<div class="controls">
+  <div class="row">
+    <label for="level">Level:</label>
+    <select id="level">
+      <option value="1" selected>Level 1 – Big arm on 12</option>
+      <option value="2">Level 2 – Big arm on 6 or 12</option>
+      <option value="3">Level 3 – Big arm on 3, 6, 9, 12</option>
+      <option value="4">Level 4 – Big arm on any number (1–12, i.e., every 5 mins)</option>
+      <option value="5">Level 5 – Big arm anywhere (0–59)</option>
+    </select>
+
+  </div>
+</div>
+
+<div class="panel">
+  <div class="row" style="align-items:flex-start;">
+    <canvas id="clock" width="320" height="320"></canvas>
+
+    <div>
+    <div>
+        <button id="newQ">New Question</button>
+    </div>
+      <div class="row">
+        <label for="hour">Your Answer:</label>
+        <input id="hour" type="number" min="1" max="12" placeholder="Hour (1–12)" />
+        :
+        <input id="minute" type="number" min="0" max="59" placeholder="Minute (0–59)" />
+        <button id="check">Check</button>
+        <button id="show" class="secondary">Show Answer</button>
+      </div>
+      <div class="status" id="status"></div>
+      <p class="hint">Tip: Use 12-hour time (no AM/PM needed).</p>
+    </div>
+  </div>
+</div>
+<div id="feedback"></div>
+  <div class="score" id="score"></div>
+  <div class="final" id="finalScore"></div>
+
+  <br>
+  <a href="index.html" class="back-btn">⬅ Back to Topics</a>
+
+<script>
+    let num1, num2, correctAnswer;
+    let rangeMin = 1, rangeMax = 10;
+    let allowedDividers = [1, 10];
+    let questionCount = 0, correctCount = 0, totalQuestions = 5;
+
+    function resetQuiz() {
+      questionCount = 0;
+      correctCount = 0;
+      document.getElementById('score').innerText = "";
+      document.getElementById('finalScore').innerText = "";
+    }
+
+/* ---------- Utilities ---------- */
+function randInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+function choice(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+/* ---------- Level logic for minute hand ---------- */
+function minutesForLevel(level){
+  if (level === 1) return [0];                       // only 12
+  if (level === 2) return [0, 30];                   // 12, 6
+  if (level === 3) return [0, 15, 30, 45];           // 12, 3, 6, 9
+  if (level === 4) return Array.from({length:12}, (_,i)=> i*5); // every 5 mins
+  // level 5
+  return Array.from({length:60}, (_,i)=> i);         // any minute
+}
+
+/* ---------- Clock drawing ---------- */
+const canvas = document.getElementById('clock');
+const ctx = canvas.getContext('2d');
+const cx = canvas.width/2;
+const cy = canvas.height/2;
+const R = 140;
+
+function drawClockFace(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  // Outer circle
+  ctx.beginPath();
+  ctx.arc(cx, cy, R, 0, Math.PI*2);
+  ctx.fillStyle = "#fafafa";
+  ctx.fill();
+  ctx.lineWidth = 4;
+  ctx.strokeStyle = "#222";
+  ctx.stroke();
+
+  // minute ticks
+  for (let m=0;m<60;m++){
+    const ang = (Math.PI/30)*m - Math.PI/2; // 0 min at top
+    const inner = m%5===0 ? R-14 : R-8;
+    ctx.beginPath();
+    ctx.moveTo(cx + inner*Math.cos(ang), cy + inner*Math.sin(ang));
+    ctx.lineTo(cx + (R-2)*Math.cos(ang), cy + (R-2)*Math.sin(ang));
+    ctx.lineWidth = m%5===0 ? 3 : 1.5;
+    ctx.strokeStyle = "#444";
+    ctx.stroke();
+  }
+
+  // numbers 1..12
+  ctx.fillStyle = "#111";
+  ctx.font = "16px Arial";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  for (let n=1;n<=12;n++){
+    const ang = (Math.PI/6)*n - Math.PI/2;
+    const nr = R-32;
+    ctx.fillText(String(n), cx + nr*Math.cos(ang), cy + nr*Math.sin(ang));
+  }
+}
+
+function drawHand(angleRad, length, width, color="#111"){
+  ctx.beginPath();
+  ctx.lineWidth = width;
+  ctx.lineCap = "round";
+  ctx.strokeStyle = color;
+  ctx.moveTo(cx, cy);
+  ctx.lineTo(cx + length*Math.cos(angleRad), cy + length*Math.sin(angleRad));
+  ctx.stroke();
+}
+
+function drawCenter(){
+  ctx.beginPath();
+  ctx.arc(cx, cy, 5, 0, Math.PI*2);
+  ctx.fillStyle = "#111";
+  ctx.fill();
+}
+
+/* ---------- Generate question & correct answer ---------- */
+let current = { hour: 3, minute: 0 };
+
+function generateQuestion(){
+    if (questionCount >= totalQuestions) {
+        document.getElementById('finalScore').innerText =
+          `🎉 Quiz Finished! You got ${correctCount} out of ${totalQuestions} correct.`;
+        document.getElementById('answer').disabled = true;
+        document.getElementById('checkBtn').disabled = true;
+        return;
+      }
+  const level = parseInt(document.getElementById('level').value, 10);
+  const minuteOptions = minutesForLevel(level);
+  const minute = choice(minuteOptions);
+  const hour = randInt(1, 12); // 1..12
+
+  current = { hour, minute };
+  drawCurrentClock();
+  document.getElementById('status').textContent = "";
+  document.getElementById('hour').value = "";
+  document.getElementById('minute').value = "";
+}
+
+function drawCurrentClock(){
+  drawClockFace();
+
+  // Angles
+  // Minute angle: 6° per minute
+  const minAngleDeg = current.minute * 6;
+  // Hour angle: 30° per hour + 0.5° per minute
+  const hourAngleDeg = ((current.hour % 12) * 30) + (current.minute * 0.5);
+
+  // Convert to canvas angle (0 at 3 o'clock → we want 12 o'clock at top)
+  const toRad = deg => (deg - 90) * Math.PI / 180;
+
+  // Draw hour hand (shorter/thicker)
+  drawHand(toRad(hourAngleDeg), R*0.55, 6, "#222");
+  // Draw minute hand (longer/thinner) — the BIG arm
+  drawHand(toRad(minAngleDeg), R*0.82, 4, "#1a73e8");
+  drawCenter();
+}
+
+/* ---------- Check answer ---------- */
+function checkAnswer(){
+  const hourIn = parseInt(document.getElementById('hour').value, 10);
+  const minIn  = parseInt(document.getElementById('minute').value, 10);
+  const status = document.getElementById('status');
+
+  if (Number.isNaN(hourIn) || Number.isNaN(minIn)) {
+    status.innerHTML = "Please enter both hour and minute.";
+    status.className = "status wrong";
+    return;
+  }
+  // Normalize hour to 1..12
+  const normHourIn = ((hourIn - 1) % 12 + 12) % 12 + 1;
+
+  const correctHour = current.hour % 12 === 0 ? 12 : current.hour % 12;
+  const correctMin  = current.minute;
+
+  const hourOK = normHourIn === correctHour;
+  const minOK  = minIn === correctMin;
+
+  if (hourOK && minOK){
+    status.textContent = "✅ Correct!";
+    status.className = "status correct";
+    correctCount++;
+  } else {
+    status.innerHTML = `❌ Not quite. Correct answer: <b>${correctHour}:${String(correctMin).padStart(2,'0')}</b>`;
+    status.className = "status wrong";
+  }
+  
+      questionCount++;
+      document.getElementById('score').innerText = `Score: ${correctCount}/${questionCount}`;
+      document.getElementById('answer').disabled = true;
+      document.getElementById('checkBtn').disabled = true;
+}
+
+function showAnswer(){
+  const status = document.getElementById('status');
+  const correctHour = current.hour % 12 === 0 ? 12 : current.hour % 12;
+  const correctMin  = current.minute;
+  status.innerHTML = `💡 Answer: <b>${correctHour}:${String(correctMin).padStart(2,'0')}</b>`;
+  status.className = "status";
+}
+
+/* ---------- Wire up ---------- */
+document.getElementById('newQ').addEventListener('click', generateQuestion);
+document.getElementById('check').addEventListener('click', checkAnswer);
+document.getElementById('show').addEventListener('click', showAnswer);
+document.getElementById('level').addEventListener('change', generateQuestion);
+
+// First question
+generateQuestion();
+</script>
+
+</body>
+</html>
