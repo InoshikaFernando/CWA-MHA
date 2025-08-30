@@ -58,7 +58,15 @@
 <script>
     let questionCount = 0, correctCount = 0, totalQuestions = 5;
 
+    function resetQuiz() {
+      questionCount = 0;
+      correctCount = 0;
+      document.getElementById('score').innerText = "";
+      document.getElementById('finalScore').innerText = "";
+    }
+
 function showFractionSection() {
+    resetQuiz();
     let year = document.getElementById('fraction-year').value;
     document.getElementById('level3').style.display = year === '3' ? 'block' : 'none';
     document.getElementById('level5').style.display = year === '5' ? 'block' : 'none';
@@ -106,11 +114,22 @@ function checkY3() {
         feedback.innerText = `❌ Wrong. Correct answer is ${correct}/${y3.denom}`;
         feedback.className = "wrong";
     }
+    questionCount++;
+    document.getElementById('score').innerText = `Score: ${correctCount}/${questionCount}`;
+    document.getElementById('answer').disabled = true;
+    document.getElementById('checkBtn').disabled = true;
 }
 
 // Fractions Addition & Subtraction (Different Denominator) Questions (Different Denominator)
 let y5 = {};
 function generateY5() {
+    if (questionCount >= totalQuestions) {
+        document.getElementById('finalScore').innerText =
+          `🎉 Quiz Finished! You got ${correctCount} out of ${totalQuestions} correct.`;
+        document.getElementById('answer').disabled = true;
+        document.getElementById('checkBtn').disabled = true;
+        return;
+    }
     let denom1 = randInt(2, 10);
     let denom2 = randInt(2, 10);
     let a = randInt(1, denom1-1);
@@ -137,11 +156,22 @@ function checkY5() {
         feedback.innerText = `❌ Wrong. Correct answer is ${correct}/${lcm}`;
         feedback.className = "wrong";
     }
+    questionCount++;
+    document.getElementById('score').innerText = `Score: ${correctCount}/${questionCount}`;
+    document.getElementById('answer').disabled = true;
+    document.getElementById('checkBtn').disabled = true;
 }
 
 // Fractions Multiplication & Division Questions (Multiplication & Division)
 let y6 = {};
 function generateY6() {
+    if (questionCount >= totalQuestions) {
+        document.getElementById('finalScore').innerText =
+          `🎉 Quiz Finished! You got ${correctCount} out of ${totalQuestions} correct.`;
+        document.getElementById('answer').disabled = true;
+        document.getElementById('checkBtn').disabled = true;
+        return;
+    }
     let denom1 = randInt(2, 10);
     let denom2 = randInt(2, 10);
     let a = randInt(1, denom1-1);
@@ -171,6 +201,10 @@ function checkY6() {
         feedback.innerText = `❌ Wrong. Correct answer is ${correctNum}/${correctDen}`;
         feedback.className = "wrong";
     }
+    questionCount++;
+    document.getElementById('score').innerText = `Score: ${correctCount}/${questionCount}`;
+    document.getElementById('answer').disabled = true;
+    document.getElementById('checkBtn').disabled = true;
 }
 
 // Greatest Common Divisor
