@@ -14,6 +14,7 @@
     <option value="3">Fractions Addition & Subtraction (SameDenominator)</option>
     <option value="5">Fractions Addition & Subtraction (Different Denominator)</option>
     <option value="6">Fractions Multiplication & Division</option>
+    <option value="7">Percentage</option>
 </select>
 
 <!-- Level 3 Section -->
@@ -48,7 +49,18 @@
     <div class="result" id="y6-result"></div>
     <button onclick="generateY6()">Next Question</button>
 </div>
-    <div id="feedback"></div>
+
+<!-- Level 7 section -->
+<div class="section" id="level7">
+    <h2>Percentage</h2>
+    <div id="y7-question"></div>
+    <input type="number" id="y7-numerator" placeholder="Num">
+    <button onclick="checkY7()">Check Answer</button>
+    <div class="result" id="y7-result"></div>
+    <button onclick="generateY7()">Next Question</button>
+</div>
+
+<div id="feedback"></div>
   <div class="score" id="score"></div>
   <div class="final" id="finalScore"></div>
 
@@ -71,6 +83,7 @@ function showFractionSection() {
     document.getElementById('level3').style.display = year === '3' ? 'block' : 'none';
     document.getElementById('level5').style.display = year === '5' ? 'block' : 'none';
     document.getElementById('level6').style.display = year === '6' ? 'block' : 'none';
+    document.getElementById('level7').style.display = year === '7' ? 'block' : 'none';
 }
 
 // Show only Level 3 by default
@@ -199,6 +212,40 @@ function checkY6() {
         correctCount++;
       } else {
         feedback.innerText = `❌ Wrong. Correct answer is ${correctNum}/${correctDen}`;
+        feedback.className = "wrong";
+    }
+    questionCount++;
+    document.getElementById('score').innerText = `Score: ${correctCount}/${questionCount}`;
+    document.getElementById('answer').disabled = true;
+    document.getElementById('checkBtn').disabled = true;
+}
+
+function generateY7() {
+    if (questionCount >= totalQuestions) {
+        document.getElementById('finalScore').innerText =
+          `🎉 Quiz Finished! You got ${correctCount} out of ${totalQuestions} correct.`;
+        document.getElementById('answer').disabled = true;
+        document.getElementById('checkBtn').disabled = true;
+        return;
+    }
+    let percent = randInt(1, 10) * 10;
+    let random = randInt(1, 10);
+    let base = random * percent;
+    y7 = {percent, base};
+    document.getElementById('y7-question').innerText = `Question: What is ${percent}% of ${base}?`;
+    document.getElementById('y7-result').innerText = '';
+    document.getElementById('feedback').innerText = "";
+}
+
+function checkY7() {
+    let userAnswer = parseInt(document.getElementById('y7-numerator').value);
+    let correctAnswer = Math.round(y7.percent / 100 * y7.base);
+    if (userAnswer === correctAnswer) {
+        feedback.innerText = "✅ Correct!";
+        feedback.className = "correct";
+        correctCount++;
+      } else {
+        feedback.innerText = `❌ Wrong. Correct answer is ${correctAnswer}`;
         feedback.className = "wrong";
     }
     questionCount++;
