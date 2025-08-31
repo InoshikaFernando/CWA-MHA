@@ -12,6 +12,7 @@
 <label for="fraction-year">Choose Year Level:</label>
 <select id="fraction-year" onchange="showFractionSection()">
     <option value="3">Fractions Addition & Subtraction (SameDenominator)</option>
+    <option value="4">Whole Numbers and fractions Addition & Subtraction</option>
     <option value="5">Fractions Addition & Subtraction (Different Denominator)</option>
     <option value="6">Fractions Multiplication & Division</option>
     <option value="7">Percentage</option>
@@ -26,6 +27,16 @@
     <button onclick="checkY3()">Check Answer</button>
     <div class="result" id="y3-result"></div>
     <button onclick="generateY3()">Next Question</button>
+</div>
+
+<div class="section" id="level4">
+    <h2>Whole Numbers Addition & Subtraction</h2>
+    <div id="y4-question"></div>
+    <input type="number" id="y4-numerator" placeholder="Num"> /
+    <input type="number" id="y4-denominator" placeholder="Den">
+    <button onclick="checkY4()">Check Answer</button>
+    <div class="result" id="y4-result"></div>
+    <button onclick="generateY4()">Next Question</button>
 </div>
 
 <!-- Level 5 Section -->
@@ -81,6 +92,7 @@ function showFractionSection() {
     resetQuiz();
     let year = document.getElementById('fraction-year').value;
     document.getElementById('level3').style.display = year === '3' ? 'block' : 'none';
+    document.getElementById('level4').style.display = year === '4' ? 'block' : 'none';  
     document.getElementById('level5').style.display = year === '5' ? 'block' : 'none';
     document.getElementById('level6').style.display = year === '6' ? 'block' : 'none';
     document.getElementById('level7').style.display = year === '7' ? 'block' : 'none';
@@ -119,12 +131,54 @@ function checkY3() {
     let num = parseInt(document.getElementById('y3-numerator').value);
     let den = parseInt(document.getElementById('y3-denominator').value);
     let correct = y3.op === '+' ? y3.a + y3.b : y3.a - y3.b;
-    if (num === correct && den === y3.denom) {
+    if (num  * y3.denom === correct * den) {
         feedback.innerText = "✅ Correct!";
         feedback.className = "correct";
         correctCount++;
     } else {
         feedback.innerText = `❌ Wrong. Correct answer is ${correct}/${y3.denom}`;
+        feedback.className = "wrong";
+    }
+    questionCount++;
+    document.getElementById('score').innerText = `Score: ${correctCount}/${questionCount}`;
+    document.getElementById('answer').disabled = true;
+    document.getElementById('checkBtn').disabled = true;
+}
+
+// Addition/ subtraction with whole numbers
+let y4 = {};
+function generateY4() {
+    if (questionCount >= totalQuestions) {
+        document.getElementById('finalScore').innerText =
+          `🎉 Quiz Finished! You got ${correctCount} out of ${totalQuestions} correct.`;
+        document.getElementById('answer').disabled = true;
+        document.getElementById('checkBtn').disabled = true;
+        return;
+    }
+    let a = randInt(1, 4);
+    let b = randInt(1, 7);
+    let c = randInt(b, 10);
+    y4 = {a, b, c};
+    let op = Math.random() < 0.5 ? '+' : '-';
+    y4.op = op;
+    document.getElementById('y4-question').innerText = `Question: ${a} ${op} ${b}/${c}`;
+    document.getElementById('y4-result').innerText = '';
+    document.getElementById('feedback').innerText = "";
+}
+function checkY4() {
+    let num = parseInt(document.getElementById('y4-numerator').value);
+    let den = parseInt(document.getElementById('y4-denominator').value);
+    let correctNum = y4.op === '+' ? y4.a * y4.c + y4.b : y4.a * y4.c - y4.b;
+    let correctDen = y4.c;
+    let feedback = document.getElementById('feedback');
+
+    // Accept equivalent fractions
+    if (num * correctDen === correctNum * den) {
+        feedback.innerText = "✅ Correct!";
+        feedback.className = "correct";
+        correctCount++;
+    } else {
+        feedback.innerText = `❌ Wrong. Correct answer is ${correctNum}/${correctDen}`;
         feedback.className = "wrong";
     }
     questionCount++;
@@ -160,13 +214,17 @@ function checkY5() {
     let lcm = y5.denom1 * y5.denom2 / gcd(y5.denom1, y5.denom2);
     let a = y5.a * (lcm / y5.denom1);
     let b = y5.b * (lcm / y5.denom2);
-    let correct = y5.op === '+' ? a + b : a - b;
-    if (num === correct && den === lcm) {
-        feedback.innerText = "✅ Correct!";
+    let correctNum = y5.op === '+' ? a + b : a - b;
+    let correctDen = lcm;
+    let feedback = document.getElementById('feedback');
+
+    // Accept equivalent fractions
+    if (num * correctDen === correctNum * den) {
+       feedback.innerText = "✅ Correct!";
         feedback.className = "correct";
         correctCount++;
-      } else {
-        feedback.innerText = `❌ Wrong. Correct answer is ${correct}/${lcm}`;
+    } else {
+        feedback.innerText = `❌ Wrong. Correct answer is ${correctNum}/${correctDen}`;
         feedback.className = "wrong";
     }
     questionCount++;
@@ -206,7 +264,7 @@ function checkY6() {
         correctNum = y6.a * y6.denom2;
         correctDen = y6.denom1 * y6.b;
     }
-    if (num === correctNum && den === correctDen) {
+    if (num * correctDen === correctNum * den) {
         feedback.innerText = "✅ Correct!";
         feedback.className = "correct";
         correctCount++;
@@ -266,6 +324,7 @@ function gcd(a,b) {
 
 // Generate initial questions
 generateY3();
+generateY4();
 generateY5();
 generateY6();
 </script>
