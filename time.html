@@ -56,7 +56,6 @@
         :
         <input id="minute" type="number" min="0" max="59" placeholder="Minute (0–59)" />
         <button id="check">Check</button>
-        <button id="show" class="secondary">Show Answer</button>
       </div>
       <div class="status" id="status"></div>
       <p class="hint">Tip: Use 12-hour time (no AM/PM needed).</p>
@@ -236,18 +235,9 @@ function checkAnswer(){
       document.getElementById('checkBtn').disabled = true;
 }
 
-function showAnswer(){
-  const status = document.getElementById('status');
-  const correctHour = current.hour % 12 === 0 ? 12 : current.hour % 12;
-  const correctMin  = current.minute;
-  status.innerHTML = `💡 Answer: <b>${correctHour}:${String(correctMin).padStart(2,'0')}</b>`;
-  status.className = "status";
-}
-
 /* ---------- Wire up ---------- */
 document.getElementById('newQ').addEventListener('click', generateQuestion);
 document.getElementById('check').addEventListener('click', checkAnswer);
-document.getElementById('show').addEventListener('click', showAnswer);
 document.getElementById('level').addEventListener('change', generateQuestion);
 
 // First question
