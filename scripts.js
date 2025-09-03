@@ -1,5 +1,8 @@
 let startTime;
+let timerStarted = false;
 function startTimer() {
+  console.log("Timer started");
+  timerStarted = true;
   startTime = Date.now();
   timerInterval = setInterval(() => {
     elapsedTime = Math.floor((Date.now() - startTime) / 1000);
@@ -9,7 +12,9 @@ function startTimer() {
 
 
 function stopTimer() {
+  console.log("Timer stopped");
   clearInterval(timerInterval);
+  timerStarted = false;
 }
 
 function resetQuiz() {
@@ -25,7 +30,7 @@ function resetQuiz() {
 }
 
 function handleQuizProgress() {
-    if (questionCount === 0) {
+    if (questionCount === 0 && !timerStarted) {
         startTimer();
       }
       if (questionCount >= totalQuestions) {
@@ -36,8 +41,6 @@ function handleQuizProgress() {
         document.getElementById('finalScore').innerText = 
           `🎉 Quiz Finished! You got ${correctCount} out of ${totalQuestions} correct.`;
         document.getElementById('points').innerText = `Points: ${points}`;
-        document.getElementById('answer').disabled = true;
-        document.getElementById('checkBtn').disabled = true;
         document.getElementById('quizActive').style.display = 'none';
         return;
       }

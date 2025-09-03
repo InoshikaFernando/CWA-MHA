@@ -9,8 +9,8 @@
 <body>
 
 <h1>Fractions Practice</h1>
-<label for="fraction-year">Choose Year Level:</label>
-<select id="fraction-year" onchange="showFractionSection()">
+<label for="level">Choose Year Level:</label>
+<select id="level" onchange="showFractionSection()">
     <option value="3">Fractions Addition & Subtraction (SameDenominator)</option>
     <option value="4">Whole Numbers and fractions Addition & Subtraction</option>
     <option value="5">Fractions Addition & Subtraction (Different Denominator)</option>
@@ -88,7 +88,7 @@
 
 function showFractionSection() {
     resetQuiz();
-    level = document.getElementById('fraction-year').value;
+    level = document.getElementById('level').value;
     document.getElementById('level3').style.display = level === '3' ? 'block' : 'none';
     document.getElementById('level4').style.display = level === '4' ? 'block' : 'none';  
     document.getElementById('level5').style.display = level === '5' ? 'block' : 'none';
@@ -108,7 +108,6 @@ function randInt(min, max) {
 let y3 = {};
 function generateY3() {
     handleQuizProgress();
-
     let denom = randInt(2, 10);
     let a = randInt(1, denom-1);
     let b = randInt(1, denom-1);
@@ -133,8 +132,6 @@ function checkY3() {
     }
     questionCount++;
     document.getElementById('score').innerText = `Score: ${correctCount}/${questionCount}`;
-    document.getElementById('answer').disabled = true;
-    document.getElementById('checkBtn').disabled = true;
 }
 
 // Addition/ subtraction with whole numbers
@@ -169,8 +166,6 @@ function checkY4() {
     }
     questionCount++;
     document.getElementById('score').innerText = `Score: ${correctCount}/${questionCount}`;
-    document.getElementById('answer').disabled = true;
-    document.getElementById('checkBtn').disabled = true;
 }
 
 // Fractions Addition & Subtraction (Different Denominator) Questions (Different Denominator)
@@ -209,8 +204,6 @@ function checkY5() {
     }
     questionCount++;
     document.getElementById('score').innerText = `Score: ${correctCount}/${questionCount}`;
-    document.getElementById('answer').disabled = true;
-    document.getElementById('checkBtn').disabled = true;
 }
 
 // Fractions Multiplication & Division Questions (Multiplication & Division)
@@ -248,8 +241,6 @@ function checkY6() {
     }
     questionCount++;
     document.getElementById('score').innerText = `Score: ${correctCount}/${questionCount}`;
-    document.getElementById('answer').disabled = true;
-    document.getElementById('checkBtn').disabled = true;
 }
 
 function generateY7() {
@@ -276,8 +267,6 @@ function checkY7() {
     }
     questionCount++;
     document.getElementById('score').innerText = `Score: ${correctCount}/${questionCount}`;
-    document.getElementById('answer').disabled = true;
-    document.getElementById('checkBtn').disabled = true;
 }
 
 // Greatest Common Divisor
