@@ -45,7 +45,7 @@
   <div id="timer" style="font-size:18px; margin-top:10px;"></div>
   <div id="points" style="font-size:20px; margin-top:10px; color:#16a085;"></div>
   <button class="back-btn" onclick="location.href='index.html'">⬅ Back to Topics</button>
-  
+  <script src="scripts.js"></script>
   <script>
     // ...existing code...
 let num1, num2, correctAnswer;
@@ -53,29 +53,6 @@ let rangeMin = 1, rangeMax = 10;
 let questionCount = 0, correctCount = 0, totalQuestions = 5;
 let timerInterval, startTime, elapsedTime = 0;
 let level = 0;
-
-function startTimer() {
-  startTime = Date.now();
-  timerInterval = setInterval(() => {
-    elapsedTime = Math.floor((Date.now() - startTime) / 1000);
-    document.getElementById('timer').innerText = `Time: ${elapsedTime} sec`;
-  }, 1000);
-}
-
-function stopTimer() {
-  clearInterval(timerInterval);
-}
-
-function resetQuiz() {
-  questionCount = 0;
-  correctCount = 0;
-  elapsedTime = 0;
-  document.getElementById('score').innerText = "";
-  document.getElementById('finalScore').innerText = "";
-  document.getElementById('timer').innerText = "Time: 0 sec";
-  document.getElementById('points').innerText = "";
-  stopTimer();
-}
 
     function setLevel() {
       level = parseInt(document.getElementById('level').value);
@@ -97,17 +74,7 @@ function resetQuiz() {
       if (questionCount === 0) {
         startTimer();
       }
-      if (questionCount >= totalQuestions) {
-        stopTimer();
-        let timeUsed = elapsedTime || 1; // Avoid division by zero
-        let points = Math.round((correctCount / timeUsed) * 100);
-        document.getElementById('finalScore').innerText = 
-          `🎉 Quiz Finished! You got ${correctCount} out of ${totalQuestions} correct.`;
-        document.getElementById('points').innerText = `Points: ${points}`;
-        document.getElementById('answer').disabled = true;
-        document.getElementById('checkBtn').disabled = true;
-        return;
-      }
+      handleQuizProgress();
       num1 = Math.floor(Math.random() * (rangeMax - rangeMin + 1)) + rangeMin;
       num2 = Math.floor(Math.random() * (rangeMax - rangeMin + 1)) + rangeMin;
       correctAnswer = num1 + num2;

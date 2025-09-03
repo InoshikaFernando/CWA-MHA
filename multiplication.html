@@ -84,7 +84,7 @@
     }
 
     function nextQuestion() {
-      handleQuizProgress
+      handleQuizProgress();
 
       num1 = Math.floor(Math.random() * (rangeMax - rangeMin + 1)) + rangeMin;
       num2 = allowedMultipliers[Math.floor(Math.random() * allowedMultipliers.length)];

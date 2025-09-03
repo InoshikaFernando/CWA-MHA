@@ -106,7 +106,7 @@ function randInt(min, max) {
 // Fractions Addition & Subtraction (SameDenominator) Questions (Same Denominator)
 let y3 = {};
 function generateY3() {
-    handleQuizProgress
+    handleQuizProgress();
 
     let denom = randInt(2, 10);
     let a = randInt(1, denom-1);
@@ -139,7 +139,7 @@ function checkY3() {
 // Addition/ subtraction with whole numbers
 let y4 = {};
 function generateY4() {
-    handleQuizProgress
+    handleQuizProgress();
     let a = randInt(1, 4);
     let b = randInt(1, 7);
     let c = randInt(b, 10);
@@ -175,7 +175,7 @@ function checkY4() {
 // Fractions Addition & Subtraction (Different Denominator) Questions (Different Denominator)
 let y5 = {};
 function generateY5() {
-    handleQuizProgress
+    handleQuizProgress();
     let denom1 = randInt(2, 10);
     let denom2 = randInt(2, 10);
     let a = randInt(1, denom1-1);
@@ -215,7 +215,7 @@ function checkY5() {
 // Fractions Multiplication & Division Questions (Multiplication & Division)
 let y6 = {};
 function generateY6() {
-    handleQuizProgress
+    handleQuizProgress();
     let denom1 = randInt(2, 10);
     let denom2 = randInt(2, 10);
     let a = randInt(1, denom1-1);
@@ -252,7 +252,7 @@ function checkY6() {
 }
 
 function generateY7() {
-    handleQuizProgress
+    handleQuizProgress();
     let percent = randInt(1, 10) * 10;
     let random = randInt(1, 10);
     let base = random * percent;
