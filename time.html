@@ -41,24 +41,25 @@
 
   </div>
 </div>
+<div id="quizActive">
+  <div class="panel">
+    <div class="row" style="align-items:flex-start;">
+      <canvas id="clock" width="320" height="320"></canvas>
 
-<div class="panel">
-  <div class="row" style="align-items:flex-start;">
-    <canvas id="clock" width="320" height="320"></canvas>
-
-    <div>
-    <div>
-        <button id="newQ">New Question</button>
-    </div>
-      <div class="row">
-        <label for="hour">Your Answer:</label>
-        <input id="hour" type="number" min="1" max="12" placeholder="Hour (1–12)" />
-        :
-        <input id="minute" type="number" min="0" max="59" placeholder="Minute (0–59)" />
-        <button id="check">Check</button>
+      <div>
+      <div>
+          <button id="newQ">New Question</button>
       </div>
-      <div class="status" id="status"></div>
-      <p class="hint">Tip: Use 12-hour time (no AM/PM needed).</p>
+        <div class="row">
+          <label for="hour">Your Answer:</label>
+          <input id="hour" type="number" min="1" max="12" placeholder="Hour (1–12)" />
+          :
+          <input id="minute" type="number" min="0" max="59" placeholder="Minute (0–59)" />
+          <button id="check">Check</button>
+        </div>
+        <div class="status" id="status"></div>
+        <p class="hint">Tip: Use 12-hour time (no AM/PM needed).</p>
+      </div>
     </div>
   </div>
 </div>

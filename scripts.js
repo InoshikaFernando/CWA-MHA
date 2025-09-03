@@ -30,12 +30,13 @@ function handleQuizProgress() {
         stopTimer();
         let timeUsed = elapsedTime || 1; // Avoid division by zero
         level = parseInt(document.getElementById('level').value, 10);
-        let points = Math.round((correctCount / timeUsed) * 100 * level);
+        let points = Math.round((correctCount / timeUsed) * 100 * Math.sqrt(level));
         document.getElementById('finalScore').innerText = 
           `🎉 Quiz Finished! You got ${correctCount} out of ${totalQuestions} correct.`;
         document.getElementById('points').innerText = `Points: ${points}`;
         document.getElementById('answer').disabled = true;
         document.getElementById('checkBtn').disabled = true;
+        document.getElementById('quizActive').style.display = 'none';
         return;
       }
 }

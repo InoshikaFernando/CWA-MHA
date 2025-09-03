@@ -20,13 +20,13 @@
     <option value="7">Level 7</option>
     <option value="8">Level 8</option>
   </select>
+  <div id="quizActive">
+    <div id="question">Click "Next Question" to start</div>
 
-  <div id="question">Click "Next Question" to start</div>
-
-  <input type="number" id="answer" placeholder="Your answer" disabled>
-  <button onclick="checkAnswer()" disabled id="checkBtn">Check</button>
-  <button onclick="nextQuestion()">Next Question</button>
-
+    <input type="number" id="answer" placeholder="Your answer" disabled>
+    <button onclick="checkAnswer()" disabled id="checkBtn">Check</button>
+    <button onclick="nextQuestion()">Next Question</button>
+  </div>
   <div id="feedback"></div>
   <div class="score" id="score"></div>
   <div class="final" id="finalScore"></div>

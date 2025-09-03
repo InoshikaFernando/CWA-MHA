@@ -17,60 +17,60 @@
     <option value="6">Fractions Multiplication & Division</option>
     <option value="7">Percentage</option>
 </select>
+<div id="quizActive">
+    <!-- Level 3 Section -->
+    <div class="section" id="level3">
+        <h2>Fractions Addition & Subtraction (Same Denominator)</h2>
+        <div id="y3-question"></div>
+        <input type="number" id="y3-numerator" placeholder="Num"> /
+        <input type="number" id="y3-denominator" placeholder="Den">
+        <button onclick="checkY3()">Check Answer</button>
+        <div class="result" id="y3-result"></div>
+        <button onclick="generateY3()">Next Question</button>
+    </div>
 
-<!-- Level 3 Section -->
-<div class="section" id="level3">
-    <h2>Fractions Addition & Subtraction (Same Denominator)</h2>
-    <div id="y3-question"></div>
-    <input type="number" id="y3-numerator" placeholder="Num"> /
-    <input type="number" id="y3-denominator" placeholder="Den">
-    <button onclick="checkY3()">Check Answer</button>
-    <div class="result" id="y3-result"></div>
-    <button onclick="generateY3()">Next Question</button>
+    <div class="section" id="level4">
+        <h2>Whole Numbers Addition & Subtraction</h2>
+        <div id="y4-question"></div>
+        <input type="number" id="y4-numerator" placeholder="Num"> /
+        <input type="number" id="y4-denominator" placeholder="Den">
+        <button onclick="checkY4()">Check Answer</button>
+        <div class="result" id="y4-result"></div>
+        <button onclick="generateY4()">Next Question</button>
+    </div>
+
+    <!-- Level 5 Section -->
+    <div class="section" id="level5">
+        <h2>Fractions Addition & Subtraction (Different Denominator)</h2>
+        <div id="y5-question"></div>
+        <input type="number" id="y5-numerator" placeholder="Num"> /
+        <input type="number" id="y5-denominator" placeholder="Den">
+        <button onclick="checkY5()">Check Answer</button>
+        <div class="result" id="y5-result"></div>
+        <button onclick="generateY5()">Next Question</button>
+    </div>
+
+    <!-- Level 6 Section -->
+    <div class="section" id="level6">
+        <h2>Fractions Multiplication & Division</h2>
+        <div id="y6-question"></div>
+        <input type="number" id="y6-numerator" placeholder="Num"> /
+        <input type="number" id="y6-denominator" placeholder="Den">
+        <button onclick="checkY6()">Check Answer</button>
+        <div class="result" id="y6-result"></div>
+        <button onclick="generateY6()">Next Question</button>
+    </div>
+
+    <!-- Level 7 section -->
+    <div class="section" id="level7">
+        <h2>Percentage</h2>
+        <div id="y7-question"></div>
+        <input type="number" id="y7-numerator" placeholder="Num">
+        <button onclick="checkY7()">Check Answer</button>
+        <div class="result" id="y7-result"></div>
+        <button onclick="generateY7()">Next Question</button>
+    </div>
 </div>
-
-<div class="section" id="level4">
-    <h2>Whole Numbers Addition & Subtraction</h2>
-    <div id="y4-question"></div>
-    <input type="number" id="y4-numerator" placeholder="Num"> /
-    <input type="number" id="y4-denominator" placeholder="Den">
-    <button onclick="checkY4()">Check Answer</button>
-    <div class="result" id="y4-result"></div>
-    <button onclick="generateY4()">Next Question</button>
-</div>
-
-<!-- Level 5 Section -->
-<div class="section" id="level5">
-    <h2>Fractions Addition & Subtraction (Different Denominator)</h2>
-    <div id="y5-question"></div>
-    <input type="number" id="y5-numerator" placeholder="Num"> /
-    <input type="number" id="y5-denominator" placeholder="Den">
-    <button onclick="checkY5()">Check Answer</button>
-    <div class="result" id="y5-result"></div>
-    <button onclick="generateY5()">Next Question</button>
-</div>
-
-<!-- Level 6 Section -->
-<div class="section" id="level6">
-    <h2>Fractions Multiplication & Division</h2>
-    <div id="y6-question"></div>
-    <input type="number" id="y6-numerator" placeholder="Num"> /
-    <input type="number" id="y6-denominator" placeholder="Den">
-    <button onclick="checkY6()">Check Answer</button>
-    <div class="result" id="y6-result"></div>
-    <button onclick="generateY6()">Next Question</button>
-</div>
-
-<!-- Level 7 section -->
-<div class="section" id="level7">
-    <h2>Percentage</h2>
-    <div id="y7-question"></div>
-    <input type="number" id="y7-numerator" placeholder="Num">
-    <button onclick="checkY7()">Check Answer</button>
-    <div class="result" id="y7-result"></div>
-    <button onclick="generateY7()">Next Question</button>
-</div>
-
 <div id="feedback"></div>
   <div class="score" id="score"></div>
   <div class="final" id="finalScore"></div>
