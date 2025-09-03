@@ -29,6 +29,7 @@ function handleQuizProgress() {
       if (questionCount >= totalQuestions) {
         stopTimer();
         let timeUsed = elapsedTime || 1; // Avoid division by zero
+        level = parseInt(document.getElementById('level').value, 10);
         let points = Math.round((correctCount / timeUsed) * 100 * level);
         document.getElementById('finalScore').innerText = 
           `🎉 Quiz Finished! You got ${correctCount} out of ${totalQuestions} correct.`;
