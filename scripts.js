@@ -1,5 +1,6 @@
+let startTime;
 function startTimer() {
-  let startTime = Date.now();
+  startTime = Date.now();
   timerInterval = setInterval(() => {
     elapsedTime = Math.floor((Date.now() - startTime) / 1000);
     document.getElementById('timer').innerText = `Time: ${elapsedTime} sec`;
@@ -20,6 +21,7 @@ function resetQuiz() {
   document.getElementById('timer').innerText = "Time: 0 sec";
   document.getElementById('points').innerText = "";
   stopTimer();
+  startTime = Date.now();
 }
 
 function handleQuizProgress() {
