@@ -65,22 +65,19 @@
 <div id="feedback"></div>
   <div class="score" id="score"></div>
   <div class="final" id="finalScore"></div>
-
+  <div id="timer" style="font-size:18px; margin-top:10px;"></div>
+  <div id="points" style="font-size:20px; margin-top:10px; color:#16a085;"></div>
+  
   <br>
   <a href="index.html" class="back-btn">⬅ Back to Topics</a>
-
+<script src="scripts.js"></script>
 <script>
     let num1, num2, correctAnswer;
     let rangeMin = 1, rangeMax = 10;
     let allowedDividers = [1, 10];
     let questionCount = 0, correctCount = 0, totalQuestions = 5;
-
-    function resetQuiz() {
-      questionCount = 0;
-      correctCount = 0;
-      document.getElementById('score').innerText = "";
-      document.getElementById('finalScore').innerText = "";
-    }
+    let timerInterval, startTime, elapsedTime = 0;
+    let level = 0;
 
 /* ---------- Utilities ---------- */
 function randInt(min, max) {
@@ -162,14 +159,8 @@ function drawCenter(){
 let current = { hour: 3, minute: 0 };
 
 function generateQuestion(){
-    if (questionCount >= totalQuestions) {
-        document.getElementById('finalScore').innerText =
-          `🎉 Quiz Finished! You got ${correctCount} out of ${totalQuestions} correct.`;
-        document.getElementById('answer').disabled = true;
-        document.getElementById('checkBtn').disabled = true;
-        return;
-      }
-  const level = parseInt(document.getElementById('level').value, 10);
+    handleQuizProgress
+  level = parseInt(document.getElementById('level').value, 10);
   const minuteOptions = minutesForLevel(level);
   const minute = choice(minuteOptions);
   const hour = randInt(1, 12); // 1..12

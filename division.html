@@ -30,15 +30,20 @@
   <div id="feedback"></div>
   <div class="score" id="score"></div>
   <div class="final" id="finalScore"></div>
-
+  <div id="timer" style="font-size:18px; margin-top:10px;"></div>
+  <div id="points" style="font-size:20px; margin-top:10px; color:#16a085;"></div>
+  
   <br>
   <a href="index.html" class="back-btn">⬅ Back to Topics</a>
 
+  <script src="scripts.js"></script>
   <script>
     let num1, num2, correctAnswer;
     let rangeMin = 1, rangeMax = 10;
     let allowedDividers = [1, 10];
     let questionCount = 0, correctCount = 0, totalQuestions = 5;
+    let timerInterval, startTime, elapsedTime = 0;
+    let level = 0;
 
     const levelRanges = {
       1: [1, 10],
@@ -52,7 +57,7 @@
     };
 
     function setLevel() {
-      let level = parseInt(document.getElementById('level').value);
+      level = parseInt(document.getElementById('level').value);
       switch (level) {
         case 1:
           rangeMin = 1; rangeMax = 10;
@@ -91,22 +96,8 @@
       nextQuestion();
     }
 
-    function resetQuiz() {
-      questionCount = 0;
-      correctCount = 0;
-      document.getElementById('score').innerText = "";
-      document.getElementById('finalScore').innerText = "";
-    }
-
     function nextQuestion() {
-      if (questionCount >= totalQuestions) {
-        document.getElementById('finalScore').innerText =
-          `🎉 Quiz Finished! You got ${correctCount} out of ${totalQuestions} correct.`;
-        document.getElementById('answer').disabled = true;
-        document.getElementById('checkBtn').disabled = true;
-        return;
-      }
-
+      handleQuizProgress
       // Generate clean division: num1 = num2 * multiplier
       num2 = allowedDividers[Math.floor(Math.random() * allowedDividers.length)];
 
