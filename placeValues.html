@@ -28,9 +28,11 @@
   <div id="feedback"></div>
   <div class="score" id="score"></div>
   <div class="final" id="finalScore"></div>
-
-  <button class="back-btn" onclick="location.href='index.html'">⬅ Back to Topics</button>
+  <div id="timer" style="font-size:18px; margin-top:10px;"></div>
+  <div id="points" style="font-size:20px; margin-top:10px; color:#16a085;"></div>
   
+  <button class="back-btn" onclick="location.href='index.html'">⬅ Back to Topics</button>
+  <script src="scripts.js"></script>
   <script>
     let numberString, digits, correctAnswers;
     let questionCount = 0, correctCount = 0, totalQuestions = 5;
@@ -44,20 +46,39 @@
     }
 
     function generateNumber() {
-      switch (level) {
-        case 1: return Math.floor(Math.random() * 90 + 10); // 2-digit
-        case 2: return Math.floor(Math.random() * 900 + 100); // 3-digit
-        case 3: 
-          let intPart = Math.floor(Math.random() * 9000 + 1000); // 4-digit
-          let decimalPart = (Math.floor(Math.random() * 9) / 10).toFixed(1); // tenths
-          return intPart + decimalPart.slice(1);
-        case 4:
-          let intPart4 = Math.floor(Math.random() * 90000 + 10000); // 5-digit
-          let decimalPart4 = (Math.floor(Math.random() * 90) / 100).toFixed(2); // hundredths
-          return intPart4 + decimalPart4.slice(1);
-      }
-    }
+    console.log("Generating number for level", level);
+    level = parseInt(document.getElementById('level').value);
 
+    function getUniqueDigits(count, allowZeroFirst = false) {
+        let digits = ['0','1','2','3','4','5','6','7','8','9'];
+        let result = [];
+        if (!allowZeroFirst) digits = digits.slice(1); // remove '0' for first digit
+        result.push(digits.splice(Math.floor(Math.random() * digits.length), 1)[0]);
+        digits = ['0','1','2','3','4','5','6','7','8','9'].filter(d => !result.includes(d));
+        while (result.length < count) {
+            let idx = Math.floor(Math.random() * digits.length);
+            result.push(digits.splice(idx, 1)[0]);
+            }
+            return result;
+        }
+
+        switch (level) {
+            case 1: // 2-digit
+            return getUniqueDigits(2, false).join('');
+            case 2: // 3-digit
+            return getUniqueDigits(3, false).join('');
+            case 3: { // 4-digit + tenths
+            let intPart = getUniqueDigits(4, false).join('');
+            let decimalPart = getUniqueDigits(1, true)[0];
+            return intPart + '.' + decimalPart;
+            }
+            case 4: { // 5-digit + hundredths
+            let intPart = getUniqueDigits(5, false).join('');
+            let decimalPart = getUniqueDigits(2, true).join('');
+            return intPart + '.' + decimalPart;
+            }
+        }
+    }
     function placeValue(digit, position) {
       const powers = ["ones", "tens", "hundreds", "thousands", "ten-thousands"];
       if (position >= 0) {
@@ -68,6 +89,7 @@
     }
 
     function nextQuestion() {
+      handleQuizProgress();
       if (currentDigitIndex === 0) {
         numberString = generateNumber().toString();
         digits = numberString.replace(".", "").split("").map(Number);
@@ -115,8 +137,8 @@
       currentDigitIndex++;
       if (currentDigitIndex >= correctAnswers.length) {
         currentDigitIndex = 0;
-        questionCount++;
       }
+      questionCount++;
 
       document.getElementById('score').innerText = `Score: ${correctCount}/${questionCount}`;
       document.getElementById('answer').disabled = true;
