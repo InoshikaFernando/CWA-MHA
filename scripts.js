@@ -99,61 +99,78 @@ function showCertificate(points, correctCount, totalQuestions, level, elapsedTim
 }
 
 function getCertificateTier(points, correctCount, totalQuestions, level, elapsedTime) {
-  // Certificate tiers based on points
-  if (points >= 500) {
+  // Certificate tiers based on points with color-coded system
+  if (points >= 90) {
+    // Gold tier - Best performance
     return {
       icon: "🏆",
       title: "Certificate of Mastery",
-      subtitle: "Addition Legend",
+      subtitle: "Math Legend",
       borderColor: "#ffd700",
-      backgroundGradient: "linear-gradient(135deg, #fff8dc, #f0e68c)",
+      backgroundGradient: "linear-gradient(135deg, #fff8dc, #ffd700, #ffed4e)",
       iconColor: "#ffd700",
-      subtitleColor: "#8b4513",
-      achievement: "Outstanding performance! You've achieved legendary status in addition!"
+      subtitleColor: "#b8860b",
+      achievement: "Outstanding performance! You've achieved legendary status in math!"
     };
-  } else if (points >= 300) {
+  } else if (points >= 80) {
+    // Silver tier - Excellent performance
     return {
       icon: "🥇",
       title: "Certificate of Excellence",
-      subtitle: "Addition Expert",
-      borderColor: "#ff6b35",
-      backgroundGradient: "linear-gradient(135deg, #ffeaa7, #fab1a0)",
-      iconColor: "#ff6b35",
-      subtitleColor: "#d63031",
-      achievement: "Excellent work! You've mastered addition with exceptional speed and accuracy!"
+      subtitle: "Math Expert",
+      borderColor: "#c0c0c0",
+      backgroundGradient: "linear-gradient(135deg, #f8f9fa, #c0c0c0, #e8e8e8)",
+      iconColor: "#c0c0c0",
+      subtitleColor: "#696969",
+      achievement: "Excellent work! You've mastered math with exceptional speed and accuracy!"
     };
-  } else if (points >= 200) {
+  } else if (points >= 70) {
+    // Bronze tier - Very good performance
     return {
       icon: "🥈",
       title: "Certificate of Achievement",
-      subtitle: "Addition Pro",
-      borderColor: "#74b9ff",
-      backgroundGradient: "linear-gradient(135deg, #a8e6cf, #74b9ff)",
-      iconColor: "#74b9ff",
-      subtitleColor: "#0984e3",
-      achievement: "Great job! You've shown strong skills in addition practice!"
+      subtitle: "Math Pro",
+      borderColor: "#cd7f32",
+      backgroundGradient: "linear-gradient(135deg, #f4e4bc, #cd7f32, #daa520)",
+      iconColor: "#cd7f32",
+      subtitleColor: "#8b4513",
+      achievement: "Great job! You've shown strong skills in math practice!"
     };
-  } else if (points >= 100) {
+  } else if (points >= 60) {
+    // Copper tier - Good performance
     return {
       icon: "🥉",
       title: "Certificate of Completion",
-      subtitle: "Addition Learner",
-      borderColor: "#a29bfe",
-      backgroundGradient: "linear-gradient(135deg, #dda0dd, #a29bfe)",
-      iconColor: "#a29bfe",
-      subtitleColor: "#6c5ce7",
-      achievement: "Well done! You've completed the addition practice successfully!"
+      subtitle: "Math Learner",
+      borderColor: "#b87333",
+      backgroundGradient: "linear-gradient(135deg, #f5deb3, #b87333, #d2691e)",
+      iconColor: "#b87333",
+      subtitleColor: "#8b4513",
+      achievement: "Well done! You've completed the math practice successfully!"
     };
-  } else {
+  } else if (points >= 50) {
+    // Brown tier - Basic performance
     return {
       icon: "📜",
       title: "Certificate of Participation",
-      subtitle: "Addition Student",
-      borderColor: "#636e72",
-      backgroundGradient: "linear-gradient(135deg, #ddd6fe, #a8a8a8)",
-      iconColor: "#636e72",
-      subtitleColor: "#2d3436",
-      achievement: "Good effort! Keep practicing to improve your addition skills!"
+      subtitle: "Math Student",
+      borderColor: "#8b4513",
+      backgroundGradient: "linear-gradient(135deg, #f5deb3, #8b4513, #a0522d)",
+      iconColor: "#8b4513",
+      subtitleColor: "#654321",
+      achievement: "Good effort! Keep practicing to improve your math skills!"
+    };
+  } else {
+    // Dark brown tier - Needs improvement
+    return {
+      icon: "📋",
+      title: "Certificate of Effort",
+      subtitle: "Math Beginner",
+      borderColor: "#654321",
+      backgroundGradient: "linear-gradient(135deg, #d2b48c, #654321, #8b4513)",
+      iconColor: "#654321",
+      subtitleColor: "#2f1b14",
+      achievement: "Keep practicing! Every step forward is progress in your math journey!"
     };
   }
 }

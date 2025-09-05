@@ -32,6 +32,15 @@
     <option value="7">Level 7</option>
     <option value="8">Level 8</option>
   </select>
+  
+  <label for="questionCount">Number of Questions:</label>
+  <select id="questionCount" onchange="setQuestionCount()">
+    <option value="5">5 Questions</option>
+    <option value="10">10 Questions</option>
+    <option value="20">20 Questions</option>
+    <option value="50">50 Questions</option>
+    <option value="100">100 Questions</option>
+  </select>
   <div id="quizActive">
     <div id="question">Click "Start" to begin the quiz</div>
     
@@ -68,6 +77,12 @@ let isQuizStarted = false; // Track if quiz has been started
         case 7: rangeMin = 1; rangeMax = 5000; break;
         case 8: rangeMin = 1; rangeMax = 10000; break;
       }
+      resetQuiz();
+      resetToStartState();
+    }
+
+    function setQuestionCount() {
+      totalQuestions = parseInt(document.getElementById('questionCount').value);
       resetQuiz();
       resetToStartState();
     }
