@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Number Patterns Practice</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; padding: 20px; background: #f9f9f9; }
+    h1 { color: #2c3e50; }
+    select, input, button { margin: 10px; padding: 8px; font-size: 16px; }
+    #question { font-size: 22px; margin: 20px 0; }
+    #feedback { font-size: 20px; font-weight: bold; }
+    .correct { color: green; }
+    .wrong { color: red; }
+    .score { font-size: 18px; margin-top: 15px; }
+    .final { font-size: 22px; color: #8e44ad; margin-top: 20px; font-weight: bold; }
+    .back-btn { margin-top: 20px; background: #e67e22; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 10px; }
+    .back-btn:hover { background: #d35400; }
+  </style>
+</head>
+<body>
+  <h1>🔢 Number Patterns Practice</h1>
+  
+  <label for="level">Choose Level:</label>
+  <select id="level" onchange="setLevel()">
+    <option value="1">Level 1</option>
+    <option value="2">Level 2</option>
+    <option value="3">Level 3</option>
+    <option value="4">Level 4</option>
+    <option value="5">Level 5</option>
+    <option value="6">Level 6</option>
+    <option value="7">Level 7</option>
+    <option value="8">Level 8</option>
+    <option value="9">Level 9</option>
+    <option value="10">Level 10</option>
+  </select>
+  
+  <div id="quizActive">
+    <div id="question">Click "Next Question" to start</div>
+    
+    <input type="number" id="answer" placeholder="Your answer" disabled>
+    <button onclick="checkAnswer()" disabled id="checkBtn">Check</button>
+    <button onclick="nextQuestion()">Next Question</button>
+  </div>
+  <div id="feedback"></div>
+  <div class="score" id="score"></div>
+  <div class="final" id="finalScore"></div>
+  <div id="timer" style="font-size:18px; margin-top:10px;"></div>
+  <div id="points" style="font-size:20px; margin-top:10px; color:#16a085;"></div>
+  <button class="back-btn" onclick="location.href='index.html'">⬅ Back to Topics</button>
+
+  <script src="scripts.js"></script>
+  <script>
+    let base, correctAnswer;
+    let questionCount = 0, correctCount = 0, totalQuestions = 5;
+    let level = 1;
+    let multiplier = 1;
+
+    function setLevel() {
+      level = parseInt(document.getElementById('level').value);
+      resetQuiz();
+      nextQuestion();
+    }
+
+    function resetQuiz() {
+      questionCount = 0;
+      correctCount = 0;
+      document.getElementById('score').innerText = "";
+      document.getElementById('finalScore').innerText = "";
+    }
+
+    function nextQuestion() {
+    handleQuizProgress();
+
+      
+      // Set multiplier based on level
+      switch (level) {
+        case 1: multiplier = 1; break;
+        case 2: multiplier = 10; break;
+        case 3: multiplier = 2; break;
+        case 4: multiplier = 5; break;
+        case 5: multiplier = 3; break;
+        case 6: multiplier = 4; break;
+        case 7: multiplier = 6; break;
+        case 8: multiplier = 7; break;
+        case 9: multiplier = 8; break;
+        case 10: multiplier = 9; break;
+        default: multiplier = 1; break;
+      }
+
+      // Pick a random base number between 1 and 10
+      base = (Math.floor(Math.random() * 10) + 1) * multiplier;
+
+      // Generate sequence of 3 numbers + missing one
+      let seq = [base, base + multiplier, base + multiplier + multiplier];
+      correctAnswer = seq[2] + multiplier;  // the missing value
+
+      document.getElementById('question').innerText = `Q${questionCount + 1}: ${seq[0]}, ${seq[1]}, ${seq[2]}, __ ?`;
+      document.getElementById('answer').value = "";
+      document.getElementById('feedback').innerText = "";
+      document.getElementById('answer').disabled = false;
+      document.getElementById('checkBtn').disabled = false;
+    }
+
+    function checkAnswer() {
+      let userAnswer = parseInt(document.getElementById('answer').value);
+      let feedback = document.getElementById('feedback');
+
+      if (userAnswer === correctAnswer) {
+        feedback.innerText = "✅ Correct!";
+        feedback.className = "correct";
+        correctCount++;
+      } else {
+        feedback.innerText = `❌ Wrong. Correct answer is ${correctAnswer}`;
+        feedback.className = "wrong";
+      }
+
+      questionCount++;
+      document.getElementById('score').innerText = `Score: ${correctCount}/${questionCount}`;
+      document.getElementById('answer').disabled = true;
+      document.getElementById('checkBtn').disabled = true;
+    }
+  </script>
+</body>
+</html>

@@ -8,14 +8,15 @@
 </head>
 <body>
 
-<h1>Fractions Practice</h1>
-<label for="level">Choose Year Level:</label>
+<h1>🌓 Fractions Practice</h1>
+<label for="level">Choose your Level:</label>
 <select id="level" onchange="showFractionSection()">
     <option value="3">Fractions Addition & Subtraction (SameDenominator)</option>
     <option value="4">Whole Numbers and fractions Addition & Subtraction</option>
-    <option value="5">Fractions Addition & Subtraction (Different Denominator)</option>
-    <option value="6">Fractions Multiplication & Division</option>
-    <option value="7">Percentage</option>
+    <option value="5">Fraction Word Problems</option>
+    <option value="6">Fractions Addition & Subtraction (Different Denominator)</option>
+    <option value="7">Fractions Multiplication & Division</option>
+    <option value="8">Percentage</option>
 </select>
 <div id="quizActive">
     <!-- Level 3 Section -->
@@ -24,51 +25,62 @@
         <div id="y3-question"></div>
         <input type="number" id="y3-numerator" placeholder="Num"> /
         <input type="number" id="y3-denominator" placeholder="Den">
-        <button onclick="checkY3()">Check Answer</button>
+        <button onclick="checkFractionAddSub()">Check Answer</button>
         <div class="result" id="y3-result"></div>
-        <button onclick="generateY3()">Next Question</button>
+        <button onclick="generateFractionAddSub()">Next Question</button>
     </div>
 
+    <!-- Level 4 Section -->
     <div class="section" id="level4">
         <h2>Whole Numbers Addition & Subtraction</h2>
         <div id="y4-question"></div>
         <input type="number" id="y4-numerator" placeholder="Num"> /
         <input type="number" id="y4-denominator" placeholder="Den">
-        <button onclick="checkY4()">Check Answer</button>
+        <button onclick="checkFractionAndWhole()">Check Answer</button>
         <div class="result" id="y4-result"></div>
-        <button onclick="generateY4()">Next Question</button>
+        <button onclick="generateFractionAndWhole()">Next Question</button>
     </div>
 
     <!-- Level 5 Section -->
     <div class="section" id="level5">
-        <h2>Fractions Addition & Subtraction (Different Denominator)</h2>
-        <div id="y5-question"></div>
-        <input type="number" id="y5-numerator" placeholder="Num"> /
-        <input type="number" id="y5-denominator" placeholder="Den">
-        <button onclick="checkY5()">Check Answer</button>
-        <div class="result" id="y5-result"></div>
-        <button onclick="generateY5()">Next Question</button>
+        <h2>fraction word problems</h2>
+        <div id="wordProblemQuestion"></div>
+        <input type="number" id="wordProbNumerator" placeholder="Num"> 
+        <button onclick="checkFractionWorkProblems()">Check Answer</button>
+        <div class="result" id="wordProblemResult"></div>
+        <button onclick="generateFractionWorkProblems()">Next Question</button>
     </div>
 
     <!-- Level 6 Section -->
     <div class="section" id="level6">
+        <h2>Fractions Addition & Subtraction (Different Denominator)</h2>
+        <div id="y5-question"></div>
+        <input type="number" id="y5-numerator" placeholder="Num"> /
+        <input type="number" id="y5-denominator" placeholder="Den">
+        <button onclick="checkFractionAddSubComplex()">Check Answer</button>
+        <div class="result" id="y5-result"></div>
+        <button onclick="generateFractionAddSubComplex()">Next Question</button>
+    </div>
+
+    <!-- Level 7 Section -->
+    <div class="section" id="level7">
         <h2>Fractions Multiplication & Division</h2>
         <div id="y6-question"></div>
         <input type="number" id="y6-numerator" placeholder="Num"> /
         <input type="number" id="y6-denominator" placeholder="Den">
-        <button onclick="checkY6()">Check Answer</button>
+        <button onclick="checkFractionMultiplyDivision()">Check Answer</button>
         <div class="result" id="y6-result"></div>
-        <button onclick="generateY6()">Next Question</button>
+        <button onclick="generateFractionMultiplyDivision()">Next Question</button>
     </div>
 
-    <!-- Level 7 section -->
-    <div class="section" id="level7">
+    <!-- Level 8 section -->
+    <div class="section" id="level8">
         <h2>Percentage</h2>
         <div id="y7-question"></div>
         <input type="number" id="y7-numerator" placeholder="Num">
-        <button onclick="checkY7()">Check Answer</button>
+        <button onclick="checkPercentage()">Check Answer</button>
         <div class="result" id="y7-result"></div>
-        <button onclick="generateY7()">Next Question</button>
+        <button onclick="generatePercentage()">Next Question</button>
     </div>
 </div>
 <div id="feedback"></div>
@@ -94,6 +106,7 @@ function showFractionSection() {
     document.getElementById('level5').style.display = level === '5' ? 'block' : 'none';
     document.getElementById('level6').style.display = level === '6' ? 'block' : 'none';
     document.getElementById('level7').style.display = level === '7' ? 'block' : 'none';
+    document.getElementById('level8').style.display = level === '8' ? 'block' : 'none';
 }
 
 // Show only Level 3 by default
@@ -106,7 +119,7 @@ function randInt(min, max) {
 
 // Fractions Addition & Subtraction (SameDenominator) Questions (Same Denominator)
 let y3 = {};
-function generateY3() {
+function generateFractionAddSub() {
     handleQuizProgress();
     let denom = randInt(2, 10);
     let a = randInt(1, denom-1);
@@ -118,7 +131,7 @@ function generateY3() {
     document.getElementById('y3-result').innerText = '';
     document.getElementById('feedback').innerText = "";
 }
-function checkY3() {
+function checkFractionAddSub() {
     let num = parseInt(document.getElementById('y3-numerator').value);
     let den = parseInt(document.getElementById('y3-denominator').value);
     let correct = y3.op === '+' ? y3.a + y3.b : y3.a - y3.b;
@@ -136,7 +149,7 @@ function checkY3() {
 
 // Addition/ subtraction with whole numbers
 let y4 = {};
-function generateY4() {
+function generateFractionAndWhole() {
     handleQuizProgress();
     let a = randInt(1, 4);
     let b = randInt(1, 7);
@@ -148,7 +161,7 @@ function generateY4() {
     document.getElementById('y4-result').innerText = '';
     document.getElementById('feedback').innerText = "";
 }
-function checkY4() {
+function checkFractionAndWhole() {
     let num = parseInt(document.getElementById('y4-numerator').value);
     let den = parseInt(document.getElementById('y4-denominator').value);
     let correctNum = y4.op === '+' ? y4.a * y4.c + y4.b : y4.a * y4.c - y4.b;
@@ -168,9 +181,39 @@ function checkY4() {
     document.getElementById('score').innerText = `Score: ${correctCount}/${questionCount}`;
 }
 
+// fraction word problems
+let wordProblem = {};
+function generateFractionWorkProblems() {
+    handleQuizProgress();
+    let a = randInt(1, 5);
+    let b = randInt(1, 4);
+    let c = b * randInt(1, 10);
+    wordProblem = {a, b, c};
+    document.getElementById('wordProblemQuestion').innerText = `Question: What is ${a}/${b} of ${c}?`;
+    document.getElementById('wordProblemResult').innerText = '';
+    document.getElementById('feedback').innerText = "";
+}
+function checkFractionWorkProblems() {
+    let num = parseInt(document.getElementById('wordProbNumerator').value);
+    let correctNum = wordProblem.a * (wordProblem.c / wordProblem.b);
+    let feedback = document.getElementById('feedback');
+
+    // Accept equivalent fractions
+    if (num === correctNum) {
+        feedback.innerText = "✅ Correct!";
+        feedback.className = "correct";
+        correctCount++;
+    } else {
+        feedback.innerText = `❌ Wrong. Correct answer is ${correctNum}`;
+        feedback.className = "wrong";
+    }
+    questionCount++;
+    document.getElementById('score').innerText = `Score: ${correctCount}/${questionCount}`;
+}
+
 // Fractions Addition & Subtraction (Different Denominator) Questions (Different Denominator)
 let y5 = {};
-function generateY5() {
+function generateFractionAddSubComplex() {
     handleQuizProgress();
     let denom1 = randInt(2, 10);
     let denom2 = randInt(2, 10);
@@ -183,7 +226,7 @@ function generateY5() {
     document.getElementById('y5-result').innerText = '';
     document.getElementById('feedback').innerText = "";
 }
-function checkY5() {
+function checkFractionAddSubComplex() {
     let num = parseInt(document.getElementById('y5-numerator').value);
     let den = parseInt(document.getElementById('y5-denominator').value);
     let lcm = y5.denom1 * y5.denom2 / gcd(y5.denom1, y5.denom2);
@@ -208,7 +251,7 @@ function checkY5() {
 
 // Fractions Multiplication & Division Questions (Multiplication & Division)
 let y6 = {};
-function generateY6() {
+function generateFractionMultiplyDivision() {
     handleQuizProgress();
     let denom1 = randInt(2, 10);
     let denom2 = randInt(2, 10);
@@ -220,7 +263,7 @@ function generateY6() {
     document.getElementById('y6-result').innerText = '';
     document.getElementById('feedback').innerText = "";
 }
-function checkY6() {
+function checkFractionMultiplyDivision() {
     let num = parseInt(document.getElementById('y6-numerator').value);
     let den = parseInt(document.getElementById('y6-denominator').value);
     let correctNum, correctDen;
@@ -243,7 +286,7 @@ function checkY6() {
     document.getElementById('score').innerText = `Score: ${correctCount}/${questionCount}`;
 }
 
-function generateY7() {
+function generatePercentage() {
     handleQuizProgress();
     let percent = randInt(1, 10) * 10;
     let random = randInt(1, 10);
@@ -254,7 +297,7 @@ function generateY7() {
     document.getElementById('feedback').innerText = "";
 }
 
-function checkY7() {
+function checkPercentage() {
     let userAnswer = parseInt(document.getElementById('y7-numerator').value);
     let correctAnswer = Math.round(y7.percent / 100 * y7.base);
     if (userAnswer === correctAnswer) {
@@ -280,10 +323,11 @@ function gcd(a,b) {
 }
 
 // Generate initial questions
-generateY3();
-generateY4();
-generateY5();
-generateY6();
+generateFractionAddSub();
+generateFractionAndWhole();
+generateFractionAddSubComplex();
+generateFractionMultiplyDivision();
+generatePercentage();
 </script>
 
 </body>
