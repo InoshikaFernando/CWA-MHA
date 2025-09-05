@@ -18,69 +18,72 @@
     <option value="7">Fractions Multiplication & Division</option>
     <option value="8">Percentage</option>
 </select>
+
+<label for="questionCount">Number of Questions:</label>
+<select id="questionCount" onchange="setQuestionCount()">
+    <option value="5">5 Questions</option>
+    <option value="10">10 Questions</option>
+    <option value="20">20 Questions</option>
+    <option value="50">50 Questions</option>
+    <option value="100">100 Questions</option>
+</select>
 <div id="quizActive">
     <!-- Level 3 Section -->
     <div class="section" id="level3">
         <h2>Fractions Addition & Subtraction (Same Denominator)</h2>
-        <div id="y3-question"></div>
-        <input type="number" id="y3-numerator" placeholder="Num"> /
-        <input type="number" id="y3-denominator" placeholder="Den">
-        <button onclick="checkFractionAddSub()">Check Answer</button>
+        <div id="y3-question">Click "Start" to begin the quiz</div>
+        <input type="number" id="y3-numerator" placeholder="Num" disabled> /
+        <input type="number" id="y3-denominator" placeholder="Den" disabled>
+        <button onclick="toggleAction()" id="actionBtn">Start</button>
         <div class="result" id="y3-result"></div>
-        <button onclick="generateFractionAddSub()">Next Question</button>
     </div>
 
     <!-- Level 4 Section -->
     <div class="section" id="level4">
         <h2>Whole Numbers Addition & Subtraction</h2>
-        <div id="y4-question"></div>
-        <input type="number" id="y4-numerator" placeholder="Num"> /
-        <input type="number" id="y4-denominator" placeholder="Den">
-        <button onclick="checkFractionAndWhole()">Check Answer</button>
+        <div id="y4-question">Click "Start" to begin the quiz</div>
+        <input type="number" id="y4-numerator" placeholder="Num" disabled> /
+        <input type="number" id="y4-denominator" placeholder="Den" disabled>
+        <button onclick="toggleAction()" id="actionBtn">Start</button>
         <div class="result" id="y4-result"></div>
-        <button onclick="generateFractionAndWhole()">Next Question</button>
     </div>
 
     <!-- Level 5 Section -->
     <div class="section" id="level5">
         <h2>fraction word problems</h2>
-        <div id="wordProblemQuestion"></div>
-        <input type="number" id="wordProbNumerator" placeholder="Num"> 
-        <button onclick="checkFractionWorkProblems()">Check Answer</button>
+        <div id="wordProblemQuestion">Click "Start" to begin the quiz</div>
+        <input type="number" id="wordProbNumerator" placeholder="Num" disabled> 
+        <button onclick="toggleAction()" id="actionBtn">Start</button>
         <div class="result" id="wordProblemResult"></div>
-        <button onclick="generateFractionWorkProblems()">Next Question</button>
     </div>
 
     <!-- Level 6 Section -->
     <div class="section" id="level6">
         <h2>Fractions Addition & Subtraction (Different Denominator)</h2>
-        <div id="y5-question"></div>
-        <input type="number" id="y5-numerator" placeholder="Num"> /
-        <input type="number" id="y5-denominator" placeholder="Den">
-        <button onclick="checkFractionAddSubComplex()">Check Answer</button>
+        <div id="y5-question">Click "Start" to begin the quiz</div>
+        <input type="number" id="y5-numerator" placeholder="Num" disabled> /
+        <input type="number" id="y5-denominator" placeholder="Den" disabled>
+        <button onclick="toggleAction()" id="actionBtn">Start</button>
         <div class="result" id="y5-result"></div>
-        <button onclick="generateFractionAddSubComplex()">Next Question</button>
     </div>
 
     <!-- Level 7 Section -->
     <div class="section" id="level7">
         <h2>Fractions Multiplication & Division</h2>
-        <div id="y6-question"></div>
-        <input type="number" id="y6-numerator" placeholder="Num"> /
-        <input type="number" id="y6-denominator" placeholder="Den">
-        <button onclick="checkFractionMultiplyDivision()">Check Answer</button>
+        <div id="y6-question">Click "Start" to begin the quiz</div>
+        <input type="number" id="y6-numerator" placeholder="Num" disabled> /
+        <input type="number" id="y6-denominator" placeholder="Den" disabled>
+        <button onclick="toggleAction()" id="actionBtn">Start</button>
         <div class="result" id="y6-result"></div>
-        <button onclick="generateFractionMultiplyDivision()">Next Question</button>
     </div>
 
     <!-- Level 8 section -->
     <div class="section" id="level8">
         <h2>Percentage</h2>
-        <div id="y7-question"></div>
-        <input type="number" id="y7-numerator" placeholder="Num">
-        <button onclick="checkPercentage()">Check Answer</button>
+        <div id="y7-question">Click "Start" to begin the quiz</div>
+        <input type="number" id="y7-numerator" placeholder="Num" disabled>
+        <button onclick="toggleAction()" id="actionBtn">Start</button>
         <div class="result" id="y7-result"></div>
-        <button onclick="generatePercentage()">Next Question</button>
     </div>
 </div>
 <div id="feedback"></div>
@@ -91,12 +94,15 @@
   
   <br>
   <a href="index.html" class="back-btn">⬅ Back to Topics</a>
+  <button class="back-btn" onclick="restartQuiz()">🔄 Restart Quiz</button>
 
 <script src="scripts.js"></script>
 <script>
     let questionCount = 0, correctCount = 0, totalQuestions = 5;
     let timerInterval, elapsedTime = 0;
     let level = 0;
+    let isAnswerChecked = false; // Track if current answer has been checked
+    let isQuizStarted = false; // Track if quiz has been started
 
 function showFractionSection() {
     resetQuiz();
@@ -109,6 +115,153 @@ function showFractionSection() {
     document.getElementById('level8').style.display = level === '8' ? 'block' : 'none';
 }
 
+function setQuestionCount() {
+    totalQuestions = parseInt(document.getElementById('questionCount').value);
+    resetQuiz();
+    resetToStartState();
+}
+
+function resetToStartState() {
+    const level = document.getElementById('level').value;
+    const actionBtn = document.getElementById('actionBtn');
+    
+    // Reset all input fields
+    document.querySelectorAll('input[type="number"]').forEach(input => {
+        input.value = '';
+        input.disabled = true;
+    });
+    
+    // Reset all question displays
+    document.querySelectorAll('[id$="-question"]').forEach(question => {
+        question.innerText = 'Click "Start" to begin the quiz';
+    });
+    
+    // Reset all result displays
+    document.querySelectorAll('.result').forEach(result => {
+        result.innerText = '';
+    });
+    
+    // Reset action button
+    if (actionBtn) {
+        actionBtn.innerText = 'Start';
+        actionBtn.disabled = false;
+    }
+    
+    isAnswerChecked = false;
+    isQuizStarted = false;
+    
+    // Focus the button so Enter key works
+    if (actionBtn) {
+        actionBtn.focus();
+    }
+}
+
+function restartQuiz() {
+    // Reset all quiz variables
+    questionCount = 0;
+    correctCount = 0;
+    isAnswerChecked = false;
+    isQuizStarted = false;
+    
+    // Reset the quiz using the existing resetQuiz function from scripts.js
+    resetQuiz();
+    
+    // Reset to start state
+    resetToStartState();
+    
+    // Show quiz area if it was hidden
+    document.getElementById('quizActive').style.display = 'block';
+}
+
+function startQuiz() {
+    isQuizStarted = true;
+    const level = document.getElementById('level').value;
+    
+    // Enable inputs for current level
+    if (level === '3') {
+        document.getElementById('y3-numerator').disabled = false;
+        document.getElementById('y3-denominator').disabled = false;
+        generateFractionAddSub();
+    } else if (level === '4') {
+        document.getElementById('y4-numerator').disabled = false;
+        document.getElementById('y4-denominator').disabled = false;
+        generateFractionAndWhole();
+    } else if (level === '5') {
+        document.getElementById('wordProbNumerator').disabled = false;
+        generateFractionWorkProblems();
+    } else if (level === '6') {
+        document.getElementById('y5-numerator').disabled = false;
+        document.getElementById('y5-denominator').disabled = false;
+        generateFractionAddSubComplex();
+    } else if (level === '7') {
+        document.getElementById('y6-numerator').disabled = false;
+        document.getElementById('y6-denominator').disabled = false;
+        generateFractionMultiplyDivision();
+    } else if (level === '8') {
+        document.getElementById('y7-numerator').disabled = false;
+        generatePercentage();
+    }
+}
+
+function toggleAction() {
+    if (!isQuizStarted) {
+        startQuiz();
+    } else if (isAnswerChecked) {
+        // Move to next question
+        const level = document.getElementById('level').value;
+        if (level === '3') {
+            generateFractionAddSub();
+        } else if (level === '4') {
+            generateFractionAndWhole();
+        } else if (level === '5') {
+            generateFractionWorkProblems();
+        } else if (level === '6') {
+            generateFractionAddSubComplex();
+        } else if (level === '7') {
+            generateFractionMultiplyDivision();
+        } else if (level === '8') {
+            generatePercentage();
+        }
+    } else {
+        // Check current answer
+        const level = document.getElementById('level').value;
+        if (level === '3') {
+            checkFractionAddSub();
+        } else if (level === '4') {
+            checkFractionAndWhole();
+        } else if (level === '5') {
+            checkFractionWorkProblems();
+        } else if (level === '6') {
+            checkFractionAddSubComplex();
+        } else if (level === '7') {
+            checkFractionMultiplyDivision();
+        } else if (level === '8') {
+            checkPercentage();
+        }
+    }
+}
+
+function handleEnterKey(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        const actionBtn = document.getElementById('actionBtn');
+        if (actionBtn && !actionBtn.disabled) {
+            toggleAction();
+        }
+    }
+}
+
+// Add global key listener when page loads
+document.addEventListener('keydown', handleEnterKey);
+
+// Focus the button when page loads so Enter key works immediately
+document.addEventListener('DOMContentLoaded', function() {
+    const actionBtn = document.getElementById('actionBtn');
+    if (actionBtn) {
+        actionBtn.focus();
+    }
+});
+
 // Show only Level 3 by default
 showFractionSection();
 
@@ -120,6 +273,11 @@ function randInt(min, max) {
 // Fractions Addition & Subtraction (SameDenominator) Questions (Same Denominator)
 let y3 = {};
 function generateFractionAddSub() {
+    // Only start timer on first question
+    if (questionCount === 0) {
+        startTimer();
+    }
+    
     handleQuizProgress();
     let denom = randInt(2, 10);
     let a = randInt(1, denom-1);
@@ -127,14 +285,30 @@ function generateFractionAddSub() {
     y3 = {a, b, denom};
     let op = Math.random() < 0.5 ? '+' : '-';
     y3.op = op;
-    document.getElementById('y3-question').innerText = `Question: ${a}/${denom} ${op} ${b}/${denom}`;
+    document.getElementById('y3-question').innerText = `Q${questionCount + 1}: ${a}/${denom} ${op} ${b}/${denom}`;
     document.getElementById('y3-result').innerText = '';
     document.getElementById('feedback').innerText = "";
+    
+    // Reset button state
+    document.getElementById('actionBtn').innerText = "Check";
+    document.getElementById('actionBtn').disabled = false;
+    isAnswerChecked = false;
+    
+    // Enable inputs
+    document.getElementById('y3-numerator').disabled = false;
+    document.getElementById('y3-denominator').disabled = false;
+    
+    // Focus on first input
+    setTimeout(() => {
+        document.getElementById('y3-numerator').focus();
+    }, 10);
 }
 function checkFractionAddSub() {
     let num = parseInt(document.getElementById('y3-numerator').value);
     let den = parseInt(document.getElementById('y3-denominator').value);
     let correct = y3.op === '+' ? y3.a + y3.b : y3.a - y3.b;
+    let feedback = document.getElementById('feedback');
+    
     if (num  * y3.denom === correct * den) {
         feedback.innerText = "✅ Correct!";
         feedback.className = "correct";
@@ -145,6 +319,21 @@ function checkFractionAddSub() {
     }
     questionCount++;
     document.getElementById('score').innerText = `Score: ${correctCount}/${questionCount}`;
+    
+    // Update button state
+    document.getElementById('actionBtn').innerText = "Next Question";
+    isAnswerChecked = true;
+    
+    // Disable inputs
+    document.getElementById('y3-numerator').disabled = true;
+    document.getElementById('y3-denominator').disabled = true;
+    
+    // Check if quiz is complete
+    if (questionCount >= totalQuestions) {
+        document.getElementById('actionBtn').disabled = true;
+        document.getElementById('finalScore').innerText = 
+          `🎉 Quiz Finished! You got ${correctCount} out of ${totalQuestions} correct.`;
+    }
 }
 
 // Addition/ subtraction with whole numbers
