@@ -26,6 +26,7 @@ function resetQuiz() {
   document.getElementById('timer').innerText = "Time: 0 sec";
   document.getElementById('points').innerText = "";
   stopTimer();
+  startTimer();
   startTime = Date.now();
 }
 

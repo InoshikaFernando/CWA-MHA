@@ -32,8 +32,8 @@
     <div class="section" id="level3">
         <h2>Fractions Addition & Subtraction (Same Denominator)</h2>
         <div id="y3-question">Click "Start" to begin the quiz</div>
-        <input type="number" id="y3-numerator" placeholder="Num" disabled> /
-        <input type="number" id="y3-denominator" placeholder="Den" disabled>
+        <input type="number" id="y3-numerator" placeholder="Num"> /
+        <input type="number" id="y3-denominator" placeholder="Den">
         <button onclick="toggleAction()" id="actionBtn3">Start</button>
         <div class="result" id="y3-result"></div>
     </div>
@@ -42,8 +42,8 @@
     <div class="section" id="level4">
         <h2>Whole Numbers Addition & Subtraction</h2>
         <div id="y4-question">Click "Start" to begin the quiz</div>
-        <input type="number" id="y4-numerator" placeholder="Num" disabled> /
-        <input type="number" id="y4-denominator" placeholder="Den" disabled>
+        <input type="number" id="y4-numerator" placeholder="Num"> /
+        <input type="number" id="y4-denominator" placeholder="Den">
         <button onclick="toggleAction()" id="actionBtn4">Start</button>
         <div class="result" id="y4-result"></div>
     </div>
@@ -52,7 +52,7 @@
     <div class="section" id="level5">
         <h2>fraction word problems</h2>
         <div id="wordProblemQuestion">Click "Start" to begin the quiz</div>
-        <input type="number" id="wordProbNumerator" placeholder="Num" disabled> 
+        <input type="number" id="wordProbNumerator" placeholder="Num"> 
         <button onclick="toggleAction()" id="actionBtn5">Start</button>
         <div class="result" id="wordProblemResult"></div>
     </div>
@@ -61,8 +61,8 @@
     <div class="section" id="level6">
         <h2>Fractions Addition & Subtraction (Different Denominator)</h2>
         <div id="y5-question">Click "Start" to begin the quiz</div>
-        <input type="number" id="y5-numerator" placeholder="Num" disabled> /
-        <input type="number" id="y5-denominator" placeholder="Den" disabled>
+        <input type="number" id="y5-numerator" placeholder="Num"> /
+        <input type="number" id="y5-denominator" placeholder="Den">
         <button onclick="toggleAction()" id="actionBtn6">Start</button>
         <div class="result" id="y5-result"></div>
     </div>
@@ -71,8 +71,8 @@
     <div class="section" id="level7">
         <h2>Fractions Multiplication & Division</h2>
         <div id="y6-question">Click "Start" to begin the quiz</div>
-        <input type="number" id="y6-numerator" placeholder="Num" disabled> /
-        <input type="number" id="y6-denominator" placeholder="Den" disabled>
+        <input type="number" id="y6-numerator" placeholder="Num"> /
+        <input type="number" id="y6-denominator" placeholder="Den">
         <button onclick="toggleAction()" id="actionBtn7">Start</button>
         <div class="result" id="y6-result"></div>
     </div>
@@ -81,7 +81,7 @@
     <div class="section" id="level8">
         <h2>Percentage</h2>
         <div id="y7-question">Click "Start" to begin the quiz</div>
-        <input type="number" id="y7-numerator" placeholder="Num" disabled>
+        <input type="number" id="y7-numerator" placeholder="Num">
         <button onclick="toggleAction()" id="actionBtn8">Start</button>
         <div class="result" id="y7-result"></div>
     </div>
@@ -118,43 +118,44 @@ function showFractionSection() {
 function setQuestionCount() {
     totalQuestions = parseInt(document.getElementById('questionCount').value);
     resetQuiz();
-    resetToStartState();
+    startQuiz();
+    //resetToStartState();
 }
 
-function resetToStartState() {
-    const level = document.getElementById('level').value;
-    const actionBtn = document.getElementById('actionBtn');
+// function resetToStartState() {
+//     const level = document.getElementById('level').value;
+//     const actionBtn = document.getElementById('actionBtn');
     
-    // Reset all input fields
-    document.querySelectorAll('input[type="number"]').forEach(input => {
-        input.value = '';
-        input.disabled = true;
-    });
+//     // Reset all input fields
+//     document.querySelectorAll('input[type="number"]').forEach(input => {
+//         input.value = '';
+//         input.disabled = true;
+//     });
     
-    // Reset all question displays
-    document.querySelectorAll('[id$="-question"]').forEach(question => {
-        question.innerText = 'Click "Start" to begin the quiz';
-    });
+//     // Reset all question displays
+//     document.querySelectorAll('[id$="-question"]').forEach(question => {
+//         question.innerText = 'Click "Start" to begin the quiz';
+//     });
     
-    // Reset all result displays
-    document.querySelectorAll('.result').forEach(result => {
-        result.innerText = '';
-    });
+//     // Reset all result displays
+//     document.querySelectorAll('.result').forEach(result => {
+//         result.innerText = '';
+//     });
     
-    // Reset action button
-    if (actionBtn) {
-        actionBtn.innerText = 'Start';
-        actionBtn.disabled = false;
-    }
+//     // Reset action button
+//     if (actionBtn) {
+//         actionBtn.innerText = 'Start';
+//         actionBtn.disabled = false;
+//     }
     
-    isAnswerChecked = false;
-    isQuizStarted = false;
+//     isAnswerChecked = false;
+//     isQuizStarted = false;
     
-    // Focus the button so Enter key works
-    if (actionBtn) {
-        actionBtn.focus();
-    }
-}
+//     // Focus the button so Enter key works
+//     if (actionBtn) {
+//         actionBtn.focus();
+//     }
+// }
 
 function restartQuiz() {
     // Reset all quiz variables
@@ -165,9 +166,10 @@ function restartQuiz() {
     
     // Reset the quiz using the existing resetQuiz function from scripts.js
     resetQuiz();
+    startQuiz();
     
     // Reset to start state
-    resetToStartState();
+    //resetToStartState();
     
     // Show quiz area if it was hidden
     document.getElementById('quizActive').style.display = 'block';
@@ -273,9 +275,9 @@ function randInt(min, max) {
 let y3 = {};
 function generateFractionAddSub() {
     // Only start timer on first question
-    if (questionCount === 0) {
-        startTimer();
-    }
+    // if (questionCount === 0) {
+    //     startTimer();
+    // }
     
     handleQuizProgress();
     let denom = randInt(2, 10);
@@ -303,6 +305,8 @@ function generateFractionAddSub() {
     }, 10);
 }
 function checkFractionAddSub() {
+    document.getElementById('y3-numerator').disabled = true;
+    document.getElementById('y3-denominator').disabled = true;
     let num = parseInt(document.getElementById('y3-numerator').value);
     let den = parseInt(document.getElementById('y3-denominator').value);
     let correct = y3.op === '+' ? y3.a + y3.b : y3.a - y3.b;
@@ -364,9 +368,13 @@ function generateFractionAndWhole() {
     document.getElementById('actionBtn4').innerText = "Check";
     document.getElementById('actionBtn4').disabled = false;
     isAnswerChecked = false;
-
+    // Enable inputs
+    document.getElementById('y4-numerator').disabled = false;
+    document.getElementById('y4-denominator').disabled = false;
 }
 function checkFractionAndWhole() {
+    document.getElementById('y4-numerator').disabled = true;
+    document.getElementById('y4-denominator').disabled = true;
     let num = parseInt(document.getElementById('y4-numerator').value);
     let den = parseInt(document.getElementById('y4-denominator').value);
     let correctNum = y4.op === '+' ? y4.a * y4.c + y4.b : y4.a * y4.c - y4.b;
@@ -386,6 +394,25 @@ function checkFractionAndWhole() {
     document.getElementById('score').innerText = `Score: ${correctCount}/${questionCount}`;
     document.getElementById('actionBtn4').innerText = "Next Question";
     isAnswerChecked = true;
+
+    // Check if quiz is complete
+    if (questionCount >= totalQuestions) {
+        let timeUsed = elapsedTime || 1;
+        let level = parseInt(document.getElementById('level').value, 10);
+        let points = Math.round((correctCount / timeUsed) * 100 * Math.sqrt(level));
+        stopTimer();
+        document.getElementById('actionBtn3').disabled = true;
+        document.getElementById('finalScore').innerText = 
+          `🎉 Quiz Finished! You got ${correctCount} out of ${totalQuestions} correct.`;
+        document.getElementById('points').innerText = `Points: ${points}`;
+        document.getElementById('quizActive').style.display = 'none';
+        
+        setTimeout(() => {
+          if (points >= 50) { // Minimum threshold for any certificate
+            showCertificate(points, correctCount, totalQuestions, level, elapsedTime);
+          }
+        }, 1000); // Small delay to let the final score display first
+    }
 }
 
 // fraction word problems
@@ -403,9 +430,11 @@ function generateFractionWorkProblems() {
     document.getElementById('actionBtn5').innerText = "Check";
     document.getElementById('actionBtn5').disabled = false;
     isAnswerChecked = false;
-
+    // Enable inputs
+    document.getElementById('wordProbNumerator').disabled = false;
 }
 function checkFractionWorkProblems() {
+    document.getElementById('wordProbNumerator').disabled = true;
     let num = parseInt(document.getElementById('wordProbNumerator').value);
     let correctNum = wordProblem.a * (wordProblem.c / wordProblem.b);
     let feedback = document.getElementById('feedback');
@@ -423,7 +452,24 @@ function checkFractionWorkProblems() {
     document.getElementById('score').innerText = `Score: ${correctCount}/${questionCount}`;
     document.getElementById('actionBtn5').innerText = "Next Question";
     isAnswerChecked = true;
-      
+    // Check if quiz is complete
+    if (questionCount >= totalQuestions) {
+        let timeUsed = elapsedTime || 1;
+        let level = parseInt(document.getElementById('level').value, 10);
+        let points = Math.round((correctCount / timeUsed) * 100 * Math.sqrt(level));
+        stopTimer();
+        document.getElementById('actionBtn3').disabled = true;
+        document.getElementById('finalScore').innerText = 
+          `🎉 Quiz Finished! You got ${correctCount} out of ${totalQuestions} correct.`;
+        document.getElementById('points').innerText = `Points: ${points}`;
+        document.getElementById('quizActive').style.display = 'none';
+        
+        setTimeout(() => {
+          if (points >= 50) { // Minimum threshold for any certificate
+            showCertificate(points, correctCount, totalQuestions, level, elapsedTime);
+          }
+        }, 1000); // Small delay to let the final score display first
+    }
 }
 
 // Fractions Addition & Subtraction (Different Denominator) Questions (Different Denominator)
@@ -444,9 +490,13 @@ function generateFractionAddSubComplex() {
     document.getElementById('actionBtn6').innerText = "Check";
     document.getElementById('actionBtn6').disabled = false;
     isAnswerChecked = false;
-
+    // Enable inputs
+    document.getElementById('y5-numerator').disabled = false;
+    document.getElementById('y5-denominator').disabled = false;
 }
 function checkFractionAddSubComplex() {
+    document.getElementById('y5-numerator').disabled = true;
+    document.getElementById('y5-denominator').disabled = true;
     let num = parseInt(document.getElementById('y5-numerator').value);
     let den = parseInt(document.getElementById('y5-denominator').value);
     let lcm = y5.denom1 * y5.denom2 / gcd(y5.denom1, y5.denom2);
@@ -469,6 +519,24 @@ function checkFractionAddSubComplex() {
     document.getElementById('score').innerText = `Score: ${correctCount}/${questionCount}`;
     document.getElementById('actionBtn6').innerText = "Next Question";
     isAnswerChecked = true;
+    // Check if quiz is complete
+    if (questionCount >= totalQuestions) {
+        let timeUsed = elapsedTime || 1;
+        let level = parseInt(document.getElementById('level').value, 10);
+        let points = Math.round((correctCount / timeUsed) * 100 * Math.sqrt(level));
+        stopTimer();
+        document.getElementById('actionBtn3').disabled = true;
+        document.getElementById('finalScore').innerText = 
+          `🎉 Quiz Finished! You got ${correctCount} out of ${totalQuestions} correct.`;
+        document.getElementById('points').innerText = `Points: ${points}`;
+        document.getElementById('quizActive').style.display = 'none';
+        
+        setTimeout(() => {
+          if (points >= 50) { // Minimum threshold for any certificate
+            showCertificate(points, correctCount, totalQuestions, level, elapsedTime);
+          }
+        }, 1000); // Small delay to let the final score display first
+    }
 }
 
 // Fractions Multiplication & Division Questions (Multiplication & Division)
@@ -488,9 +556,13 @@ function generateFractionMultiplyDivision() {
     document.getElementById('actionBtn7').innerText = "Check";
     document.getElementById('actionBtn7').disabled = false;
     isAnswerChecked = false;
-
+    // Enable inputs
+    document.getElementById('y6-numerator').disabled = false;
+    document.getElementById('y6-denominator').disabled = false;
 }
 function checkFractionMultiplyDivision() {
+    document.getElementById('y6-numerator').disabled = true;
+    document.getElementById('y6-denominator').disabled = true;
     let num = parseInt(document.getElementById('y6-numerator').value);
     let den = parseInt(document.getElementById('y6-denominator').value);
     let correctNum, correctDen;
@@ -513,6 +585,24 @@ function checkFractionMultiplyDivision() {
     document.getElementById('score').innerText = `Score: ${correctCount}/${questionCount}`;
     document.getElementById('actionBtn7').innerText = "Next Question";
     isAnswerChecked = true;
+    // Check if quiz is complete
+    if (questionCount >= totalQuestions) {
+        let timeUsed = elapsedTime || 1;
+        let level = parseInt(document.getElementById('level').value, 10);
+        let points = Math.round((correctCount / timeUsed) * 100 * Math.sqrt(level));
+        stopTimer();
+        document.getElementById('actionBtn3').disabled = true;
+        document.getElementById('finalScore').innerText = 
+          `🎉 Quiz Finished! You got ${correctCount} out of ${totalQuestions} correct.`;
+        document.getElementById('points').innerText = `Points: ${points}`;
+        document.getElementById('quizActive').style.display = 'none';
+        
+        setTimeout(() => {
+          if (points >= 50) { // Minimum threshold for any certificate
+            showCertificate(points, correctCount, totalQuestions, level, elapsedTime);
+          }
+        }, 1000); // Small delay to let the final score display first
+    }
 }
 
 function generatePercentage() {
@@ -528,10 +618,12 @@ function generatePercentage() {
     document.getElementById('actionBtn8').innerText = "Check";
     document.getElementById('actionBtn8').disabled = false;
     isAnswerChecked = false;
-
+    // Enable inputs
+    document.getElementById('y7-numerator').disabled = false;
 }
 
 function checkPercentage() {
+    document.getElementById('y7-numerator').disabled = true;
     let userAnswer = parseInt(document.getElementById('y7-numerator').value);
     let correctAnswer = Math.round(y7.percent / 100 * y7.base);
     if (userAnswer === correctAnswer) {
@@ -546,6 +638,24 @@ function checkPercentage() {
     document.getElementById('score').innerText = `Score: ${correctCount}/${questionCount}`;
     document.getElementById('actionBtn8').innerText = "Next Question";
     isAnswerChecked = true;
+    // Check if quiz is complete
+    if (questionCount >= totalQuestions) {
+        let timeUsed = elapsedTime || 1;
+        let level = parseInt(document.getElementById('level').value, 10);
+        let points = Math.round((correctCount / timeUsed) * 100 * Math.sqrt(level));
+        stopTimer();
+        document.getElementById('actionBtn3').disabled = true;
+        document.getElementById('finalScore').innerText = 
+          `🎉 Quiz Finished! You got ${correctCount} out of ${totalQuestions} correct.`;
+        document.getElementById('points').innerText = `Points: ${points}`;
+        document.getElementById('quizActive').style.display = 'none';
+        
+        setTimeout(() => {
+          if (points >= 50) { // Minimum threshold for any certificate
+            showCertificate(points, correctCount, totalQuestions, level, elapsedTime);
+          }
+        }, 1000); // Small delay to let the final score display first
+    }
 }
 
 // Greatest Common Divisor
