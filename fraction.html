@@ -34,7 +34,7 @@
         <div id="y3-question">Click "Start" to begin the quiz</div>
         <input type="number" id="y3-numerator" placeholder="Num" disabled> /
         <input type="number" id="y3-denominator" placeholder="Den" disabled>
-        <button onclick="toggleAction()" id="actionBtn">Start</button>
+        <button onclick="toggleAction()" id="actionBtn3">Start</button>
         <div class="result" id="y3-result"></div>
     </div>
 
@@ -44,7 +44,7 @@
         <div id="y4-question">Click "Start" to begin the quiz</div>
         <input type="number" id="y4-numerator" placeholder="Num" disabled> /
         <input type="number" id="y4-denominator" placeholder="Den" disabled>
-        <button onclick="toggleAction()" id="actionBtn">Start</button>
+        <button onclick="toggleAction()" id="actionBtn4">Start</button>
         <div class="result" id="y4-result"></div>
     </div>
 
@@ -53,7 +53,7 @@
         <h2>fraction word problems</h2>
         <div id="wordProblemQuestion">Click "Start" to begin the quiz</div>
         <input type="number" id="wordProbNumerator" placeholder="Num" disabled> 
-        <button onclick="toggleAction()" id="actionBtn">Start</button>
+        <button onclick="toggleAction()" id="actionBtn5">Start</button>
         <div class="result" id="wordProblemResult"></div>
     </div>
 
@@ -63,7 +63,7 @@
         <div id="y5-question">Click "Start" to begin the quiz</div>
         <input type="number" id="y5-numerator" placeholder="Num" disabled> /
         <input type="number" id="y5-denominator" placeholder="Den" disabled>
-        <button onclick="toggleAction()" id="actionBtn">Start</button>
+        <button onclick="toggleAction()" id="actionBtn6">Start</button>
         <div class="result" id="y5-result"></div>
     </div>
 
@@ -73,7 +73,7 @@
         <div id="y6-question">Click "Start" to begin the quiz</div>
         <input type="number" id="y6-numerator" placeholder="Num" disabled> /
         <input type="number" id="y6-denominator" placeholder="Den" disabled>
-        <button onclick="toggleAction()" id="actionBtn">Start</button>
+        <button onclick="toggleAction()" id="actionBtn7">Start</button>
         <div class="result" id="y6-result"></div>
     </div>
 
@@ -82,7 +82,7 @@
         <h2>Percentage</h2>
         <div id="y7-question">Click "Start" to begin the quiz</div>
         <input type="number" id="y7-numerator" placeholder="Num" disabled>
-        <button onclick="toggleAction()" id="actionBtn">Start</button>
+        <button onclick="toggleAction()" id="actionBtn8">Start</button>
         <div class="result" id="y7-result"></div>
     </div>
 </div>
@@ -204,10 +204,8 @@ function startQuiz() {
 }
 
 function toggleAction() {
-    if (!isQuizStarted) {
-        startQuiz();
-    } else if (isAnswerChecked) {
-        // Move to next question
+    if (isAnswerChecked) {
+        console.log("Next question");
         const level = document.getElementById('level').value;
         if (level === '3') {
             generateFractionAddSub();
@@ -223,6 +221,7 @@ function toggleAction() {
             generatePercentage();
         }
     } else {
+        console.log("Check answer");
         // Check current answer
         const level = document.getElementById('level').value;
         if (level === '3') {
@@ -290,8 +289,8 @@ function generateFractionAddSub() {
     document.getElementById('feedback').innerText = "";
     
     // Reset button state
-    document.getElementById('actionBtn').innerText = "Check";
-    document.getElementById('actionBtn').disabled = false;
+    document.getElementById('actionBtn3').innerText = "Check";
+    document.getElementById('actionBtn3').disabled = false;
     isAnswerChecked = false;
     
     // Enable inputs
@@ -321,7 +320,7 @@ function checkFractionAddSub() {
     document.getElementById('score').innerText = `Score: ${correctCount}/${questionCount}`;
     
     // Update button state
-    document.getElementById('actionBtn').innerText = "Next Question";
+    document.getElementById('actionBtn3').innerText = "Next Question";
     isAnswerChecked = true;
     
     // Disable inputs
@@ -330,9 +329,21 @@ function checkFractionAddSub() {
     
     // Check if quiz is complete
     if (questionCount >= totalQuestions) {
-        document.getElementById('actionBtn').disabled = true;
+        let timeUsed = elapsedTime || 1;
+        let level = parseInt(document.getElementById('level').value, 10);
+        let points = Math.round((correctCount / timeUsed) * 100 * Math.sqrt(level));
+        stopTimer();
+        document.getElementById('actionBtn3').disabled = true;
         document.getElementById('finalScore').innerText = 
           `🎉 Quiz Finished! You got ${correctCount} out of ${totalQuestions} correct.`;
+        document.getElementById('points').innerText = `Points: ${points}`;
+        document.getElementById('quizActive').style.display = 'none';
+        
+        setTimeout(() => {
+          if (points >= 50) { // Minimum threshold for any certificate
+            showCertificate(points, correctCount, totalQuestions, level, elapsedTime);
+          }
+        }, 1000); // Small delay to let the final score display first
     }
 }
 
@@ -349,6 +360,11 @@ function generateFractionAndWhole() {
     document.getElementById('y4-question').innerText = `Question: ${a} ${op} ${b}/${c}`;
     document.getElementById('y4-result').innerText = '';
     document.getElementById('feedback').innerText = "";
+    // Reset button state
+    document.getElementById('actionBtn4').innerText = "Check";
+    document.getElementById('actionBtn4').disabled = false;
+    isAnswerChecked = false;
+
 }
 function checkFractionAndWhole() {
     let num = parseInt(document.getElementById('y4-numerator').value);
@@ -368,6 +384,8 @@ function checkFractionAndWhole() {
     }
     questionCount++;
     document.getElementById('score').innerText = `Score: ${correctCount}/${questionCount}`;
+    document.getElementById('actionBtn4').innerText = "Next Question";
+    isAnswerChecked = true;
 }
 
 // fraction word problems
@@ -381,6 +399,11 @@ function generateFractionWorkProblems() {
     document.getElementById('wordProblemQuestion').innerText = `Question: What is ${a}/${b} of ${c}?`;
     document.getElementById('wordProblemResult').innerText = '';
     document.getElementById('feedback').innerText = "";
+    // Reset button state
+    document.getElementById('actionBtn5').innerText = "Check";
+    document.getElementById('actionBtn5').disabled = false;
+    isAnswerChecked = false;
+
 }
 function checkFractionWorkProblems() {
     let num = parseInt(document.getElementById('wordProbNumerator').value);
@@ -398,6 +421,9 @@ function checkFractionWorkProblems() {
     }
     questionCount++;
     document.getElementById('score').innerText = `Score: ${correctCount}/${questionCount}`;
+    document.getElementById('actionBtn5').innerText = "Next Question";
+    isAnswerChecked = true;
+      
 }
 
 // Fractions Addition & Subtraction (Different Denominator) Questions (Different Denominator)
@@ -414,6 +440,11 @@ function generateFractionAddSubComplex() {
     document.getElementById('y5-question').innerText = `Question: ${a}/${denom1} ${op} ${b}/${denom2}`;
     document.getElementById('y5-result').innerText = '';
     document.getElementById('feedback').innerText = "";
+    // Reset button state
+    document.getElementById('actionBtn6').innerText = "Check";
+    document.getElementById('actionBtn6').disabled = false;
+    isAnswerChecked = false;
+
 }
 function checkFractionAddSubComplex() {
     let num = parseInt(document.getElementById('y5-numerator').value);
@@ -436,6 +467,8 @@ function checkFractionAddSubComplex() {
     }
     questionCount++;
     document.getElementById('score').innerText = `Score: ${correctCount}/${questionCount}`;
+    document.getElementById('actionBtn6').innerText = "Next Question";
+    isAnswerChecked = true;
 }
 
 // Fractions Multiplication & Division Questions (Multiplication & Division)
@@ -451,6 +484,11 @@ function generateFractionMultiplyDivision() {
     document.getElementById('y6-question').innerText = `Question: ${a}/${denom1} ${op} ${b}/${denom2}`;
     document.getElementById('y6-result').innerText = '';
     document.getElementById('feedback').innerText = "";
+    // Reset button state
+    document.getElementById('actionBtn7').innerText = "Check";
+    document.getElementById('actionBtn7').disabled = false;
+    isAnswerChecked = false;
+
 }
 function checkFractionMultiplyDivision() {
     let num = parseInt(document.getElementById('y6-numerator').value);
@@ -473,6 +511,8 @@ function checkFractionMultiplyDivision() {
     }
     questionCount++;
     document.getElementById('score').innerText = `Score: ${correctCount}/${questionCount}`;
+    document.getElementById('actionBtn7').innerText = "Next Question";
+    isAnswerChecked = true;
 }
 
 function generatePercentage() {
@@ -484,6 +524,11 @@ function generatePercentage() {
     document.getElementById('y7-question').innerText = `Question: What is ${percent}% of ${base}?`;
     document.getElementById('y7-result').innerText = '';
     document.getElementById('feedback').innerText = "";
+    // Reset button state
+    document.getElementById('actionBtn8').innerText = "Check";
+    document.getElementById('actionBtn8').disabled = false;
+    isAnswerChecked = false;
+
 }
 
 function checkPercentage() {
@@ -499,6 +544,8 @@ function checkPercentage() {
     }
     questionCount++;
     document.getElementById('score').innerText = `Score: ${correctCount}/${questionCount}`;
+    document.getElementById('actionBtn8').innerText = "Next Question";
+    isAnswerChecked = true;
 }
 
 // Greatest Common Divisor
@@ -514,6 +561,7 @@ function gcd(a,b) {
 // Generate initial questions
 generateFractionAddSub();
 generateFractionAndWhole();
+generateFractionWorkProblems();
 generateFractionAddSubComplex();
 generateFractionMultiplyDivision();
 generatePercentage();
