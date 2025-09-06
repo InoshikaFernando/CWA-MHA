@@ -87,11 +87,19 @@
             case 3: { // 4-digit + tenths
             let intPart = getUniqueDigits(4, false).join('');
             let decimalPart = getUniqueDigits(1, true)[0];
+            // Ensure decimal part is different from all integer digits
+            while (intPart.includes(decimalPart)) {
+                decimalPart = getUniqueDigits(1, true)[0];
+            }
             return intPart + '.' + decimalPart;
             }
             case 4: { // 5-digit + hundredths
             let intPart = getUniqueDigits(5, false).join('');
             let decimalPart = getUniqueDigits(2, true).join('');
+            // Ensure decimal digits are different from integer digits and each other
+            while (intPart.includes(decimalPart[0]) || intPart.includes(decimalPart[1]) || decimalPart[0] === decimalPart[1]) {
+                decimalPart = getUniqueDigits(2, true).join('');
+            }
             return intPart + '.' + decimalPart;
             }
         }
@@ -112,28 +120,45 @@
       }
       
       handleQuizProgress();
-      if (currentDigitIndex === 0) {
-        numberString = generateNumber().toString();
-        digits = numberString.replace(".", "").split("").map(Number);
-        correctAnswers = [];
+      
+      // Generate new number for each question (simpler approach)
+      numberString = generateNumber().toString();
+      digits = numberString.replace(".", "").split("").map(Number);
+      correctAnswers = [];
 
-        // Build correct answers based on each digit
-        let pos = numberString.includes(".") 
-          ? numberString.length - 1 - numberString.indexOf(".") // decimal positions
-          : 0;
-
-        let index = numberString.length - 1;
-        for (let i = 0; i < numberString.length; i++) {
-          if (numberString[i] === ".") continue;
-          let exp = index - i;
-          if (numberString.includes(".")) {
-            exp = numberString.indexOf(".") - i - 1;
+      // Build correct answers based on each digit
+      let decimalIndex = numberString.indexOf(".");
+      let digitIndex = 0; // Track position in digits array
+      
+      for (let i = 0; i < numberString.length; i++) {
+        if (numberString[i] === ".") continue;
+        
+        let exp;
+        if (decimalIndex === -1) {
+          // No decimal point - integer positions
+          exp = numberString.length - 1 - i;
+        } else {
+          // Has decimal point
+          if (i < decimalIndex) {
+            // Integer part (left of decimal)
+            exp = decimalIndex - 1 - i;
+          } else {
+            // Decimal part (right of decimal)
+            exp = decimalIndex - i;
           }
-          correctAnswers.push(placeValue(digits[i], exp));
         }
+        
+        let placeVal = placeValue(digits[digitIndex], exp);
+        // Round to avoid floating point precision issues
+        placeVal = Math.round(placeVal * 1000000) / 1000000;
+        correctAnswers.push(placeVal);
+        digitIndex++;
       }
 
-      let digitChar = numberString.replace(".", "")[currentDigitIndex];
+      // Pick a random digit to ask about
+      currentDigitIndex = Math.floor(Math.random() * digits.length);
+      let digitChar = digits[currentDigitIndex];
+      
       document.getElementById('question').innerText =
         `Q${questionCount + 1}: Number is ${numberString}. What is the value of ${digitChar}?`;
 
@@ -153,20 +178,21 @@
     function checkAnswer() {
       let userAnswer = document.getElementById('answer').value.trim();
       let feedback = document.getElementById('feedback');
-
-      if (userAnswer == correctAnswers[currentDigitIndex]) {
+      
+      // Convert user answer to number for comparison
+      let userNum = parseFloat(userAnswer);
+      let correctNum = correctAnswers[currentDigitIndex];
+      
+      // Check if answer is correct (with tolerance for floating point precision)
+      if (!isNaN(userNum) && Math.abs(userNum - correctNum) < 0.00001) {
         feedback.innerText = "✅ Correct!";
         feedback.className = "correct";
         correctCount++;
       } else {
-        feedback.innerText = `❌ Wrong. Correct answer is ${correctAnswers[currentDigitIndex]}`;
+        feedback.innerText = `❌ Wrong. Correct answer is ${correctNum}`;
         feedback.className = "wrong";
       }
 
-      currentDigitIndex++;
-      if (currentDigitIndex >= correctAnswers.length) {
-        currentDigitIndex = 0;
-      }
       questionCount++;
 
       document.getElementById('score').innerText = `Score: ${correctCount}/${questionCount}`;
