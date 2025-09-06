@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guitar Training</title>
+  <style>
+    body { 
+      font-family: Arial, sans-serif; 
+      text-align: center; 
+      padding: 20px; 
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      min-height: 100vh;
+    }
+    
+    h1 { 
+      color: #fff; 
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      margin-bottom: 30px;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: rgba(255,255,255,0.1);
+      border-radius: 15px;
+      padding: 30px;
+      backdrop-filter: blur(10px);
+    }
+    
+    .controls {
+      margin-bottom: 30px;
+    }
+    
+    .note-input {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .note-btn {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 15px 20px;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .note-btn:hover {
+      background: #45a049;
+      transform: scale(1.1);
+    }
+    
+    .note-btn.active {
+      background: #ff6b6b;
+      transform: scale(1.2);
+    }
+    
+    .tempo-control {
+      margin: 20px 0;
+    }
+    
+    .tempo-control label {
+      font-size: 18px;
+      margin-right: 10px;
+    }
+    
+    .tempo-control input {
+      width: 100px;
+      padding: 8px;
+      border-radius: 5px;
+      border: none;
+      font-size: 16px;
+    }
+    
+    .playback-controls {
+      margin: 20px 0;
+    }
+    
+    .control-btn {
+      background: #2196F3;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 25px;
+      cursor: pointer;
+      margin: 0 10px;
+      transition: all 0.3s;
+    }
+    
+    .control-btn:hover {
+      background: #1976D2;
+      transform: translateY(-2px);
+    }
+    
+    .control-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .fretboard {
+      background: #8B4513;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 30px 0;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+    
+    .fretboard-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+    
+    .fretboard-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .fret-numbers {
+      display: flex;
+      flex: 1;
+      position: relative;
+    }
+    
+    .fret-number-header {
+      flex: 1;
+      text-align: center;
+      font-size: 14px;
+      color: #ccc;
+      font-weight: bold;
+    }
+    
+    .fret-number-header.nut {
+      background: #333;
+      color: white;
+      border-radius: 3px;
+    }
+    
+    .nut {
+      width: 30px;
+      height: 20px;
+      background: #333;
+      border-radius: 3px;
+      margin-right: 5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+    
+    .nut:hover {
+      background: #555;
+    }
+    
+    .nut.muted {
+      background: #ff69b4;
+    }
+    
+    .nut.muted::after {
+      content: "X";
+      color: white;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    
+    .strings {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .string {
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+    
+    .string-label {
+      width: 40px;
+      font-weight: bold;
+      font-size: 18px;
+      color: #fff;
+    }
+    
+    .frets {
+      display: flex;
+      flex: 1;
+      position: relative;
+    }
+    
+    .fret {
+      flex: 1;
+      height: 40px;
+      border-right: 2px solid #654321;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .fret:last-child {
+      border-right: 3px solid #654321;
+    }
+    
+    .fret:hover {
+      background: rgba(255,255,255,0.1);
+    }
+    
+    .fret.active {
+      background: #ff6b6b;
+      border-radius: 50%;
+      transform: scale(1.2);
+      box-shadow: 0 0 20px #ff6b6b;
+    }
+    
+    .fret-number {
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 12px;
+      color: #ccc;
+    }
+    
+    .note-display {
+      background: rgba(0,0,0,0.3);
+      border-radius: 10px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    
+    .current-notes {
+      font-size: 24px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    
+    .sequence-display {
+      background: rgba(0,0,0,0.2);
+      border-radius: 10px;
+      padding: 15px;
+      margin: 20px 0;
+      min-height: 60px;
+    }
+    
+    .sequence-item {
+      display: inline-block;
+      background: #4CAF50;
+      color: white;
+      padding: 8px 16px;
+      margin: 5px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+    
+    .sequence-item.current {
+      background: #ff6b6b;
+      transform: scale(1.1);
+    }
+    
+    .back-btn {
+      margin-top: 20px;
+      background: #e67e22;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+    
+    .back-btn:hover {
+      background: #d35400;
+    }
+    
+    .mode-selection {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    .mode-selection label {
+      font-weight: bold;
+      margin-right: 10px;
+      color: #333;
+    }
+    
+    .mode-selection select {
+      padding: 8px 12px;
+      border: 2px solid #ddd;
+      border-radius: 5px;
+      font-size: 16px;
+      background: white;
+    }
+    
+    .pentatonic-controls, .chord-controls {
+      margin: 15px 0;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 10px;
+      border: 2px solid #e9ecef;
+      text-align: center;
+    }
+    
+    .pentatonic-controls label, .chord-controls label {
+      font-weight: bold;
+      margin-right: 10px;
+      color: #333;
+    }
+    
+    .pentatonic-controls select, .chord-controls select {
+      padding: 8px 12px;
+      border: 2px solid #ddd;
+      border-radius: 5px;
+      font-size: 16px;
+      background: white;
+      margin-right: 10px;
+    }
+    
+    .note-position-controls {
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    
+    .note-position-controls label {
+      font-weight: bold;
+      margin-right: 10px;
+      color: #333;
+    }
+    
+    .note-position-controls select {
+      padding: 8px 12px;
+      border: 2px solid #ddd;
+      border-radius: 5px;
+      font-size: 16px;
+      background: white;
+    }
+    
+    .note-buttons-container {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .highlighted {
+      background: #ffeb3b !important;
+      box-shadow: 0 0 10px #ffeb3b;
+      animation: pulse 0.5s ease-in-out;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    
+    @media (max-width: 768px) {
+      .note-input {
+        gap: 10px;
+      }
+      
+      .note-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 16px;
+      }
+      
+      .fret {
+        height: 30px;
+      }
+      
+      .fret-number {
+        font-size: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>🎸 Guitar Training</h1>
+  
+  <div class="container">
+    <div class="controls">
+      <div class="mode-selection">
+        <label for="mode">Mode:</label>
+        <select id="mode">
+          <option value="notes">Individual Notes</option>
+          <option value="pentatonic">Pentatonic Scale</option>
+          <option value="chords">Chords</option>
+        </select>
+      </div>
+      
+      <div class="pentatonic-controls" id="pentatonicControls" style="display: none;">
+        <label for="pentatonicKey">Pentatonic Scale Key:</label>
+        <select id="pentatonicKey">
+          <option value="C">C</option>
+          <option value="D">D</option>
+          <option value="E">E</option>
+          <option value="F">F</option>
+          <option value="G">G</option>
+          <option value="A">A</option>
+          <option value="B">B</option>
+        </select>
+        
+        <label for="pentatonicPosition">Starting Position:</label>
+        <select id="pentatonicPosition">
+          <option value="open">Open Position (0-3 frets)</option>
+          <option value="fifth">5th Position (5-8 frets)</option>
+          <option value="seventh">7th Position (7-10 frets)</option>
+          <option value="twelfth">12th Position (12+ frets)</option>
+        </select>
+        
+        <button class="control-btn" id="playPentatonicBtn">🎵 Play Scale</button>
+      </div>
+      
+      <div class="chord-controls" id="chordControls" style="display: none;">
+        <label for="chordKey">Chord:</label>
+        <select id="chordKey">
+          <option value="C">C Major</option>
+          <option value="D">D Major</option>
+          <option value="E">E Major</option>
+          <option value="F">F Major</option>
+          <option value="G">G Major</option>
+          <option value="A">A Major</option>
+          <option value="B">B Major</option>
+        </select>
+        
+        <label for="chordPosition">Chord Position:</label>
+        <select id="chordPosition">
+          <option value="open">Open Position</option>
+          <option value="barre">Barre Chord</option>
+          <option value="triad">Triad (3-note)</option>
+        </select>
+        
+        <button class="control-btn" id="playChordBtn">🎸 Play Chord</button>
+      </div>
+      
+      <div class="note-input" id="noteButtons">
+        <div class="note-position-controls">
+          <label for="notePosition">Note Position:</label>
+          <select id="notePosition">
+            <option value="all">All Positions</option>
+            <option value="open">Open Position (0-3 frets)</option>
+            <option value="fifth">5th Position (5-8 frets)</option>
+            <option value="seventh">7th Position (7-10 frets)</option>
+            <option value="twelfth">12th Position (12+ frets)</option>
+          </select>
+        </div>
+        
+        <div class="note-buttons-container">
+          <button class="note-btn" data-note="C">C</button>
+          <button class="note-btn" data-note="D">D</button>
+          <button class="note-btn" data-note="E">E</button>
+          <button class="note-btn" data-note="F">F</button>
+          <button class="note-btn" data-note="G">G</button>
+          <button class="note-btn" data-note="A">A</button>
+          <button class="note-btn" data-note="B">B</button>
+        </div>
+      </div>
+      
+      <div class="tempo-control">
+        <label for="tempo">Tempo (BPM):</label>
+        <input type="number" id="tempo" value="120" min="60" max="200">
+      </div>
+      
+      <div class="playback-controls">
+        <button class="control-btn" id="playBtn">▶️ Play Sequence</button>
+        <button class="control-btn" id="stopBtn" disabled>⏹️ Stop</button>
+        <button class="control-btn" id="clearBtn">🗑️ Clear</button>
+        <button class="control-btn" id="addRestBtn">⏸️ Add Rest</button>
+      </div>
+    </div>
+    
+    <div class="note-display">
+      <h3>Current Note Sequence:</h3>
+      <div class="current-notes" id="currentNotes">Click notes to build your sequence</div>
+    </div>
+    
+    <div class="sequence-display">
+      <h3>Note Sequence:</h3>
+      <div id="sequenceDisplay"></div>
+    </div>
+    
+    <div class="fretboard">
+      <div class="fretboard-title">Guitar Fretboard</div>
+      <div class="fretboard-header">
+        <div class="string-label"></div>
+        <div class="fret-numbers">
+          <div class="fret-number-header nut">0</div>
+          <div class="fret-number-header">1</div>
+          <div class="fret-number-header">2</div>
+          <div class="fret-number-header">3</div>
+          <div class="fret-number-header">4</div>
+          <div class="fret-number-header">5</div>
+          <div class="fret-number-header">6</div>
+          <div class="fret-number-header">7</div>
+          <div class="fret-number-header">8</div>
+          <div class="fret-number-header">9</div>
+          <div class="fret-number-header">10</div>
+          <div class="fret-number-header">11</div>
+          <div class="fret-number-header">12</div>
+        </div>
+      </div>
+      <div class="strings">
+        <!-- High E String (top) -->
+        <div class="string">
+          <div class="string-label">E</div>
+          <div class="nut" data-string="0" data-fret="0"></div>
+          <div class="frets">
+            <div class="fret" data-string="0" data-fret="0"></div>
+            <div class="fret" data-string="0" data-fret="1"></div>
+            <div class="fret" data-string="0" data-fret="2"></div>
+            <div class="fret" data-string="0" data-fret="3"></div>
+            <div class="fret" data-string="0" data-fret="4"></div>
+            <div class="fret" data-string="0" data-fret="5"></div>
+            <div class="fret" data-string="0" data-fret="6"></div>
+            <div class="fret" data-string="0" data-fret="7"></div>
+            <div class="fret" data-string="0" data-fret="8"></div>
+            <div class="fret" data-string="0" data-fret="9"></div>
+            <div class="fret" data-string="0" data-fret="10"></div>
+            <div class="fret" data-string="0" data-fret="11"></div>
+            <div class="fret" data-string="0" data-fret="12"></div>
+          </div>
+        </div>
+        
+        <!-- A String -->
+        <div class="string">
+          <div class="string-label">A</div>
+          <div class="nut" data-string="1" data-fret="0"></div>
+          <div class="frets">
+            <div class="fret" data-string="1" data-fret="0"></div>
+            <div class="fret" data-string="1" data-fret="1"></div>
+            <div class="fret" data-string="1" data-fret="2"></div>
+            <div class="fret" data-string="1" data-fret="3"></div>
+            <div class="fret" data-string="1" data-fret="4"></div>
+            <div class="fret" data-string="1" data-fret="5"></div>
+            <div class="fret" data-string="1" data-fret="6"></div>
+            <div class="fret" data-string="1" data-fret="7"></div>
+            <div class="fret" data-string="1" data-fret="8"></div>
+            <div class="fret" data-string="1" data-fret="9"></div>
+            <div class="fret" data-string="1" data-fret="10"></div>
+            <div class="fret" data-string="1" data-fret="11"></div>
+            <div class="fret" data-string="1" data-fret="12"></div>
+          </div>
+        </div>
+        
+        <!-- D String -->
+        <div class="string">
+          <div class="string-label">D</div>
+          <div class="nut" data-string="2" data-fret="0"></div>
+          <div class="frets">
+            <div class="fret" data-string="2" data-fret="0"></div>
+            <div class="fret" data-string="2" data-fret="1"></div>
+            <div class="fret" data-string="2" data-fret="2"></div>
+            <div class="fret" data-string="2" data-fret="3"></div>
+            <div class="fret" data-string="2" data-fret="4"></div>
+            <div class="fret" data-string="2" data-fret="5"></div>
+            <div class="fret" data-string="2" data-fret="6"></div>
+            <div class="fret" data-string="2" data-fret="7"></div>
+            <div class="fret" data-string="2" data-fret="8"></div>
+            <div class="fret" data-string="2" data-fret="9"></div>
+            <div class="fret" data-string="2" data-fret="10"></div>
+            <div class="fret" data-string="2" data-fret="11"></div>
+            <div class="fret" data-string="2" data-fret="12"></div>
+          </div>
+        </div>
+        
+        <!-- G String -->
+        <div class="string">
+          <div class="string-label">G</div>
+          <div class="nut" data-string="3" data-fret="0"></div>
+          <div class="frets">
+            <div class="fret" data-string="3" data-fret="0"></div>
+            <div class="fret" data-string="3" data-fret="1"></div>
+            <div class="fret" data-string="3" data-fret="2"></div>
+            <div class="fret" data-string="3" data-fret="3"></div>
+            <div class="fret" data-string="3" data-fret="4"></div>
+            <div class="fret" data-string="3" data-fret="5"></div>
+            <div class="fret" data-string="3" data-fret="6"></div>
+            <div class="fret" data-string="3" data-fret="7"></div>
+            <div class="fret" data-string="3" data-fret="8"></div>
+            <div class="fret" data-string="3" data-fret="9"></div>
+            <div class="fret" data-string="3" data-fret="10"></div>
+            <div class="fret" data-string="3" data-fret="11"></div>
+            <div class="fret" data-string="3" data-fret="12"></div>
+          </div>
+        </div>
+        
+        <!-- B String -->
+        <div class="string">
+          <div class="string-label">B</div>
+          <div class="nut" data-string="4" data-fret="0"></div>
+          <div class="frets">
+            <div class="fret" data-string="4" data-fret="0"></div>
+            <div class="fret" data-string="4" data-fret="1"></div>
+            <div class="fret" data-string="4" data-fret="2"></div>
+            <div class="fret" data-string="4" data-fret="3"></div>
+            <div class="fret" data-string="4" data-fret="4"></div>
+            <div class="fret" data-string="4" data-fret="5"></div>
+            <div class="fret" data-string="4" data-fret="6"></div>
+            <div class="fret" data-string="4" data-fret="7"></div>
+            <div class="fret" data-string="4" data-fret="8"></div>
+            <div class="fret" data-string="4" data-fret="9"></div>
+            <div class="fret" data-string="4" data-fret="10"></div>
+            <div class="fret" data-string="4" data-fret="11"></div>
+            <div class="fret" data-string="4" data-fret="12"></div>
+          </div>
+        </div>
+        
+        <!-- Low E String (bottom) -->
+        <div class="string">
+          <div class="string-label">E</div>
+          <div class="nut" data-string="5" data-fret="0"></div>
+          <div class="frets">
+            <div class="fret" data-string="5" data-fret="0"></div>
+            <div class="fret" data-string="5" data-fret="1"></div>
+            <div class="fret" data-string="5" data-fret="2"></div>
+            <div class="fret" data-string="5" data-fret="3"></div>
+            <div class="fret" data-string="5" data-fret="4"></div>
+            <div class="fret" data-string="5" data-fret="5"></div>
+            <div class="fret" data-string="5" data-fret="6"></div>
+            <div class="fret" data-string="5" data-fret="7"></div>
+            <div class="fret" data-string="5" data-fret="8"></div>
+            <div class="fret" data-string="5" data-fret="9"></div>
+            <div class="fret" data-string="5" data-fret="10"></div>
+            <div class="fret" data-string="5" data-fret="11"></div>
+            <div class="fret" data-string="5" data-fret="12"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <button class="back-btn" onclick="location.href='index.html'">⬅ Back to Topics</button>
+  </div>
+
+  <script>
+    // Audio context for sound generation
+    let audioContext;
+    let currentSequence = [];
+    let isPlaying = false;
+    let currentNoteIndex = 0;
+    let playInterval;
+    
+    // Note frequencies (in Hz)
+    const noteFrequencies = {
+      'C': 261.63,
+      'D': 293.66,
+      'E': 329.63,
+      'F': 349.23,
+      'G': 392.00,
+      'A': 440.00,
+      'B': 493.88
+    };
+    
+    // Guitar string notes (open strings) - top to bottom
+    const stringNotes = ['E', 'A', 'D', 'G', 'B', 'E']; // High E, A, D, G, B, Low E
+    
+    // Pentatonic scale patterns (major pentatonic) with position-specific notes
+    const pentatonicPatterns = {
+      'C': {
+        'open': ['C', 'D', 'E', 'G', 'A'],
+        'fifth': ['C', 'D', 'E', 'G', 'A'],
+        'seventh': ['C', 'D', 'E', 'G', 'A'],
+        'twelfth': ['C', 'D', 'E', 'G', 'A']
+      },
+      'D': {
+        'open': ['D', 'E', 'F#', 'A', 'B'],
+        'fifth': ['D', 'E', 'F#', 'A', 'B'],
+        'seventh': ['D', 'E', 'F#', 'A', 'B'],
+        'twelfth': ['D', 'E', 'F#', 'A', 'B']
+      },
+      'E': {
+        'open': ['E', 'F#', 'G#', 'B', 'C#'],
+        'fifth': ['E', 'F#', 'G#', 'B', 'C#'],
+        'seventh': ['E', 'F#', 'G#', 'B', 'C#'],
+        'twelfth': ['E', 'F#', 'G#', 'B', 'C#']
+      },
+      'F': {
+        'open': ['F', 'G', 'A', 'C', 'D'],
+        'fifth': ['F', 'G', 'A', 'C', 'D'],
+        'seventh': ['F', 'G', 'A', 'C', 'D'],
+        'twelfth': ['F', 'G', 'A', 'C', 'D']
+      },
+      'G': {
+        'open': ['G', 'A', 'B', 'D', 'E'],
+        'fifth': ['G', 'A', 'B', 'D', 'E'],
+        'seventh': ['G', 'A', 'B', 'D', 'E'],
+        'twelfth': ['G', 'A', 'B', 'D', 'E']
+      },
+      'A': {
+        'open': ['A', 'B', 'C#', 'E', 'F#'],
+        'fifth': ['A', 'B', 'C#', 'E', 'F#'],
+        'seventh': ['A', 'B', 'C#', 'E', 'F#'],
+        'twelfth': ['A', 'B', 'C#', 'E', 'F#']
+      },
+      'B': {
+        'open': ['B', 'C#', 'D#', 'F#', 'G#'],
+        'fifth': ['B', 'C#', 'D#', 'F#', 'G#'],
+        'seventh': ['B', 'C#', 'D#', 'F#', 'G#'],
+        'twelfth': ['B', 'C#', 'D#', 'F#', 'G#']
+      }
+    };
+    
+    // Position-specific fret ranges for filtering
+    const positionRanges = {
+      'open': { min: 0, max: 3 },
+      'fifth': { min: 5, max: 8 },
+      'seventh': { min: 7, max: 10 },
+      'twelfth': { min: 12, max: 15 }
+    };
+    
+    // Major chord positions (string, fret) for each chord and position type
+    const chordPositions = {
+      'C': {
+        'open': [
+          {string: 0, fret: 3}, // High E, 3rd fret
+          {string: 1, fret: 3}, // A, 3rd fret  
+          {string: 2, fret: 0}, // D, open
+          {string: 3, fret: 0}, // G, open
+          {string: 4, fret: 1}, // B, 1st fret
+          {string: 5, fret: 3}  // Low E, 3rd fret
+        ],
+        'barre': [
+          {string: 0, fret: 8}, // High E, 8th fret
+          {string: 1, fret: 8}, // A, 8th fret
+          {string: 2, fret: 5}, // D, 5th fret
+          {string: 3, fret: 5}, // G, 5th fret
+          {string: 4, fret: 6}, // B, 6th fret
+          {string: 5, fret: 8}  // Low E, 8th fret
+        ],
+        'triad': [
+          {string: 1, fret: 3}, // A, 3rd fret
+          {string: 2, fret: 0}, // D, open
+          {string: 3, fret: 0}  // G, open
+        ]
+      },
+      'D': {
+        'open': [
+          {string: 0, fret: 2}, // High E, 2nd fret
+          {string: 1, fret: 0}, // A, open
+          {string: 2, fret: 0}, // D, open
+          {string: 3, fret: 2}, // G, 2nd fret
+          {string: 4, fret: 3}, // B, 3rd fret
+          {string: 5, fret: 2}  // Low E, 2nd fret
+        ],
+        'barre': [
+          {string: 0, fret: 10}, // High E, 10th fret
+          {string: 1, fret: 8},  // A, 8th fret
+          {string: 2, fret: 8},  // D, 8th fret
+          {string: 3, fret: 10}, // G, 10th fret
+          {string: 4, fret: 11}, // B, 11th fret
+          {string: 5, fret: 10}  // Low E, 10th fret
+        ],
+        'triad': [
+          {string: 1, fret: 0}, // A, open
+          {string: 2, fret: 0}, // D, open
+          {string: 3, fret: 2}  // G, 2nd fret
+        ]
+      },
+      'E': {
+        'open': [
+          {string: 0, fret: 0}, // High E, open
+          {string: 1, fret: 2}, // A, 2nd fret
+          {string: 2, fret: 2}, // D, 2nd fret
+          {string: 3, fret: 1}, // G, 1st fret
+          {string: 4, fret: 0}, // B, open
+          {string: 5, fret: 0}  // Low E, open
+        ],
+        'barre': [
+          {string: 0, fret: 12}, // High E, 12th fret
+          {string: 1, fret: 14}, // A, 14th fret
+          {string: 2, fret: 14}, // D, 14th fret
+          {string: 3, fret: 13}, // G, 13th fret
+          {string: 4, fret: 12}, // B, 12th fret
+          {string: 5, fret: 12}  // Low E, 12th fret
+        ],
+        'triad': [
+          {string: 1, fret: 2}, // A, 2nd fret
+          {string: 2, fret: 2}, // D, 2nd fret
+          {string: 3, fret: 1}  // G, 1st fret
+        ]
+      },
+      'F': {
+        'open': [
+          {string: 0, fret: 1}, // High E, 1st fret
+          {string: 1, fret: 3}, // A, 3rd fret
+          {string: 2, fret: 3}, // D, 3rd fret
+          {string: 3, fret: 2}, // G, 2nd fret
+          {string: 4, fret: 1}, // B, 1st fret
+          {string: 5, fret: 1}  // Low E, 1st fret
+        ],
+        'barre': [
+          {string: 0, fret: 1}, // High E, 1st fret
+          {string: 1, fret: 3}, // A, 3rd fret
+          {string: 2, fret: 3}, // D, 3rd fret
+          {string: 3, fret: 2}, // G, 2nd fret
+          {string: 4, fret: 1}, // B, 1st fret
+          {string: 5, fret: 1}  // Low E, 1st fret
+        ],
+        'triad': [
+          {string: 1, fret: 3}, // A, 3rd fret
+          {string: 2, fret: 3}, // D, 3rd fret
+          {string: 3, fret: 2}  // G, 2nd fret
+        ]
+      },
+      'G': {
+        'open': [
+          {string: 0, fret: 3}, // High E, 3rd fret
+          {string: 1, fret: 2}, // A, 2nd fret
+          {string: 2, fret: 0}, // D, open
+          {string: 3, fret: 0}, // G, open
+          {string: 4, fret: 0}, // B, open
+          {string: 5, fret: 3}  // Low E, 3rd fret
+        ],
+        'barre': [
+          {string: 0, fret: 3}, // High E, 3rd fret
+          {string: 1, fret: 2}, // A, 2nd fret
+          {string: 2, fret: 0}, // D, open
+          {string: 3, fret: 0}, // G, open
+          {string: 4, fret: 0}, // B, open
+          {string: 5, fret: 3}  // Low E, 3rd fret
+        ],
+        'triad': [
+          {string: 1, fret: 2}, // A, 2nd fret
+          {string: 2, fret: 0}, // D, open
+          {string: 3, fret: 0}  // G, open
+        ]
+      },
+      'A': {
+        'open': [
+          {string: 0, fret: 0}, // High E, open
+          {string: 1, fret: 0}, // A, open
+          {string: 2, fret: 2}, // D, 2nd fret
+          {string: 3, fret: 2}, // G, 2nd fret
+          {string: 4, fret: 2}, // B, 2nd fret
+          {string: 5, fret: 0}  // Low E, open
+        ],
+        'barre': [
+          {string: 0, fret: 5}, // High E, 5th fret
+          {string: 1, fret: 5}, // A, 5th fret
+          {string: 2, fret: 7}, // D, 7th fret
+          {string: 3, fret: 7}, // G, 7th fret
+          {string: 4, fret: 7}, // B, 7th fret
+          {string: 5, fret: 5}  // Low E, 5th fret
+        ],
+        'triad': [
+          {string: 1, fret: 0}, // A, open
+          {string: 2, fret: 2}, // D, 2nd fret
+          {string: 3, fret: 2}  // G, 2nd fret
+        ]
+      },
+      'B': {
+        'open': [
+          {string: 0, fret: 2}, // High E, 2nd fret
+          {string: 1, fret: 2}, // A, 2nd fret
+          {string: 2, fret: 4}, // D, 4th fret
+          {string: 3, fret: 4}, // G, 4th fret
+          {string: 4, fret: 4}, // B, 4th fret
+          {string: 5, fret: 2}  // Low E, 2nd fret
+        ],
+        'barre': [
+          {string: 0, fret: 2}, // High E, 2nd fret
+          {string: 1, fret: 2}, // A, 2nd fret
+          {string: 2, fret: 4}, // D, 4th fret
+          {string: 3, fret: 4}, // G, 4th fret
+          {string: 4, fret: 4}, // B, 4th fret
+          {string: 5, fret: 2}  // Low E, 2nd fret
+        ],
+        'triad': [
+          {string: 1, fret: 2}, // A, 2nd fret
+          {string: 2, fret: 4}, // D, 4th fret
+          {string: 3, fret: 4}  // G, 4th fret
+        ]
+      }
+    };
+    
+    // Note positions on fretboard (string, fret) for each note
+    // String order: 0=High E, 1=A, 2=D, 3=G, 4=B, 5=Low E
+    const notePositions = {
+      'C': [
+        {string: 1, fret: 3}, // A string, 3rd fret
+        {string: 2, fret: 10}, // D string, 10th fret
+        {string: 3, fret: 5}, // G string, 5th fret
+        {string: 4, fret: 1}, // B string, 1st fret
+        {string: 5, fret: 8}  // Low E string, 8th fret
+      ],
+      'D': [
+        {string: 0, fret: 10}, // High E string, 10th fret
+        {string: 1, fret: 5},  // A string, 5th fret
+        {string: 2, fret: 0},  // D string, open
+        {string: 3, fret: 7},  // G string, 7th fret
+        {string: 4, fret: 3},  // B string, 3rd fret
+        {string: 5, fret: 10}  // Low E string, 10th fret
+      ],
+      'E': [
+        {string: 0, fret: 0},  // High E string, open
+        {string: 0, fret: 12}, // High E string, 12th fret
+        {string: 1, fret: 7},  // A string, 7th fret
+        {string: 2, fret: 2},  // D string, 2nd fret
+        {string: 3, fret: 9},  // G string, 9th fret
+        {string: 4, fret: 5},  // B string, 5th fret
+        {string: 5, fret: 0},  // Low E string, open
+        {string: 5, fret: 12}  // Low E string, 12th fret
+      ],
+      'F': [
+        {string: 0, fret: 1},  // High E string, 1st fret
+        {string: 1, fret: 8},  // A string, 8th fret
+        {string: 2, fret: 3},  // D string, 3rd fret
+        {string: 3, fret: 10}, // G string, 10th fret
+        {string: 4, fret: 6},  // B string, 6th fret
+        {string: 5, fret: 1}   // Low E string, 1st fret
+      ],
+      'G': [
+        {string: 0, fret: 3},  // High E string, 3rd fret
+        {string: 1, fret: 10}, // A string, 10th fret
+        {string: 2, fret: 5},  // D string, 5th fret
+        {string: 3, fret: 0},  // G string, open
+        {string: 3, fret: 12}, // G string, 12th fret
+        {string: 4, fret: 8},  // B string, 8th fret
+        {string: 5, fret: 3}   // Low E string, 3rd fret
+      ],
+      'A': [
+        {string: 0, fret: 5},  // High E string, 5th fret
+        {string: 1, fret: 0},  // A string, open
+        {string: 1, fret: 12}, // A string, 12th fret
+        {string: 2, fret: 7},  // D string, 7th fret
+        {string: 3, fret: 2},  // G string, 2nd fret
+        {string: 4, fret: 10}, // B string, 10th fret
+        {string: 5, fret: 5}   // Low E string, 5th fret
+      ],
+      'B': [
+        {string: 0, fret: 7},  // High E string, 7th fret
+        {string: 1, fret: 2},  // A string, 2nd fret
+        {string: 2, fret: 9},  // D string, 9th fret
+        {string: 3, fret: 4},  // G string, 4th fret
+        {string: 4, fret: 0},  // B string, open
+        {string: 4, fret: 12}, // B string, 12th fret
+        {string: 5, fret: 7}   // Low E string, 7th fret
+      ]
+    };
+    
+    // Initialize audio context
+    function initAudio() {
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+    
+    // Play a note with audio and visual feedback
+    function playNote(note) {
+      if (!note || note === 'REST') return;
+      
+      initAudio();
+      
+      // Play audio
+      const frequency = noteFrequencies[note];
+      if (frequency) {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+        oscillator.type = 'sine';
+        
+        gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.01);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.5);
+      }
+      
+      // Highlight fretboard positions
+      highlightNotePositions(note);
+    }
+    
+    // Highlight all positions of a note on the fretboard
+    function highlightNotePositions(note) {
+      // Clear previous highlights
+      clearHighlights();
+      
+      const positions = notePositions[note];
+      if (positions) {
+        positions.forEach(pos => {
+          const fretElement = document.querySelector(
+            `[data-string="${pos.string}"][data-fret="${pos.fret}"]`
+          );
+          if (fretElement) {
+            fretElement.classList.add('active');
+          }
+        });
+        
+        // Remove highlights after 1 second
+        setTimeout(() => {
+          clearHighlights();
+        }, 1000);
+      }
+    }
+    
+    // Clear all highlights from fretboard
+    function clearHighlights() {
+      document.querySelectorAll('.fret.active').forEach(fret => {
+        fret.classList.remove('active');
+      });
+    }
+    
+    // Add note to sequence
+    function addNoteToSequence(note) {
+      currentSequence.push(note);
+      updateSequenceDisplay();
+      updateCurrentNotes();
+    }
+    
+    // Update the sequence display
+    function updateSequenceDisplay() {
+      const display = document.getElementById('sequenceDisplay');
+      display.innerHTML = '';
+      
+      currentSequence.forEach((note, index) => {
+        const noteElement = document.createElement('span');
+        noteElement.className = 'sequence-item';
+        noteElement.textContent = note;
+        if (index === currentNoteIndex && isPlaying) {
+          noteElement.classList.add('current');
+        }
+        display.appendChild(noteElement);
+      });
+    }
+    
+    // Update current notes display
+    function updateCurrentNotes() {
+      const display = document.getElementById('currentNotes');
+      if (currentSequence.length === 0) {
+        display.textContent = 'Click notes to build your sequence';
+      } else {
+        display.textContent = currentSequence.join(' - ');
+      }
+    }
+    
+    // Play the entire sequence
+    function playSequence() {
+      if (currentSequence.length === 0) return;
+      
+      isPlaying = true;
+      currentNoteIndex = 0;
+      
+      document.getElementById('playBtn').disabled = true;
+      document.getElementById('stopBtn').disabled = false;
+      
+      const tempo = parseInt(document.getElementById('tempo').value);
+      const beatDuration = 60000 / tempo; // Convert BPM to milliseconds
+      
+      playInterval = setInterval(() => {
+        if (currentNoteIndex >= currentSequence.length) {
+          stopSequence();
+          return;
+        }
+        
+        const note = currentSequence[currentNoteIndex];
+        if (note !== 'REST') {
+          playNote(note);
+        }
+        
+        updateSequenceDisplay();
+        currentNoteIndex++;
+      }, beatDuration);
+    }
+    
+    // Stop the sequence
+    function stopSequence() {
+      isPlaying = false;
+      currentNoteIndex = 0;
+      
+      if (playInterval) {
+        clearInterval(playInterval);
+        playInterval = null;
+      }
+      
+      document.getElementById('playBtn').disabled = false;
+      document.getElementById('stopBtn').disabled = true;
+      
+      clearHighlights();
+      updateSequenceDisplay();
+    }
+    
+    // Clear the sequence
+    function clearSequence() {
+      currentSequence = [];
+      currentNoteIndex = 0;
+      updateSequenceDisplay();
+      updateCurrentNotes();
+      clearHighlights();
+    }
+    
+    // Add rest to sequence
+    function addRest() {
+      addNoteToSequence('REST');
+    }
+    
+    // Event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize mode
+      handleModeChange();
+      // Note buttons
+      document.querySelectorAll('.note-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const note = this.dataset.note;
+          const position = document.getElementById('notePosition').value;
+          
+          addNoteToSequence(note);
+          
+          // Visual feedback
+          this.classList.add('active');
+          setTimeout(() => {
+            this.classList.remove('active');
+          }, 200);
+          
+          // Clear any existing highlights first
+          clearHighlights();
+          
+          // Small delay to ensure clearing is complete
+          setTimeout(() => {
+            // Highlight note positions based on selected position
+            if (position === 'all') {
+              highlightNotePositions(note);
+            } else {
+              highlightNotePositionsInRange(note, position);
+            }
+          }, 50);
+        });
+      });
+      
+      // Control buttons
+      document.getElementById('playBtn').addEventListener('click', playSequence);
+      document.getElementById('stopBtn').addEventListener('click', stopSequence);
+      document.getElementById('clearBtn').addEventListener('click', clearSequence);
+      document.getElementById('addRestBtn').addEventListener('click', addRest);
+      
+      // Mode selection
+      document.getElementById('mode').addEventListener('change', handleModeChange);
+      
+      // Pentatonic scale controls
+      document.getElementById('playPentatonicBtn').addEventListener('click', playPentatonicScale);
+      
+      // Chord controls
+      document.getElementById('playChordBtn').addEventListener('click', playChord);
+      
+      // Fretboard clicks (optional - for direct note playing)
+      document.querySelectorAll('.fret').forEach(fret => {
+        fret.addEventListener('click', function() {
+          const string = parseInt(this.dataset.string);
+          const fret = parseInt(this.dataset.fret);
+          
+          // Find which note this position corresponds to
+          const stringNote = stringNotes[string];
+          // This is a simplified version - in reality, you'd calculate the note based on string and fret
+          console.log(`String ${string}, Fret ${fret} - Note: ${stringNote}`);
+        });
+      });
+      
+      // Nut clicks for muting strings
+      document.querySelectorAll('.nut').forEach(nut => {
+        nut.addEventListener('click', function() {
+          const string = parseInt(this.dataset.string);
+          toggleStringMute(string, this);
+        });
+      });
+    });
+    
+    // Function to toggle string mute
+    function toggleStringMute(string, nutElement) {
+      nutElement.classList.toggle('muted');
+      
+      if (nutElement.classList.contains('muted')) {
+        console.log(`String ${string} (${stringNotes[string]}) muted`);
+        // You can add additional mute logic here if needed
+      } else {
+        console.log(`String ${string} (${stringNotes[string]}) unmuted`);
+        // You can add additional unmute logic here if needed
+      }
+    }
+    
+    // Function to handle mode changes
+    function handleModeChange() {
+      const mode = document.getElementById('mode').value;
+      const pentatonicControls = document.getElementById('pentatonicControls');
+      const chordControls = document.getElementById('chordControls');
+      const noteButtons = document.getElementById('noteButtons');
+      
+      // Hide all controls first
+      pentatonicControls.style.display = 'none';
+      chordControls.style.display = 'none';
+      noteButtons.style.display = 'none';
+      
+      // Show relevant controls based on mode
+      switch(mode) {
+        case 'pentatonic':
+          pentatonicControls.style.display = 'block';
+          break;
+        case 'chords':
+          chordControls.style.display = 'block';
+          break;
+        case 'notes':
+        default:
+          noteButtons.style.display = 'flex';
+          break;
+      }
+    }
+    
+    // Function to play pentatonic scale
+    function playPentatonicScale() {
+      const key = document.getElementById('pentatonicKey').value;
+      const position = document.getElementById('pentatonicPosition').value;
+      const scale = pentatonicPatterns[key][position];
+      
+      // Clear any existing highlights
+      clearHighlights();
+      
+      // Find and highlight positions for the pentatonic scale notes in the selected position
+      scale.forEach((note, index) => {
+        setTimeout(() => {
+          highlightNotePositionsInRange(note, position);
+        }, index * 500); // 500ms delay between each note
+      });
+      
+      // Play the scale notes
+      scale.forEach((note, index) => {
+        setTimeout(() => {
+          playNote(note);
+        }, index * 500);
+      });
+    }
+    
+    // Function to play chord
+    function playChord() {
+      const chordKey = document.getElementById('chordKey').value;
+      const chordPosition = document.getElementById('chordPosition').value;
+      const chord = chordPositions[chordKey][chordPosition];
+      
+      // Clear any existing highlights
+      clearHighlights();
+      
+      // Highlight chord positions
+      chord.forEach(position => {
+        const fretElement = document.querySelector(`[data-string="${position.string}"][data-fret="${position.fret}"]`);
+        if (fretElement) {
+          fretElement.classList.add('highlighted');
+        }
+      });
+      
+      // Play all chord notes simultaneously
+      chord.forEach(position => {
+        const stringNote = stringNotes[position.string];
+        const note = calculateNoteFromPosition(stringNote, position.fret);
+        playNote(note);
+      });
+    }
+    
+    // Function to calculate note from string and fret position
+    function calculateNoteFromPosition(stringNote, fret) {
+      const noteOrder = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+      const startIndex = noteOrder.indexOf(stringNote);
+      const newIndex = (startIndex + fret) % 12;
+      return noteOrder[newIndex];
+    }
+    
+    // Function to highlight note positions
+    function highlightNotePositions(note) {
+      const positions = notePositions[note];
+      if (positions) {
+        positions.forEach(position => {
+          const fretElement = document.querySelector(`[data-string="${position.string}"][data-fret="${position.fret}"]`);
+          if (fretElement) {
+            fretElement.classList.add('highlighted');
+            setTimeout(() => {
+              fretElement.classList.remove('highlighted');
+            }, 1000);
+          }
+        });
+      }
+    }
+    
+    // Function to highlight note positions within a specific fret range
+    function highlightNotePositionsInRange(note, position) {
+      const positions = notePositions[note];
+      const range = positionRanges[position];
+      
+      if (positions && range) {
+        positions.forEach(pos => {
+          if (pos.fret >= range.min && pos.fret <= range.max) {
+            const fretElement = document.querySelector(`[data-string="${pos.string}"][data-fret="${pos.fret}"]`);
+            if (fretElement) {
+              fretElement.classList.add('highlighted');
+              setTimeout(() => {
+                fretElement.classList.remove('highlighted');
+              }, 1000);
+            }
+          }
+        });
+      }
+    }
+    
+    // Function to clear all highlights
+    function clearHighlights() {
+      document.querySelectorAll('.highlighted').forEach(element => {
+        element.classList.remove('highlighted');
+      });
+    }
+  </script>
+</body>
+</html>
