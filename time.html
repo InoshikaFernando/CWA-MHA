@@ -31,7 +31,7 @@
 <div class="controls">
   <div class="row">
     <label for="level">Level:</label>
-    <select id="level">
+    <select id="level" onchange="setLevel()">
       <option value="1" selected>Level 1 – Big arm on 12</option>
       <option value="2">Level 2 – Big arm on 6 or 12</option>
       <option value="3">Level 3 – Big arm on 3, 6, 9, 12</option>
@@ -39,6 +39,14 @@
       <option value="5">Level 5 – Big arm anywhere (0–59)</option>
     </select>
 
+    <label for="questionCount">Number of Questions:</label>
+    <select id="questionCount" onchange="setQuestionCount()">
+      <option value="5">5 Questions</option>
+      <option value="10">10 Questions</option>
+      <option value="20">20 Questions</option>
+      <option value="50">50 Questions</option>
+      <option value="100">100 Questions</option>
+    </select>
   </div>
 </div>
 <div id="quizActive">
@@ -47,15 +55,12 @@
       <canvas id="clock" width="320" height="320"></canvas>
 
       <div>
-      <div>
-          <button id="newQ">New Question</button>
-      </div>
         <div class="row">
           <label for="hour">Your Answer:</label>
           <input id="hour" type="number" min="1" max="12" placeholder="Hour (1–12)" />
           :
           <input id="minute" type="number" min="0" max="59" placeholder="Minute (0–59)" />
-          <button id="check">Check</button>
+          <button onclick="toggleAction()" id="actionBtn">Check</button>
         </div>
         <div class="status" id="status"></div>
         <p class="hint">Tip: Use 12-hour time (no AM/PM needed).</p>
@@ -71,6 +76,7 @@
   
   <br>
   <a href="index.html" class="back-btn">⬅ Back to Topics</a>
+  <button class="back-btn" onclick="restartQuiz()">🔄 Restart Quiz</button>
 <script src="scripts.js"></script>
 <script>
     let num1, num2, correctAnswer;
@@ -79,7 +85,53 @@
     let questionCount = 0, correctCount = 0, totalQuestions = 5;
     let timerInterval, elapsedTime = 0;
     let level = 0;
+    let isAnswerChecked = false; // Track if current answer has been checked
+    let isQuizStarted = false; // Track if quiz has been started
 
+
+  function setLevel() {
+    level = parseInt(document.getElementById('level').value);
+    resetQuiz();
+    resetToStartState();
+  }
+
+  function setQuestionCount() {
+    totalQuestions = parseInt(document.getElementById('questionCount').value);
+    resetQuiz();
+    resetToStartState();
+  }
+
+  function resetQuiz() {
+    questionCount = 0;
+    correctCount = 0;
+    currentDigitIndex = 0;
+    document.getElementById('score').innerText = "";
+    document.getElementById('finalScore').innerText = "";
+  }
+
+  function resetToStartState() {
+  //  document.getElementById('question').innerText = `Click "Start" to begin the quiz`;
+    document.getElementById('hour').value = "";
+    document.getElementById('minute').value = "";
+    document.getElementById('feedback').innerText = "";
+    document.getElementById('actionBtn').disabled = false;
+    isAnswerChecked = false;
+    isQuizStarted = false;
+    
+    // Focus the button so Enter key works
+    const actionBtn = document.getElementById('actionBtn');
+    if (actionBtn) {
+      actionBtn.focus();
+    }
+    stopTimer();
+    elapsedTime = 0;
+    startTimer();
+  }
+
+  function generateNumber() {
+      console.log("Generating number for level", level);
+      level = parseInt(document.getElementById('level').value);
+    }
 /* ---------- Utilities ---------- */
 function randInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -171,6 +223,11 @@ function generateQuestion(){
   document.getElementById('status').textContent = "";
   document.getElementById('hour').value = "";
   document.getElementById('minute').value = "";
+  document.getElementById('hour').disabled = false;
+  document.getElementById('minute').disabled = false;
+  isAnswerChecked = false;
+  document.getElementById('actionBtn').innerText = "Check";
+  document.getElementById('actionBtn').disabled = false;
 }
 
 function drawCurrentClock(){
@@ -220,20 +277,68 @@ function checkAnswer(){
     status.innerHTML = `❌ Not quite. Correct answer: <b>${correctHour}:${String(correctMin).padStart(2,'0')}</b>`;
     status.className = "status wrong";
   }
-  
-      questionCount++;
-      document.getElementById('score').innerText = `Score: ${correctCount}/${questionCount}`;
-      document.getElementById('answer').disabled = true;
-      document.getElementById('checkBtn').disabled = true;
+  isAnswerChecked = true;
+  questionCount++;
+  document.getElementById('score').innerText = `Score: ${correctCount}/${questionCount}`;
+  document.getElementById('hour').disabled = true;
+  document.getElementById('minute').disabled = true;
+  document.getElementById('actionBtn').innerText = "Next Question";
+  document.getElementById('actionBtn').disabled = false;
+  // Check if quiz is complete and show certificate based on points
+  if (questionCount >= totalQuestions) {
+    // Stop the timer when quiz is complete
+    stopTimer();
+    document.getElementById('actionBtn').disabled = true;
+    
+    // Show final score and points
+    let timeUsed = elapsedTime || 1;
+    let level = parseInt(document.getElementById('level').value, 10);
+    let points = Math.round((correctCount / timeUsed) * 100 * Math.sqrt(level));
+    document.getElementById('finalScore').innerText = 
+      `🎉 Quiz Finished! You got ${correctCount} out of ${totalQuestions} correct.`;
+    document.getElementById('points').innerText = `Points: ${points}`;
+    document.getElementById('quizActive').style.display = 'none';
+    
+    setTimeout(() => {
+      if (points >= 50) { // Minimum threshold for any certificate
+        showCertificate(points, correctCount, totalQuestions, level, elapsedTime);
+      }
+    }, 1000); // Small delay to let the final score display first
+  }
 }
 
+function restartQuiz() {
+  // Reset all quiz variables
+  questionCount = 0;
+  correctCount = 0;
+  isAnswerChecked = false;
+  isQuizStarted = false;
+  currentDigitIndex = 0;
+  
+  // Reset the quiz using the existing resetQuiz function from scripts.js
+  resetQuiz();
+  
+  // Reset to start state
+  resetToStartState();
+  
+  // Show quiz area if it was hidden
+  document.getElementById('quizActive').style.display = 'block';
+}
 /* ---------- Wire up ---------- */
-document.getElementById('newQ').addEventListener('click', generateQuestion);
-document.getElementById('check').addEventListener('click', checkAnswer);
-document.getElementById('level').addEventListener('change', generateQuestion);
+//document.getElementById('newQ').addEventListener('click', generateQuestion);
+//document.getElementById('check').addEventListener('click', checkAnswer);
+//document.getElementById('level').addEventListener('change', generateQuestion);
 
 // First question
 generateQuestion();
+
+function toggleAction() {
+  if (isAnswerChecked) {
+    generateQuestion();
+  } else {
+    checkAnswer();
+  }
+}
 </script>
 
 </body>
