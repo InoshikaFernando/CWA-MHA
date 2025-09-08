@@ -75,7 +75,7 @@ function showCertificate(points, correctCount, totalQuestions, level, elapsedTim
       <h2 style="color: ${certificateData.subtitleColor}; margin-bottom: 20px; font-size: 24px;">${certificateData.subtitle}</h2>
       <p style="font-size: 18px; color: #34495e; margin-bottom: 15px;">This certifies that</p>
       <div style="font-size: 24px; font-weight: bold; color: #2c3e50; margin-bottom: 20px; padding: 10px; background: #ecf0f1; border-radius: 5px;">Student</div>
-      <p style="font-size: 18px; color: #34495e; margin-bottom: 15px;">has successfully completed the Addition Practice</p>
+      <p style="font-size: 18px; color: #34495e; margin-bottom: 15px;">has successfully completed the ${title}</p>
       <p style="font-size: 18px; color: #34495e; margin-bottom: 15px;">with a score of ${correctCount}/${totalQuestions}</p>
       <p style="font-size: 18px; color: #34495e; margin-bottom: 15px;">earning ${points} points in Level ${level}</p>
       <p style="font-size: 16px; color: #7f8c8d; margin-bottom: 20px;">${certificateData.achievement}</p>
