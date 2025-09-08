@@ -66,6 +66,41 @@
     function generateNumber() {
       console.log("Generating number for level", level);
       level = parseInt(document.getElementById('level').value);
+      let number = 0;
+      switch (level) {
+        case 1: // 2-digit, unique digits
+          let digits1 = getUniqueDigits(2, false);
+          number = parseInt(digits1.join(''));
+          break;
+        case 2: // 3-digit, unique digits
+          let digits2 = getUniqueDigits(3, false);
+          number = parseInt(digits2.join(''));
+          break;
+        case 3: // 4-digit + tenths, all unique
+          let intPart3 = getUniqueDigits(4, false).join('');
+          let decimalPart3 = getUniqueDigits(1, true)[0];
+          while (intPart3.includes(decimalPart3)) {
+            decimalPart3 = getUniqueDigits(1, true)[0];
+          }
+          number = parseFloat(intPart3 + '.' + decimalPart3);
+          break;
+        case 4: // 5-digit + hundredths, all unique
+          let intPart4 = getUniqueDigits(5, false).join('');
+          let decimalPart4 = getUniqueDigits(2, true).join('');
+          while (
+            intPart4.includes(decimalPart4[0]) ||
+            intPart4.includes(decimalPart4[1]) ||
+            decimalPart4[0] === decimalPart4[1]
+          ) {
+            decimalPart4 = getUniqueDigits(2, true).join('');
+          }
+          number = parseFloat(intPart4 + '.' + decimalPart4);
+          break;
+        default:
+          number = getNumberForLevel(1);
+      }
+      console.log("Generated number:", number);
+      return number;
     }
 
     function getUniqueDigits(count, allowZeroFirst = false) {
