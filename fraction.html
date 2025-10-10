@@ -114,13 +114,40 @@ function showFractionSection() {
     document.getElementById('level6').style.display = level === '6' ? 'block' : 'none';
     document.getElementById('level7').style.display = level === '7' ? 'block' : 'none';
     document.getElementById('level8').style.display = level === '8' ? 'block' : 'none';
+    
+    // Reset button text and state for the current level
+    const actionBtn = document.getElementById(`actionBtn${level}`);
+    if (actionBtn) {
+        actionBtn.innerText = "Start";
+        actionBtn.disabled = false;
+        actionBtn.focus();
+    }
+    
+    // Hide question and inputs initially - only show after Start is pressed
+    const questionElement = document.getElementById(`y${level}-question`);
+    if (questionElement) {
+        questionElement.innerText = "Click \"Start\" to begin the quiz";
+    }
+    
+    // Disable inputs initially
+    const inputs = document.querySelectorAll(`#level${level} input`);
+    inputs.forEach(input => {
+        input.disabled = true;
+        input.value = "";
+    });
+    
+    // Reset quiz state
+    isQuizStarted = false;
+    isAnswerChecked = false;
+    
+    // Clear feedback
+    document.getElementById('feedback').innerText = "";
 }
 
 function setQuestionCount() {
     totalQuestions = parseInt(document.getElementById('questionCount').value);
     resetQuiz();
-    startQuiz();
-    //resetToStartState();
+    showFractionSection();
 }
 
 // function resetToStartState() {
@@ -206,8 +233,45 @@ function startQuiz() {
     }
 }
 
+function startQuiz() {
+    isQuizStarted = true;
+    
+    // Get current level
+    const currentLevel = document.getElementById('level').value;
+    
+    // Enable inputs for the current level
+    const inputs = document.querySelectorAll(`#level${currentLevel} input`);
+    inputs.forEach(input => {
+        input.disabled = false;
+    });
+    
+    // Generate first question
+    if (currentLevel === '3') {
+        generateFractionAddSub();
+    } else if (currentLevel === '4') {
+        generateFractionAndWhole();
+    } else if (currentLevel === '5') {
+        generateFractionWorkProblems();
+    } else if (currentLevel === '6') {
+        generateFractionAddSubComplex();
+    } else if (currentLevel === '7') {
+        generateFractionMultiplyDivision();
+    } else if (currentLevel === '8') {
+        generatePercentage();
+    }
+    
+    // Update button text
+    const actionBtn = document.getElementById(`actionBtn${currentLevel}`);
+    if (actionBtn) {
+        actionBtn.innerText = "Check";
+    }
+}
+
 function toggleAction() {
-    if (isAnswerChecked) {
+    if (!isQuizStarted) {
+        // Start the quiz
+        startQuiz();
+    } else if (isAnswerChecked) {
         console.log("Next question");
         const level = document.getElementById('level').value;
         if (level === '3') {
@@ -246,7 +310,8 @@ function toggleAction() {
 function handleEnterKey(event) {
     if (event.key === 'Enter') {
         event.preventDefault();
-        const actionBtn = document.getElementById('actionBtn');
+        const level = document.getElementById('level').value;
+        const actionBtn = document.getElementById(`actionBtn${level}`);
         if (actionBtn && !actionBtn.disabled) {
             toggleAction();
         }
@@ -258,14 +323,15 @@ document.addEventListener('keydown', handleEnterKey);
 
 // Focus the button when page loads so Enter key works immediately
 document.addEventListener('DOMContentLoaded', function() {
-    const actionBtn = document.getElementById('actionBtn');
+    // Show only Level 3 by default
+    showFractionSection();
+    
+    const level = document.getElementById('level').value;
+    const actionBtn = document.getElementById(`actionBtn${level}`);
     if (actionBtn) {
         actionBtn.focus();
     }
 });
-
-// Show only Level 3 by default
-showFractionSection();
 
 // Utility function to generate random number
 function randInt(min, max) {
@@ -276,9 +342,9 @@ function randInt(min, max) {
 let y3 = {};
 function generateFractionAddSub() {
     // Only start timer on first question
-    // if (questionCount === 0) {
-    //     startTimer();
-    // }
+    if (questionCount === 0) {
+        startTimer();
+    }
     
     handleQuizProgress();
     let denom = randInt(2, 10);
@@ -296,7 +362,9 @@ function generateFractionAddSub() {
     document.getElementById('actionBtn3').disabled = false;
     isAnswerChecked = false;
     
-    // Enable inputs
+    // Clear and enable inputs
+    document.getElementById('y3-numerator').value = "";
+    document.getElementById('y3-denominator').value = "";
     document.getElementById('y3-numerator').disabled = false;
     document.getElementById('y3-denominator').disabled = false;
     
@@ -369,9 +437,16 @@ function generateFractionAndWhole() {
     document.getElementById('actionBtn4').innerText = "Check";
     document.getElementById('actionBtn4').disabled = false;
     isAnswerChecked = false;
-    // Enable inputs
+    // Clear and enable inputs
+    document.getElementById('y4-numerator').value = "";
+    document.getElementById('y4-denominator').value = "";
     document.getElementById('y4-numerator').disabled = false;
     document.getElementById('y4-denominator').disabled = false;
+    
+    // Focus on first input
+    setTimeout(() => {
+        document.getElementById('y4-numerator').focus();
+    }, 10);
 }
 function checkFractionAndWhole() {
     document.getElementById('y4-numerator').disabled = true;
@@ -431,8 +506,14 @@ function generateFractionWorkProblems() {
     document.getElementById('actionBtn5').innerText = "Check";
     document.getElementById('actionBtn5').disabled = false;
     isAnswerChecked = false;
-    // Enable inputs
+    // Clear and enable inputs
+    document.getElementById('wordProbNumerator').value = "";
     document.getElementById('wordProbNumerator').disabled = false;
+    
+    // Focus on input
+    setTimeout(() => {
+        document.getElementById('wordProbNumerator').focus();
+    }, 10);
 }
 function checkFractionWorkProblems() {
     document.getElementById('wordProbNumerator').disabled = true;
@@ -491,9 +572,16 @@ function generateFractionAddSubComplex() {
     document.getElementById('actionBtn6').innerText = "Check";
     document.getElementById('actionBtn6').disabled = false;
     isAnswerChecked = false;
-    // Enable inputs
+    // Clear and enable inputs
+    document.getElementById('y5-numerator').value = "";
+    document.getElementById('y5-denominator').value = "";
     document.getElementById('y5-numerator').disabled = false;
     document.getElementById('y5-denominator').disabled = false;
+    
+    // Focus on first input
+    setTimeout(() => {
+        document.getElementById('y5-numerator').focus();
+    }, 10);
 }
 function checkFractionAddSubComplex() {
     document.getElementById('y5-numerator').disabled = true;
@@ -557,9 +645,16 @@ function generateFractionMultiplyDivision() {
     document.getElementById('actionBtn7').innerText = "Check";
     document.getElementById('actionBtn7').disabled = false;
     isAnswerChecked = false;
-    // Enable inputs
+    // Clear and enable inputs
+    document.getElementById('y6-numerator').value = "";
+    document.getElementById('y6-denominator').value = "";
     document.getElementById('y6-numerator').disabled = false;
     document.getElementById('y6-denominator').disabled = false;
+    
+    // Focus on first input
+    setTimeout(() => {
+        document.getElementById('y6-numerator').focus();
+    }, 10);
 }
 function checkFractionMultiplyDivision() {
     document.getElementById('y6-numerator').disabled = true;
@@ -619,8 +714,14 @@ function generatePercentage() {
     document.getElementById('actionBtn8').innerText = "Check";
     document.getElementById('actionBtn8').disabled = false;
     isAnswerChecked = false;
-    // Enable inputs
+    // Clear and enable inputs
+    document.getElementById('y7-numerator').value = "";
     document.getElementById('y7-numerator').disabled = false;
+    
+    // Focus on input
+    setTimeout(() => {
+        document.getElementById('y7-numerator').focus();
+    }, 10);
 }
 
 function checkPercentage() {
