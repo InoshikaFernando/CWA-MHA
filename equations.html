@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equations Practice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background: #f0f8ff;
+        }
+
+        h1 {
+            color: #2c3e50;
+        }
+
+        select, input, button, a {
+            margin: 10px;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .year-selector {
+            margin: 20px 0;
+        }
+
+        .year-selector label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .timer {
+            font-size: 18px;
+            margin: 10px 0;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        .progress-container {
+            margin: 20px auto;
+            width: 80%;
+            max-width: 500px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #ccc;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #3498db;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .questions-container {
+            margin: 20px auto;
+            max-width: 800px;
+            text-align: left;
+        }
+
+        .question {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .question-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .sub-question {
+            background: #f8f9fa;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border: 1px solid #e9ecef;
+        }
+
+        .sub-question-letter {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 25px;
+            font-weight: bold;
+            margin-right: 10px;
+            vertical-align: top;
+            font-size: 14px;
+        }
+
+        .equation {
+            display: inline-block;
+            font-size: 1.1em;
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .input-group {
+            margin-top: 10px;
+        }
+
+        .working-box {
+            width: 100%;
+            min-height: 60px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            font-family: 'Courier New', monospace;
+            resize: vertical;
+            margin-bottom: 8px;
+        }
+
+        .working-box:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .answer-input {
+            width: 120px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .submit-container {
+            margin: 20px 0;
+        }
+
+        .submit-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #2980b9;
+        }
+
+        .submit-btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+
+        .results-container {
+            margin: 20px auto;
+            max-width: 800px;
+            text-align: left;
+        }
+
+        .score {
+            font-size: 1.5em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .feedback {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+
+        .feedback-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 4px solid;
+        }
+
+        .feedback-item.correct {
+            background: #d4edda;
+            border-left-color: #28a745;
+        }
+
+        .feedback-item.incorrect {
+            background: #f8d7da;
+            border-left-color: #dc3545;
+        }
+
+        .explanation {
+            margin-top: 8px;
+            padding: 8px;
+            background: rgba(0,0,0,0.05);
+            border-radius: 3px;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            transition: background 0.3s;
+            margin: 10px;
+        }
+
+        .back-btn:hover {
+            background: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Grade 6 Equations Practice</h1>
+            <p>Solve the equations below. You have 1 hour to complete all 36 sub-questions (18 questions with 2 parts each).</p>
+            <div style="margin-top: 12px;">
+                <label for="yearSelect" style="margin-right: 8px; font-weight: 600;">Select Year:</label>
+                <select id="yearSelect" style="padding: 8px 12px; border-radius: 6px; border: 1px solid #e9ecef;">
+                    <option value="">-- Select --</option>
+                    <option value="6">Year 6</option>
+                </select>
+            </div>
+            <div class="timer" id="timer">60:00</div>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+        
+        <div class="questions-container">
+            <div id="questionsContainer"></div>
+        </div>
+        
+        <div class="submit-container">
+            <button class="submit-btn" id="submitBtn" onclick="submitAnswers()">Submit Answers</button>
+        </div>
+        
+        <div class="results-container" id="resultsContainer" style="display: none;">
+            <div class="score" id="score"></div>
+            <div id="feedback"></div>
+        </div>
+    </div>
+
+    <script>
+        // Questions data - Only questions from provided PDF screenshots
+        let questions = [];
+        const questionsYear6 = [
+            {
+                id: 1,
+                title: "Solve for x:",
+                parts: [
+                    {
+                        letter: "a",
+                        equation: "4x - 1 = 7",
+                        answer: 2,
+                        explanation: "To solve 4x - 1 = 7, add 1 to both sides: 4x = 8, then divide by 4: x = 2"
+                    },
+                    {
+                        letter: "b",
+                        equation: "5 - 3x = 6",
+                        answer: -0.33,
+                        explanation: "To solve 5 - 3x = 6, subtract 5 from both sides: -3x = 1, then divide by -3: x = -1/3 ≈ -0.33"
+                    }
+                ]
+            },
+            {
+                id: 2,
+                title: "Solve for x:",
+                parts: [
+                    {
+                        letter: "a",
+                        equation: "x/5 - 3 = -1",
+                        answer: 10,
+                        explanation: "To solve x/5 - 3 = -1, add 3 to both sides: x/5 = 2, then multiply by 5: x = 10"
+                    },
+                    {
+                        letter: "b",
+                        equation: "2x + 5 = 13",
+                        answer: 4,
+                        explanation: "To solve 2x + 5 = 13, subtract 5 from both sides: 2x = 8, then divide by 2: x = 4"
+                    }
+                ]
+            },
+            {
+                id: 3,
+                title: "Solve for x:",
+                parts: [
+                    {
+                        letter: "a",
+                        equation: "3x = 15",
+                        answer: 5,
+                        explanation: "To solve 3x = 15, divide both sides by 3: x = 15 ÷ 3 = 5"
+                    },
+                    {
+                        letter: "b",
+                        equation: "x ÷ 4 = 6",
+                        answer: 24,
+                        explanation: "To solve x ÷ 4 = 6, multiply both sides by 4: x = 6 × 4 = 24"
+                    }
+                ]
+            },
+            {
+                id: 4,
+                title: "Solve for x:",
+                parts: [
+                    {
+                        letter: "a",
+                        equation: "x + 8 = 15",
+                        answer: 7,
+                        explanation: "To solve x + 8 = 15, subtract 8 from both sides: x = 15 - 8 = 7"
+                    },
+                    {
+                        letter: "b",
+                        equation: "x - 7 = 12",
+                        answer: 19,
+                        explanation: "To solve x - 7 = 12, add 7 to both sides: x = 12 + 7 = 19"
+                    }
+                ]
+            },
+            {
+                id: 5,
+                title: "Solve for x:",
+                parts: [
+                    {
+                        letter: "a",
+                        equation: "4x + 2 = 18",
+                        answer: 4,
+                        explanation: "To solve 4x + 2 = 18, subtract 2 from both sides: 4x = 16, then divide by 4: x = 4"
+                    },
+                    {
+                        letter: "b",
+                        equation: "5x - 3 = 22",
+                        answer: 5,
+                        explanation: "To solve 5x - 3 = 22, add 3 to both sides: 5x = 25, then divide by 5: x = 5"
+                    }
+                ]
+            },
+            {
+                id: 6,
+                title: "Solve for x:",
+                parts: [
+                    {
+                        letter: "a",
+                        equation: "x ÷ 3 = 8",
+                        answer: 24,
+                        explanation: "To solve x ÷ 3 = 8, multiply both sides by 3: x = 8 × 3 = 24"
+                    },
+                    {
+                        letter: "b",
+                        equation: "6x = 42",
+                        answer: 7,
+                        explanation: "To solve 6x = 42, divide both sides by 6: x = 42 ÷ 6 = 7"
+                    }
+                ]
+            },
+            {
+                id: 7,
+                title: "Solve for x:",
+                parts: [
+                    {
+                        letter: "a",
+                        equation: "x + 12 = 25",
+                        answer: 13,
+                        explanation: "To solve x + 12 = 25, subtract 12 from both sides: x = 25 - 12 = 13"
+                    },
+                    {
+                        letter: "b",
+                        equation: "x - 9 = 16",
+                        answer: 25,
+                        explanation: "To solve x - 9 = 16, add 9 to both sides: x = 16 + 9 = 25"
+                    }
+                ]
+            },
+            {
+                id: 8,
+                title: "Solve for x:",
+                parts: [
+                    {
+                        letter: "a",
+                        equation: "2x - 5 = 9",
+                        answer: 7,
+                        explanation: "To solve 2x - 5 = 9, add 5 to both sides: 2x = 14, then divide by 2: x = 7"
+                    },
+                    {
+                        letter: "b",
+                        equation: "3x + 4 = 19",
+                        answer: 5,
+                        explanation: "To solve 3x + 4 = 19, subtract 4 from both sides: 3x = 15, then divide by 3: x = 5"
+                    }
+                ]
+            },
+            {
+                id: 9,
+                title: "Solve for x:",
+                parts: [
+                    {
+                        letter: "a",
+                        equation: "5x - 8 = 17",
+                        answer: 5,
+                        explanation: "To solve 5x - 8 = 17, add 8 to both sides: 5x = 25, then divide by 5: x = 5"
+                    },
+                    {
+                        letter: "b",
+                        equation: "x ÷ 6 = 7",
+                        answer: 42,
+                        explanation: "To solve x ÷ 6 = 7, multiply both sides by 6: x = 7 × 6 = 42"
+                    }
+                ]
+            },
+            {
+                id: 10,
+                title: "Solve for x:",
+                parts: [
+                    {
+                        letter: "a",
+                        equation: "3x + 7 = 22",
+                        answer: 5,
+                        explanation: "To solve 3x + 7 = 22, subtract 7 from both sides: 3x = 15, then divide by 3: x = 5"
+                    },
+                    {
+                        letter: "b",
+                        equation: "x - 15 = 8",
+                        answer: 23,
+                        explanation: "To solve x - 15 = 8, add 15 to both sides: x = 8 + 15 = 23"
+                    }
+                ]
+            },
+            {
+                id: 11,
+                title: "Solve for x:",
+                parts: [
+                    {
+                        letter: "a",
+                        equation: "4x + 3 = 19",
+                        answer: 4,
+                        explanation: "To solve 4x + 3 = 19, subtract 3 from both sides: 4x = 16, then divide by 4: x = 4"
+                    },
+                    {
+                        letter: "b",
+                        equation: "2x - 6 = 10",
+                        answer: 8,
+                        explanation: "To solve 2x - 6 = 10, add 6 to both sides: 2x = 16, then divide by 2: x = 8"
+                    }
+                ]
+            },
+            {
+                id: 12,
+                title: "Solve for x:",
+                parts: [
+                    {
+                        letter: "a",
+                        equation: "x ÷ 5 = 9",
+                        answer: 45,
+                        explanation: "To solve x ÷ 5 = 9, multiply both sides by 5: x = 9 × 5 = 45"
+                    },
+                    {
+                        letter: "b",
+                        equation: "6x + 2 = 26",
+                        answer: 4,
+                        explanation: "To solve 6x + 2 = 26, subtract 2 from both sides: 6x = 24, then divide by 6: x = 4"
+                    }
+                ]
+            },
+            {
+                id: 13,
+                title: "Solve for x:",
+                parts: [
+                    {
+                        letter: "a",
+                        equation: "3x - 4 = 14",
+                        answer: 6,
+                        explanation: "To solve 3x - 4 = 14, add 4 to both sides: 3x = 18, then divide by 3: x = 6"
+                    },
+                    {
+                        letter: "b",
+                        equation: "x + 20 = 35",
+                        answer: 15,
+                        explanation: "To solve x + 20 = 35, subtract 20 from both sides: x = 35 - 20 = 15"
+                    }
+                ]
+            },
+            {
+                id: 14,
+                title: "Solve for x:",
+                parts: [
+                    {
+                        letter: "a",
+                        equation: "5x + 6 = 31",
+                        answer: 5,
+                        explanation: "To solve 5x + 6 = 31, subtract 6 from both sides: 5x = 25, then divide by 5: x = 5"
+                    },
+                    {
+                        letter: "b",
+                        equation: "x ÷ 7 = 6",
+                        answer: 42,
+                        explanation: "To solve x ÷ 7 = 6, multiply both sides by 7: x = 6 × 7 = 42"
+                    }
+                ]
+            },
+            {
+                id: 15,
+                title: "Solve for x:",
+                parts: [
+                    {
+                        letter: "a",
+                        equation: "2x + 8 = 24",
+                        answer: 8,
+                        explanation: "To solve 2x + 8 = 24, subtract 8 from both sides: 2x = 16, then divide by 2: x = 8"
+                    },
+                    {
+                        letter: "b",
+                        equation: "x - 12 = 18",
+                        answer: 30,
+                        explanation: "To solve x - 12 = 18, add 12 to both sides: x = 18 + 12 = 30"
+                    }
+                ]
+            },
+            {
+                id: 16,
+                title: "Solve for x:",
+                parts: [
+                    {
+                        letter: "a",
+                        equation: "4x - 9 = 15",
+                        answer: 6,
+                        explanation: "To solve 4x - 9 = 15, add 9 to both sides: 4x = 24, then divide by 4: x = 6"
+                    },
+                    {
+                        letter: "b",
+                        equation: "3x + 5 = 20",
+                        answer: 5,
+                        explanation: "To solve 3x + 5 = 20, subtract 5 from both sides: 3x = 15, then divide by 3: x = 5"
+                    }
+                ]
+            },
+            {
+                id: 17,
+                title: "Solve for x:",
+                parts: [
+                    {
+                        letter: "a",
+                        equation: "x ÷ 8 = 5",
+                        answer: 40,
+                        explanation: "To solve x ÷ 8 = 5, multiply both sides by 8: x = 5 × 8 = 40"
+                    },
+                    {
+                        letter: "b",
+                        equation: "6x - 3 = 27",
+                        answer: 5,
+                        explanation: "To solve 6x - 3 = 27, add 3 to both sides: 6x = 30, then divide by 6: x = 5"
+                    }
+                ]
+            },
+            {
+                id: 18,
+                title: "Solve for x:",
+                parts: [
+                    {
+                        letter: "a",
+                        equation: "5x + 4 = 29",
+                        answer: 5,
+                        explanation: "To solve 5x + 4 = 29, subtract 4 from both sides: 5x = 25, then divide by 5: x = 5"
+                    },
+                    {
+                        letter: "b",
+                        equation: "x - 25 = 10",
+                        answer: 35,
+                        explanation: "To solve x - 25 = 10, add 25 to both sides: x = 10 + 25 = 35"
+                    }
+                ]
+            }
+        ];
+
+        let timerInterval;
+        let isSubmitted = false;
+
+        // Initialize the application after a year is selected
+        function init() {
+            // No-op: actual start happens on year selection
+        }
+
+        // Generate questions HTML
+        function generateQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            questions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.innerHTML = `
+                    <div class="question-title">${question.title}</div>
+                    ${question.parts.map(part => `
+                        <div class="sub-question">
+                            <div class="sub-question-letter">${part.letter}.</div>
+                            <div class="equation">${part.equation}</div>
+                            <div class="input-group">
+                                <textarea id="working${question.id}_${part.letter}" class="working-box" placeholder="Write your steps here..."></textarea>
+                                <input type="number" id="answer${question.id}_${part.letter}" class="answer-input" step="any">
+                            </div>
+                        </div>
+                    `).join('')}
+                `;
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function startTimer() {
+            const timerElement = document.getElementById('timer');
+            let timeLeft = 3600; // 1 hour in seconds
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                
+                const hours = Math.floor(timeLeft / 3600);
+                const minutes = Math.floor((timeLeft % 3600) / 60);
+                const seconds = timeLeft % 60;
+                
+                timerElement.textContent = `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitAnswers();
+                }
+            }, 1000);
+        }
+
+        function updateProgress() {
+            const progressFill = document.getElementById('progressFill');
+            let totalParts = 0;
+            let answeredParts = 0;
+            
+            questions.forEach(question => {
+                totalParts += question.parts.length;
+                question.parts.forEach(part => {
+                    const answerInput = document.getElementById(`answer${question.id}_${part.letter}`);
+                    if (answerInput && answerInput.value.trim() !== '') {
+                        answeredParts++;
+                    }
+                });
+            });
+            
+            const percentage = (answeredParts / totalParts) * 100;
+            progressFill.style.width = `${percentage}%`;
+        }
+
+        function submitAnswers() {
+            if (isSubmitted) return;
+            isSubmitted = true;
+            
+            clearInterval(timerInterval);
+            
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitted';
+            
+            const results = [];
+            let correct = 0;
+            let totalParts = 0;
+            
+            questions.forEach(question => {
+                question.parts.forEach(part => {
+                    totalParts++;
+                    const answerInput = document.getElementById(`answer${question.id}_${part.letter}`);
+                    const workingInput = document.getElementById(`working${question.id}_${part.letter}`);
+                    
+                    const userAnswer = parseFloat(answerInput.value);
+                    const userWorking = workingInput.value.trim();
+                    const isCorrect = Math.abs(userAnswer - part.answer) < 0.01;
+                    
+                    if (isCorrect) correct++;
+                    
+                    results.push({
+                        question: question,
+                        part: part,
+                        userAnswer: userAnswer,
+                        userWorking: userWorking,
+                        isCorrect: isCorrect
+                    });
+                });
+            });
+            
+            displayResults(results, correct, totalParts);
+        }
+
+        function displayResults(results, correct, total) {
+            const resultsContainer = document.getElementById('resultsContainer');
+            const scoreElement = document.getElementById('score');
+            const feedbackElement = document.getElementById('feedback');
+            
+            const percentage = Math.round((correct / total) * 100);
+            scoreElement.textContent = `Score: ${correct}/${total} (${percentage}%)`;
+            
+            let feedbackHTML = '';
+            results.forEach(item => {
+                const statusClass = item.isCorrect ? 'correct' : 'incorrect';
+                const statusText = item.isCorrect ? '✓ Correct' : '✗ Incorrect';
+                
+                feedbackHTML += `
+                    <div class="feedback-item ${statusClass}">
+                        <strong>Question ${item.question.id}${item.part.letter}: ${item.part.equation}</strong><br>
+                        <strong>Your answer:</strong> ${item.userAnswer}<br>
+                        <strong>Correct answer:</strong> ${item.part.answer}<br>
+                        <strong>Status:</strong> ${statusText}
+                        ${item.userWorking ? `<div style="margin: 10px 0; padding: 10px; background: rgba(0,0,0,0.05); border-radius: 5px;"><strong>Your working:</strong><br><pre style="margin: 5px 0; font-family: 'Courier New', monospace; white-space: pre-wrap;">${item.userWorking}</pre></div>` : ''}
+                        ${!item.isCorrect ? `<div class="explanation">${item.part.explanation}</div>` : ''}
+                    </div>
+                `;
+            });
+            
+            feedbackElement.innerHTML = feedbackHTML;
+            resultsContainer.style.display = 'block';
+            resultsContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Add event listeners for progress updates
+        document.addEventListener('DOMContentLoaded', function() {
+            // Wire year selection
+            const yearSelect = document.getElementById('yearSelect');
+            const timerElement = document.getElementById('timer');
+            const progressFill = document.getElementById('progressFill');
+
+            yearSelect.addEventListener('change', function() {
+                // Reset UI/state
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                }
+                isSubmitted = false;
+                document.getElementById('resultsContainer').style.display = 'none';
+                document.getElementById('submitBtn').disabled = false;
+                document.getElementById('submitBtn').textContent = 'Submit Answers';
+                timerElement.textContent = '60:00';
+                progressFill.style.width = '0%';
+
+                // Load selected year
+                if (this.value === '6') {
+                    questions = questionsYear6;
+                    generateQuestions();
+                    startTimer();
+                    updateProgress();
+                } else {
+                    questions = [];
+                    const container = document.getElementById('questionsContainer');
+                    container.innerHTML = '';
+                }
+            });
+
+            // Update progress when inputs change
+            document.addEventListener('input', function(e) {
+                if (e.target.classList.contains('answer-input')) {
+                    updateProgress();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

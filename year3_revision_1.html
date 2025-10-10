@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Year 3 Revision 1 - Math Word Problems</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .timer {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-top: 20px;
+            display: inline-block;
+        }
+
+        .progress-container {
+            background: #f8f9fa;
+            padding: 20px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .questions-container {
+            padding: 30px;
+        }
+
+        .question {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 5px solid #4facfe;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .question-number {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #4facfe;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-top: 15px;
+        }
+
+        .working-box {
+            width: 100%;
+            min-height: 80px;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: 'Courier New', monospace;
+            resize: vertical;
+            margin-bottom: 10px;
+            transition: border-color 0.3s ease;
+        }
+
+        .working-box:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .answer-input {
+            width: 150px;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1.1em;
+            text-align: center;
+            transition: border-color 0.3s ease;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .submit-container {
+            text-align: center;
+            padding: 30px;
+            background: #f8f9fa;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            font-weight: 600;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(79, 172, 254, 0.3);
+        }
+
+        .submit-btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .results-container {
+            padding: 30px;
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .score {
+            font-size: 2em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .feedback {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .feedback-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 5px solid;
+        }
+
+        .feedback-item.correct {
+            background: #d4edda;
+            border-left-color: #28a745;
+        }
+
+        .feedback-item.incorrect {
+            background: #f8d7da;
+            border-left-color: #dc3545;
+        }
+
+        .explanation {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(0,0,0,0.05);
+            border-radius: 5px;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 10px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .questions-container {
+                padding: 20px;
+            }
+            
+            .question {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Year 3 Revision 1</h1>
+            <p>Solve the word problems below. You have 1 hour to complete all 25 questions.</p>
+            <div class="timer" id="timer">60:00</div>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+        
+        <div class="questions-container">
+            <div id="questionsContainer"></div>
+        </div>
+        
+        <div class="submit-container">
+            <button class="submit-btn" id="submitBtn" onclick="submitAnswers()">Submit Answers</button>
+        </div>
+        
+        <div class="results-container" id="resultsContainer" style="display: none;">
+            <div class="score" id="score"></div>
+            <div id="feedback"></div>
+        </div>
+    </div>
+
+    <script>
+        // Questions data from S4.pdf
+        const questions = [
+            {
+                id: 1,
+                text: "The second and third grade students from Epps Elementary went on a field trip to the science museum. The first bus arrived at 9:50 A.M. with 75 students. The second bus arrived at 9:53 A.M. with 72 students and the third bus arrived at 9:55 A.M. with 76 students. Write a number sentence showing how many second and third grade students arrived at the science museum from Epps Elementary?",
+                answer: 223,
+                explanation: "Add the number of students from all three buses: 75 + 72 + 76 = 223 students"
+            },
+            {
+                id: 2,
+                text: "Every year Sally goes to summer camp with her sister during the third week of June. The boys attend camp during the 4th week of June. This year there were 285 girls and 307 boys that attended. How many more boys than girls attended summer camp this year?",
+                answer: 22,
+                explanation: "Subtract the number of girls from the number of boys: 307 - 285 = 22 more boys"
+            },
+            {
+                id: 3,
+                text: "Hawk Elementary has 128 third graders and 135 fourth graders. Each grade level has 6 teachers. How many third and fourth grade students attend Hawk Elementary?",
+                answer: 263,
+                explanation: "Add the number of third and fourth graders: 128 + 135 = 263 students"
+            },
+            {
+                id: 4,
+                text: "Ben lives in Charlotte, North Carolina and plans to visit his grandmother in Durham next week which is 145 miles away. He then plans to leave his grandmother's house and travel 83 miles to his cousin's house in Winston-Salem. He will then travel 80 miles back home. How far will Ben have traveled by the time he gets back home?",
+                answer: 308,
+                explanation: "Add all the distances: 145 + 83 + 80 = 308 miles"
+            },
+            {
+                id: 5,
+                text: "Mrs. Danon gave two hundred forty sheets of construction paper to her students to use in an art project. So far the students have used ninety-three sheets of paper. How many sheets of construction paper do they have left?",
+                answer: 147,
+                explanation: "Subtract the used sheets from the total: 240 - 93 = 147 sheets left"
+            },
+            {
+                id: 6,
+                text: "Jonathan received $25 from his grandparents for his birthday. He spent $10 on a book and $13 on music. Write a number sentence showing how much money Jonathan had left?",
+                answer: 2,
+                explanation: "Subtract the money spent from the money received: $25 - $10 - $13 = $2 left"
+            },
+            {
+                id: 7,
+                text: "Look at the number sentence below. Write a number in the box to make the number sentence true? 72 + ___ = 115",
+                answer: 43,
+                explanation: "To find the missing number, subtract 72 from 115: 115 - 72 = 43"
+            },
+            {
+                id: 8,
+                text: "Tyler had 403 coins in a jar. 129 coins were nickels and dimes. The rest were pennies. How many coins were pennies?",
+                answer: 274,
+                explanation: "Subtract the nickels and dimes from the total: 403 - 129 = 274 pennies"
+            },
+            {
+                id: 9,
+                text: "Yesterday was the school book fair. It was open from 8:00 A.M. to 8:30 P.M. 127 books were sold during school hours and 389 books were sold after school hours. How many books were sold at the book fair yesterday?",
+                answer: 516,
+                explanation: "Add the books sold during school hours and after school: 127 + 389 = 516 books"
+            },
+            {
+                id: 10,
+                text: "Jesse is selling candy for a band fund raiser. His goal is to sell 150 boxes of candy. So far he has sold 98 boxes of candy. How many more boxes of candy does he need to sell in order to reach his goal?",
+                answer: 52,
+                explanation: "Subtract the boxes sold from the goal: 150 - 98 = 52 more boxes needed"
+            },
+            {
+                id: 11,
+                text: "Carl's mother wants to give some of his toys to a local charity center. He has about 52 toys. If she gives 38 of his toys away, how many toys will he have left?",
+                answer: 14,
+                explanation: "Subtract the toys given away from the total: 52 - 38 = 14 toys left"
+            },
+            {
+                id: 12,
+                text: "Emily and Chilton both love to read books. Emily has 42 books and Chilton has 39 books. How many books do they have in all?",
+                answer: 81,
+                explanation: "Add Emily's and Chilton's books: 42 + 39 = 81 books total"
+            },
+            {
+                id: 13,
+                text: "While Frank was waiting for his mother to grocery shop, he counted 35 cans of beans, 29 cans of corn and 38 cans of peas on the store shelf. How many more cans of peas than corn were on the store shelf?",
+                answer: 9,
+                explanation: "Subtract the cans of corn from the cans of peas: 38 - 29 = 9 more cans of peas"
+            },
+            {
+                id: 14,
+                text: "Monica and Josh ran for student council. Monica received 57 votes and Josh received 65 votes. How many more votes did Josh receive than Monica?",
+                answer: 8,
+                explanation: "Subtract Monica's votes from Josh's votes: 65 - 57 = 8 more votes"
+            },
+            {
+                id: 15,
+                text: "Vikki makes bracelets and necklaces out of colored beads. She has 574 red beads, 658 blue beads and just a few green and purple beads. How many red and blue beads does she have?",
+                answer: 1232,
+                explanation: "Add the red and blue beads: 574 + 658 = 1,232 beads"
+            },
+            {
+                id: 16,
+                text: "The 6 fifth grade teachers took their students to the library 2 weeks ago. Out of the 124 students who checked out library books, only 98 have returned their books. How many students have not returned their library books?",
+                answer: 26,
+                explanation: "Subtract the students who returned books from the total: 124 - 98 = 26 students"
+            },
+            {
+                id: 17,
+                text: "There are 120 students in second grade. Only 32 of them ride the bus. The other students are walkers, bike riders or car riders. How many students do not ride the bus?",
+                answer: 88,
+                explanation: "Subtract the bus riders from the total students: 120 - 32 = 88 students"
+            },
+            {
+                id: 18,
+                text: "Miguel spends 120 minutes in math class each day and 45 minutes in music class. How many more minutes does Miguel spend in math class than music class?",
+                answer: 75,
+                explanation: "Subtract music class time from math class time: 120 - 45 = 75 more minutes"
+            },
+            {
+                id: 19,
+                text: "Jana wants to collect 250 stickers to put in her sticker book. She already has 128 stickers. How many stickers does she still need to collect?",
+                answer: 122,
+                explanation: "Subtract the stickers she has from her goal: 250 - 128 = 122 stickers needed"
+            },
+            {
+                id: 20,
+                text: "Linda sold 107 pencils working at the school store last month. She sold 115 pencils the month before. How many pencils did Linda sell during these 2 months?",
+                answer: 222,
+                explanation: "Add the pencils sold in both months: 107 + 115 = 222 pencils"
+            },
+            {
+                id: 21,
+                text: "Jeanie is learning a new online math game. Yesterday she scored 782 points. Today she scored 937 points. How many more points did she score today than yesterday?",
+                answer: 155,
+                explanation: "Subtract yesterday's score from today's score: 937 - 782 = 155 more points"
+            },
+            {
+                id: 22,
+                text: "Last month the students from Kent Elementary put on a music concert for their community. 308 people attended the program during the day and 492 people attended the program held at night. How many total people attended the program last month?",
+                answer: 800,
+                explanation: "Add the day and night attendees: 308 + 492 = 800 people total"
+            },
+            {
+                id: 23,
+                text: "At Gregg Elementary, Mr. Tanner's class is the largest third grade class with 23 students. Last December they had 72 cupcakes at their Christmas party. When the party was over there were 15 cupcakes left. Write a number sentence showing how many cupcakes were eaten at the party?",
+                answer: 57,
+                explanation: "Subtract the cupcakes left from the total cupcakes: 72 - 15 = 57 cupcakes eaten"
+            },
+            {
+                id: 24,
+                text: "Alan and David brought their marbles to Matt's house so they could see who had the most marbles. Alan had 208 marbles, David had 195 and Matt had 284 marbles. How many more marbles did Matt have than David?",
+                answer: 89,
+                explanation: "Subtract David's marbles from Matt's marbles: 284 - 195 = 89 more marbles"
+            },
+            {
+                id: 25,
+                text: "Jessica went with her mother to the flower shop. They wanted to send some flowers to Jessica's grandmother for her birthday. The florist said they had 108 red roses and 112 pink roses. They decided to send her 1 dozen red roses. How many red roses were left after they purchased a dozen?",
+                answer: 96,
+                explanation: "Subtract 1 dozen (12) from the red roses: 108 - 12 = 96 red roses left"
+            }
+        ];
+
+        let timerInterval;
+        let isSubmitted = false;
+
+        // Initialize the application
+        function init() {
+            generateQuestions();
+            startTimer();
+            updateProgress();
+        }
+
+        // Generate questions HTML
+        function generateQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            questions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.innerHTML = `
+                    <div class="question-number">Question ${question.id}</div>
+                    <div class="question-text">${question.text}</div>
+                    <div class="input-group">
+                        <textarea id="working${question.id}" class="working-box" placeholder="Write your working here..."></textarea>
+                        <input type="number" id="answer${question.id}" class="answer-input" step="any" placeholder="Your answer">
+                    </div>
+                `;
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function startTimer() {
+            const timerElement = document.getElementById('timer');
+            let timeLeft = 3600; // 1 hour in seconds
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                
+                const hours = Math.floor(timeLeft / 3600);
+                const minutes = Math.floor((timeLeft % 3600) / 60);
+                const seconds = timeLeft % 60;
+                
+                timerElement.textContent = `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitAnswers();
+                }
+            }, 1000);
+        }
+
+        function updateProgress() {
+            const progressFill = document.getElementById('progressFill');
+            let answeredQuestions = 0;
+            
+            questions.forEach(question => {
+                const answerInput = document.getElementById(`answer${question.id}`);
+                if (answerInput && answerInput.value.trim() !== '') {
+                    answeredQuestions++;
+                }
+            });
+            
+            const percentage = (answeredQuestions / questions.length) * 100;
+            progressFill.style.width = `${percentage}%`;
+        }
+
+        function submitAnswers() {
+            if (isSubmitted) return;
+            isSubmitted = true;
+            
+            clearInterval(timerInterval);
+            
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitted';
+            
+            const results = [];
+            let correct = 0;
+            
+            questions.forEach(question => {
+                const answerInput = document.getElementById(`answer${question.id}`);
+                const workingInput = document.getElementById(`working${question.id}`);
+                
+                const userAnswer = parseFloat(answerInput.value);
+                const userWorking = workingInput.value.trim();
+                const isCorrect = Math.abs(userAnswer - question.answer) < 0.01;
+                
+                if (isCorrect) correct++;
+                
+                results.push({
+                    question: question,
+                    userAnswer: userAnswer,
+                    userWorking: userWorking,
+                    isCorrect: isCorrect
+                });
+            });
+            
+            displayResults(results, correct);
+        }
+
+        function displayResults(results, correct) {
+            const resultsContainer = document.getElementById('resultsContainer');
+            const scoreElement = document.getElementById('score');
+            const feedbackElement = document.getElementById('feedback');
+            
+            const percentage = Math.round((correct / questions.length) * 100);
+            scoreElement.textContent = `Score: ${correct}/${questions.length} (${percentage}%)`;
+            
+            let feedbackHTML = '';
+            results.forEach(item => {
+                const statusClass = item.isCorrect ? 'correct' : 'incorrect';
+                const statusText = item.isCorrect ? '✓ Correct' : '✗ Incorrect';
+                
+                feedbackHTML += `
+                    <div class="feedback-item ${statusClass}">
+                        <strong>Question ${item.question.id}</strong><br>
+                        <strong>Your answer:</strong> ${item.userAnswer}<br>
+                        <strong>Correct answer:</strong> ${item.question.answer}<br>
+                        <strong>Status:</strong> ${statusText}
+                        ${item.userWorking ? `<div style="margin: 10px 0; padding: 10px; background: rgba(0,0,0,0.05); border-radius: 5px;"><strong>Your working:</strong><br><pre style="margin: 5px 0; font-family: 'Courier New', monospace; white-space: pre-wrap;">${item.userWorking}</pre></div>` : ''}
+                        ${!item.isCorrect ? `<div class="explanation">${item.question.explanation}</div>` : ''}
+                    </div>
+                `;
+            });
+            
+            feedbackElement.innerHTML = feedbackHTML;
+            resultsContainer.style.display = 'block';
+            resultsContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Add event listeners for progress updates
+        document.addEventListener('DOMContentLoaded', function() {
+            init();
+            
+            // Update progress when inputs change
+            document.addEventListener('input', function(e) {
+                if (e.target.classList.contains('answer-input')) {
+                    updateProgress();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
