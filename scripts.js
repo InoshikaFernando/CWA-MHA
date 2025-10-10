@@ -196,8 +196,11 @@ function printCertificate() {
   const scoreText = certificateDiv.querySelectorAll('p')[1]?.textContent || '';
   const pointsText = certificateDiv.querySelectorAll('p')[2]?.textContent || '';
   const achievementText = certificateDiv.querySelectorAll('p')[3]?.textContent || '';
-  const dateText = certificateDiv.querySelector('.footer div:first-child p')?.textContent || `Date: ${new Date().toLocaleDateString()}`;
-  const timeText = certificateDiv.querySelector('.footer div:last-child p')?.textContent || 'Time: 0 seconds';
+  
+  // Fix the selectors to match the actual HTML structure
+  const footerDiv = certificateDiv.querySelector('div[style*="display: flex; justify-content: space-between"]');
+  const dateText = footerDiv?.querySelector('div[style*="text-align: left"] p')?.textContent || `Date: ${new Date().toLocaleDateString()}`;
+  const timeText = footerDiv?.querySelector('div[style*="text-align: right"] p')?.textContent || 'Time: 0 seconds';
   
   // Create print window
   const printWindow = window.open('', '_blank', 'width=800,height=600');
@@ -291,8 +294,11 @@ function downloadCertificate() {
   const scoreText = certificateDiv.querySelectorAll('p')[1]?.textContent || '';
   const pointsText = certificateDiv.querySelectorAll('p')[2]?.textContent || '';
   const achievementText = certificateDiv.querySelectorAll('p')[3]?.textContent || '';
-  const dateText = certificateDiv.querySelector('.footer div:first-child p')?.textContent || `Date: ${new Date().toLocaleDateString()}`;
-  const timeText = certificateDiv.querySelector('.footer div:last-child p')?.textContent || 'Time: 0 seconds';
+  
+  // Fix the selectors to match the actual HTML structure
+  const footerDiv = certificateDiv.querySelector('div[style*="display: flex; justify-content: space-between"]');
+  const dateText = footerDiv?.querySelector('div[style*="text-align: left"] p')?.textContent || `Date: ${new Date().toLocaleDateString()}`;
+  const timeText = footerDiv?.querySelector('div[style*="text-align: right"] p')?.textContent || 'Time: 0 seconds';
   
   // Create HTML content for download
   const htmlContent = `
