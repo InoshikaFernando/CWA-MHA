@@ -17,24 +17,29 @@ function stopTimer() {
   timerStarted = false;
 }
 
+function resetTimer() {
+  stopTimer();
+  elapsedTime = 0;
+  document.getElementById('timer').innerText = "Time: 0 sec";
+}
+
 function resetQuiz() {
   questionCount = 0;
   correctCount = 0;
   elapsedTime = 0;
   document.getElementById('score').innerText = "";
   document.getElementById('finalScore').innerText = "";
-  document.getElementById('timer').innerText = "Time: 0 sec";
   document.getElementById('points').innerText = "";
-  stopTimer();
-  startTimer();
-  startTime = Date.now();
+  resetTimer();
+  // Don't start timer here - let it start when first question begins
 }
 
 function handleQuizProgress() {
+    // Only start timer on first question if not already started
     if (questionCount === 0 && !timerStarted) {
         startTimer();
-      }
-      // Quiz completion logic is now handled in checkAnswer() function
+    }
+    // Quiz completion logic is now handled in checkAnswer() function
 }
 
 function showCertificate(points, correctCount, totalQuestions, level, elapsedTime) {
