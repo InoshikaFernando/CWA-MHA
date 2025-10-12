@@ -152,6 +152,7 @@
 
         .submit-container {
             margin: 20px 0;
+            display: none; /* Hide initially */
         }
 
         .submit-btn {
@@ -767,10 +768,16 @@
                     generateQuestions();
                     startTimer();
                     updateProgress();
+                    
+                    // Show submit button after year selection
+                    document.querySelector('.submit-container').style.display = 'block';
                 } else {
                     questions = [];
                     const container = document.getElementById('questionsContainer');
                     container.innerHTML = '';
+                    
+                    // Hide submit button when no year is selected
+                    document.querySelector('.submit-container').style.display = 'none';
                 }
             });
 

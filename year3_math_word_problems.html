@@ -4,61 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Year 3 Revision 1 - Math Word Problems</title>
+    <link rel="stylesheet" href="style.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+
+        .year-selector {
+            margin: 20px 0;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            font-weight: 300;
-        }
-
-        .header p {
-            font-size: 1.2em;
-            opacity: 0.9;
+        .year-selector label {
+            font-weight: bold;
+            margin-right: 10px;
         }
 
         .timer {
-            background: rgba(255,255,255,0.2);
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 1.5em;
+            font-size: 18px;
+            margin: 10px 0;
+            color: #2c3e50;
             font-weight: bold;
-            margin-top: 20px;
-            display: inline-block;
         }
 
         .progress-container {
-            background: #f8f9fa;
-            padding: 20px;
-            border-bottom: 1px solid #e9ecef;
+            margin: 20px auto;
+            width: 80%;
+            max-width: 500px;
         }
 
         .progress-bar {
@@ -67,119 +35,146 @@
             background: #e9ecef;
             border-radius: 10px;
             overflow: hidden;
+            border: 1px solid #ccc;
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            background: #3498db;
             width: 0%;
             transition: width 0.3s ease;
         }
 
         .questions-container {
-            padding: 30px;
+            margin: 20px auto;
+            max-width: 800px;
+            text-align: left;
+            display: none; /* Hide initially */
         }
 
         .question {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 25px;
-            margin-bottom: 25px;
-            border-left: 5px solid #4facfe;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-        }
-
-        .question-number {
-            font-size: 1.1em;
-            font-weight: 600;
-            color: #4facfe;
-            margin-bottom: 10px;
-        }
-
-        .question-text {
-            font-size: 1.1em;
-            line-height: 1.6;
-            color: #2c3e50;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
             margin-bottom: 20px;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .question-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
         }
 
         .input-group {
-            margin-top: 15px;
+            margin-top: 10px;
         }
 
         .working-box {
             width: 100%;
-            min-height: 80px;
-            padding: 15px;
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
-            font-size: 1em;
+            min-height: 60px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
             font-family: 'Courier New', monospace;
             resize: vertical;
-            margin-bottom: 10px;
-            transition: border-color 0.3s ease;
+            margin-bottom: 8px;
         }
 
         .working-box:focus {
             outline: none;
-            border-color: #4facfe;
-            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+            border-color: #3498db;
         }
 
         .answer-input {
-            width: 150px;
-            padding: 12px;
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
-            font-size: 1.1em;
+            width: 120px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
             text-align: center;
-            transition: border-color 0.3s ease;
         }
 
         .answer-input:focus {
             outline: none;
-            border-color: #4facfe;
-            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+            border-color: #3498db;
         }
 
         .submit-container {
+            margin: 20px 0;
+            display: none; /* Hide initially */
+        }
+        
+        .back-container {
+            margin: 20px 0;
             text-align: center;
-            padding: 30px;
-            background: #f8f9fa;
+        }
+        
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 10px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .questions-container {
+                padding: 15px;
+            }
+            
+            .question-item {
+                padding: 15px;
+            }
+            
+            .answer-input {
+                width: 100%;
+                max-width: 200px;
+            }
+            
+            .working-box {
+                min-height: 80px;
+            }
         }
 
         .submit-btn {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            background: #3498db;
             color: white;
             border: none;
-            padding: 15px 40px;
-            font-size: 1.2em;
-            border-radius: 50px;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 5px;
             cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            font-weight: 600;
+            transition: background 0.3s;
         }
 
         .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(79, 172, 254, 0.3);
+            background: #2980b9;
         }
 
         .submit-btn:disabled {
             background: #6c757d;
             cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
         }
 
         .results-container {
-            padding: 30px;
-            background: #f8f9fa;
-            border-top: 1px solid #e9ecef;
+            margin: 20px auto;
+            max-width: 800px;
+            text-align: left;
         }
 
         .score {
-            font-size: 2em;
+            font-size: 1.5em;
             font-weight: bold;
             text-align: center;
             margin-bottom: 20px;
@@ -188,16 +183,16 @@
 
         .feedback {
             background: white;
-            border-radius: 10px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #ccc;
         }
 
         .feedback-item {
-            margin-bottom: 20px;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 5px solid;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            border-left: 4px solid;
         }
 
         .feedback-item.correct {
@@ -211,11 +206,12 @@
         }
 
         .explanation {
-            margin-top: 10px;
-            padding: 10px;
+            margin-top: 8px;
+            padding: 8px;
             background: rgba(0,0,0,0.05);
-            border-radius: 5px;
+            border-radius: 3px;
             font-style: italic;
+            font-size: 14px;
         }
 
         @media (max-width: 768px) {
@@ -245,8 +241,15 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Year 3 Revision 1</h1>
-            <p>Solve the word problems below. You have 1 hour to complete all 25 questions.</p>
+            <h1>Year 3 Revision - Math Word Problems</h1>
+            <p>Solve the word problems below. You have 1 hour to complete all questions.</p>
+            <div style="margin-top: 12px;">
+                <label for="revisionSelect" style="margin-right: 8px; font-weight: 600;">Select Revision:</label>
+                <select id="revisionSelect" style="padding: 8px 12px; border-radius: 6px; border: 1px solid #e9ecef;">
+                    <option value="">-- Select --</option>
+                    <option value="1">Revision 1</option>
+                </select>
+            </div>
             <div class="timer" id="timer">60:00</div>
         </div>
         
@@ -262,6 +265,10 @@
         
         <div class="submit-container">
             <button class="submit-btn" id="submitBtn" onclick="submitAnswers()">Submit Answers</button>
+        </div>
+        
+        <div class="back-container">
+            <a href="index.html" class="back-btn">⬅ Back to Topics</a>
         </div>
         
         <div class="results-container" id="resultsContainer" style="display: none;">
@@ -428,13 +435,6 @@
         let timerInterval;
         let isSubmitted = false;
 
-        // Initialize the application
-        function init() {
-            generateQuestions();
-            startTimer();
-            updateProgress();
-        }
-
         // Generate questions HTML
         function generateQuestions() {
             const container = document.getElementById('questionsContainer');
@@ -556,7 +556,43 @@
 
         // Add event listeners for progress updates
         document.addEventListener('DOMContentLoaded', function() {
-            init();
+            // Wire revision selection
+            const revisionSelect = document.getElementById('revisionSelect');
+            const timerElement = document.getElementById('timer');
+            const progressFill = document.getElementById('progressFill');
+
+            revisionSelect.addEventListener('change', function() {
+                // Reset UI/state
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                }
+                isSubmitted = false;
+                document.getElementById('resultsContainer').style.display = 'none';
+                document.getElementById('submitBtn').disabled = false;
+                document.getElementById('submitBtn').textContent = 'Submit Answers';
+                timerElement.textContent = '60:00';
+                progressFill.style.width = '0%';
+
+                // Load selected revision
+                if (this.value === '1') {
+                    generateQuestions();
+                    startTimer();
+                    updateProgress();
+                    
+                    // Show questions and submit button after revision selection
+                    document.querySelector('.questions-container').style.display = 'block';
+                    document.querySelector('.submit-container').style.display = 'block';
+                } else {
+                    questions = [];
+                    const container = document.getElementById('questionsContainer');
+                    container.innerHTML = '';
+                    
+                    // Hide questions and submit button when no revision is selected
+                    document.querySelector('.questions-container').style.display = 'none';
+                    document.querySelector('.submit-container').style.display = 'none';
+                }
+            });
             
             // Update progress when inputs change
             document.addEventListener('input', function(e) {
