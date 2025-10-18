@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Year 6 Equations MCQs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background: #f0f8ff;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .year-selector {
+            margin: 20px 0;
+        }
+
+        .year-selector label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        select {
+            margin: 10px;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .timer {
+            font-size: 18px;
+            margin: 10px 0;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        .progress-container {
+            margin: 20px auto;
+            width: 80%;
+            max-width: 500px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #ccc;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #3498db;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .questions-container {
+            margin: 20px auto;
+            max-width: 800px;
+            text-align: left;
+        }
+
+        .question {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .question-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .equation {
+            display: inline-block;
+            font-size: 1.3em;
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 5px;
+            border: 1px solid #e9ecef;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .option {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+
+        .option:hover {
+            background: #e9ecef;
+            border-color: #3498db;
+        }
+
+        .option.selected {
+            background: #3498db;
+            color: white;
+            border-color: #2980b9;
+        }
+
+        .option.correct {
+            background: #28a745;
+            color: white;
+            border-color: #1e7e34;
+        }
+
+        .option.incorrect {
+            background: #dc3545;
+            color: white;
+            border-color: #c82333;
+        }
+
+        .submit-container {
+            margin: 20px 0;
+            display: none;
+        }
+
+        .submit-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #2980b9;
+        }
+
+        .submit-btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+
+        .results-container {
+            margin: 20px auto;
+            max-width: 800px;
+            text-align: left;
+        }
+
+        .score {
+            font-size: 1.8em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .feedback {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+
+        .feedback-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid;
+        }
+
+        .feedback-item.correct {
+            background: #d4edda;
+            border-left-color: #28a745;
+        }
+
+        .feedback-item.incorrect {
+            background: #f8d7da;
+            border-left-color: #dc3545;
+        }
+
+        .explanation {
+            margin-top: 8px;
+            padding: 8px;
+            background: rgba(0,0,0,0.05);
+            border-radius: 3px;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background 0.3s;
+            margin: 10px;
+        }
+
+        .back-btn:hover {
+            background: #2980b9;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧮 Year 6 Equations MCQs</h1>
+            <p class="subtitle">Multiple Choice Questions - Solve equations and select the correct answer</p>
+            <div class="year-selector">
+                <label for="yearSelect">Select Year:</label>
+                <select id="yearSelect">
+                    <option value="">-- Select --</option>
+                    <option value="6">Year 6</option>
+                </select>
+            </div>
+            <div class="timer" id="timer">30:00</div>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <div class="stats" id="stats" style="display: none;">
+            <div class="stat-item">
+                <div class="stat-number" id="answeredCount">0</div>
+                <div class="stat-label">Answered</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="totalCount">0</div>
+                <div class="stat-label">Total</div>
+            </div>
+        </div>
+        
+        <div class="questions-container">
+            <div id="questionsContainer"></div>
+        </div>
+        
+        <div class="submit-container">
+            <button class="submit-btn" id="submitBtn" onclick="submitAnswers()">Submit Answers</button>
+        </div>
+        
+        <div class="results-container" id="resultsContainer" style="display: none;">
+            <div class="score" id="score"></div>
+            <div id="feedback"></div>
+            <a href="index.html" class="back-btn">← Back to Main Menu</a>
+        </div>
+    </div>
+
+    <script>
+        // Year 6 Equations MCQs
+        const questionsYear6 = [
+            {
+                id: 1,
+                equation: "Which of the following is not an equation?",
+                options: ["4 + 5 = 9", "3 - 7 = 20", "18 w = 6", "y = 3x - 8", "14 z - 2"],
+                correct: 4,
+                explanation: "An equation must have an equals sign (=). '14 z - 2' is an expression, not an equation, because it has no equals sign."
+            },
+            {
+                id: 2,
+                equation: "The value of the missing number that would make this equation true is: 32 - ___ = 18",
+                options: [4, 6, 14, 16, 24],
+                correct: 2,
+                explanation: "To find the missing number: 32 - x = 18, so x = 32 - 18 = 14"
+            },
+            {
+                id: 3,
+                equation: "The value of the missing number that would make this equation true is: 22 = 7 + ___ . 5",
+                options: [2, 3, 6, 5, 6],
+                correct: 1,
+                explanation: "To find the missing number: 22 = 7 + x × 5, so 22 - 7 = x × 5, so 15 = x × 5, so x = 3"
+            },
+            {
+                id: 4,
+                equation: "Equation A: 3x + 2 = 8 is equivalent to equation B: 3x + 10 = 16 because:",
+                options: ["both sides of equation A have been multiplied by 2 to give equation B.", "both sides of equation A have been multiplied by 3 to give equation B.", "both sides of equation A have had 8 added to give equation B.", "both sides of equation A have had 8 subtracted to give equation B.", "the two equations are not equivalent"],
+                correct: 2,
+                explanation: "To transform equation A (3x + 2 = 8) into equation B (3x + 10 = 16), we add 8 to both sides: (3x + 2) + 8 = 3x + 10 and 8 + 8 = 16"
+            },
+            {
+                id: 5,
+                equation: "Which of the following is not an equation?",
+                options: ["𝑥𝑥 = 8(𝑥𝑥 − 5)", "8(𝑥𝑥 − 5) = 0", "𝑥𝑥 + 8(𝑥𝑥 − 5)", "2𝑥𝑥 = (𝑥𝑥 − 5)", "𝑥𝑥 − 5 = 1/2"],
+                correct: 2,
+                explanation: "An equation must have an equals sign (=). Option C '𝑥𝑥 + 8(𝑥𝑥 − 5)' is an expression, not an equation, because it has no equals sign."
+            },
+            {
+                id: 6,
+                equation: "When solving the equation 5a − 7 = 19, which step is performed first?",
+                options: ["Subtract 7 from both sides", "Add 7 to both sides", "Divide both sides by 5", "Multiply both sides by 5", "Subtract 19 from both sides"],
+                correct: 1,
+                explanation: "To solve 5a − 7 = 19, we first add 7 to both sides to isolate the term with the variable: 5a = 26"
+            },
+            {
+                id: 7,
+                equation: "Which value of x makes the equation 3x + 4 = 19 true?",
+                options: [3, 4, 19, 6, 5],
+                correct: 4,
+                explanation: "To solve 3x + 4 = 19: subtract 4 from both sides (3x = 15), then divide by 3 (x = 5). Check: 3(5) + 4 = 15 + 4 = 19 ✓"
+            },
+            {
+                id: 8,
+                equation: "Consider the rule a = 3b − 7. The value of b, if a = 26, is:",
+                options: [5, 9, 18, 11, 71],
+                correct: 3,
+                explanation: "Substitute a = 26: 26 = 3b − 7. Add 7 to both sides: 33 = 3b. Divide by 3: b = 11"
+            },
+            {
+                id: 9,
+                equation: "A number is doubled, and then 7 is added. This gives a final result of 31. An equation that represents this statement is:",
+                options: ["2(n + 7) = 31", "n/2 + 7 = 31", "2n + 7 = 31", "2n – 7 = 31", "(n+7)/2 = 31"],
+                correct: 2,
+                explanation: "If n is the number, doubling it gives 2n, then adding 7 gives 2n + 7, which equals 31. So the equation is 2n + 7 = 31"
+            },
+            {
+                id: 10,
+                equation: "A number is doubled, and then 7 is added. This gives a final result of 31. The number is:",
+                options: [8, 9, 10, 11, 12],
+                correct: 4,
+                explanation: "Using the equation 2n + 7 = 31: subtract 7 from both sides (2n = 24), then divide by 2 (n = 12). Check: 2(12) + 7 = 24 + 7 = 31 ✓"
+            },
+            {
+                id: 11,
+                equation: "Which expression does not expand to 18m + 24?",
+                options: ["6(3m + 4)", "2(9m + 12)", "3(8 + 6m)", "4(6 + 4m)", "6(4 + 3m)"],
+                correct: 3,
+                explanation: "A) 6(3m + 4) = 18m + 24; B) 2(9m + 12) = 18m + 24; C) 3(8 + 6m) = 24 + 18m; D) 4(6 + 4m) = 24 + 16m; E) 6(4 + 3m) = 24 + 18m. Option D does not expand to 18m + 24."
+            },
+            {
+                id: 12,
+                equation: "When solving the equation 3a - 5 = 19, which step should be performed first?",
+                options: ["Adding 5 to both sides", "Subtracting 5 from both sides", "Multiplying both sides by 3", "Dividing both sides by 3", "Subtracting 19 from both sides"],
+                correct: 0,
+                explanation: "To isolate the term with 'a', you first undo the subtraction of 5 by adding 5 to both sides."
+            },
+            {
+                id: 13,
+                equation: "When solving the equation (5b + 7) / 4 = 8, which step should be performed last?",
+                options: ["Multiplying both sides by 4", "Subtracting 7 from both sides", "Dividing both sides by 5", "Adding 7 from both sides", "Multiplying both sides by 5"],
+                correct: 2,
+                explanation: "The order of operations to solve would be: 1. Multiply by 4, 2. Subtract 7, 3. Divide by 5. So, dividing by 5 is the last step."
+            },
+            {
+                id: 14,
+                equation: "Consider the rule y = 2x - 6. The value of x if y = 12 is:",
+                options: [3, 4, 6, 8, 9],
+                correct: 4,
+                explanation: "Substitute y=12: 12 = 2x - 6. Add 6 to both sides: 18 = 2x. Divide by 2: x = 9."
+            },
+            {
+                id: 15,
+                equation: "Alison is a years old and Brendan is b years old. In 4 years' time their combined age will be 32. An equation that represents this scenario is:",
+                options: ["a + 4 + b + 4 = 32", "a + b + 4 = 32", "a + b - 4 = 32", "4(a + b) = 32", "4(a - b) = 32"],
+                correct: 0,
+                explanation: "In 4 years' time, Alison will be a + 4 years old and Brendan will be b + 4 years old. Their combined age will be (a + 4) + (b + 4) = a + 4 + b + 4 = 32"
+            },
+            {
+                id: 16,
+                equation: "The sum of Carol's current age, and her age last year is 25. How old is Carol?",
+                options: [12, 13, 14, 15, 16],
+                correct: 1,
+                explanation: "Let Carol's current age be x. Her age last year was x - 1. The sum is x + (x - 1) = 25, so 2x - 1 = 25, so 2x = 26, so x = 13"
+            },
+            {
+                id: 17,
+                equation: "The value of the missing number that would make this equation true is: 45 = 4 + 1 . _____",
+                options: [9, 15, 11, 41, 40],
+                correct: 3,
+                explanation: "To find the missing number: 45 = 4 + 1 × x, so 45 = 4 + x, so x = 45 - 4 = 41"
+            },
+            {
+                id: 18,
+                equation: "Equation A: x - 3 = 10 is equivalent to Equation B: 4x - 12 = 40 because:",
+                options: ["both sides of equation A have been multiplied by 4 to give equation B.", "both sides of equation A have been divided by 4 to give equation B.", "both sides of equation A have had 9 added to give equation B.", "both sides of equation A have had -15 subtracted to give equation B.", "the two equations are not equivalent"],
+                correct: 0,
+                explanation: "To transform equation A (x - 3 = 10) into equation B (4x - 12 = 40), we multiply both sides by 4: 4(x - 3) = 4(10), so 4x - 12 = 40"
+            },
+            {
+                id: 19,
+                equation: "Which expression does not expand to 16m + 24?",
+                options: ["8(2m + 3)", "2(12 + 8m)", "8(8m + 16)", "8(3 + 2m)", "4(4m + 6)"],
+                correct: 2,
+                explanation: "A) 8(2m + 3) = 16m + 24; B) 2(12 + 8m) = 24 + 16m = 16m + 24; C) 8(8m + 16) = 64m + 128; D) 8(3 + 2m) = 24 + 16m = 16m + 24; E) 4(4m + 6) = 16m + 24. Option C does not expand to 16m + 24."
+            },
+            {
+                id: 20,
+                equation: "When solving the equation (5a-7)/3 = 9, which step should be performed first?",
+                options: ["Subtracting 7 from both sides", "Adding 7 to both sides", "Dividing both sides by 5", "Multiplying both sides by 3", "Subtracting 9 from both sides"],
+                correct: 3,
+                explanation: "To isolate the term with 'a', you first undo the division by 3 by multiplying both sides by 3."
+            },
+            {
+                id: 21,
+                equation: "When solving the equation (21+4x)/3 = 18, the first step is to multiply both sides by 3. Which step should be performed last?",
+                options: ["Dividing both sides by 4", "Adding 21 to both sides", "Subtracting 21 from both sides", "Multiplying both sides by 3", "Multiplying both sides by 4"],
+                correct: 0,
+                explanation: "After multiplying by 3, you get 21 + 4x = 54. Then subtract 21 (4x = 33), and finally divide by 4 (x = 33/4)."
+            },
+            {
+                id: 22,
+                equation: "Consider the rule a = 2b - 41. The value of b if a = 50 is:",
+                options: [45.5, 18, -4.5, 4.5, 90],
+                correct: 0,
+                explanation: "Substitute a=50: 50 = 2b - 41. Add 41 to both sides: 91 = 2b. Divide by 2: b = 45.5."
+            },
+            {
+                id: 23,
+                equation: "Alison is a years old and Brendan is b years old. In 10 years' time their combined age will be 40. An equation that represents this scenario is:",
+                options: ["a + b + 10 = 40", "a + b - 10 = 40", "a + b + 20 = 40", "10(a + b) = 40", ""],
+                correct: 2,
+                explanation: "In 10 years, Alison will be a+10 and Brendan will be b+10. Their combined age will be (a+10) + (b+10) = a+b+20. So, a+b+20 = 40."
+            },
+            {
+                id: 24,
+                equation: "Consider the rectangle shown. The value of x is: (Rectangle with top side = 10, bottom side = 4 - 2x)",
+                options: [-3, 3, -7, 7, 4],
+                correct: 0,
+                explanation: "For a rectangle, opposite sides are equal. So 10 = 4 - 2x. Solving: 10 - 4 = -2x, so 6 = -2x, so x = -3."
+            },
+            {
+                id: 25,
+                equation: "Consider the rectangle shown. The value of y is: (Rectangle with left side = 7, right side = (2y - 3)/5)",
+                options: [10, 16, 25, 19, 36],
+                correct: 3,
+                explanation: "For a rectangle, opposite sides are equal. So 7 = (2y - 3)/5. Solving: 7 × 5 = 2y - 3, so 35 = 2y - 3, so 38 = 2y, so y = 19."
+            },
+            {
+                id: 26,
+                equation: "The solution to the equation (2x - 5) / 3 = 1 / 3 is:",
+                options: [6, 12, 1.25, 4, 3],
+                correct: 4,
+                explanation: "Multiply both sides by 3: 2x - 5 = 1. Add 5 to both sides: 2x = 6. Divide by 2: x = 3."
+            },
+            {
+                id: 27,
+                equation: "Which expression expands to 30x + 6?",
+                options: ["3(10x + 3)", "2(10x + 3)", "6(x + 5)", "6x(5 + x)", "6(5x + 1)"],
+                correct: 4,
+                explanation: "A) 3(10x + 3) = 30x + 9; B) 2(10x + 3) = 20x + 6; C) 6(x + 5) = 6x + 30; D) 6x(5 + x) = 30x + 6x²; E) 6(5x + 1) = 30x + 6 ✓"
+            },
+            {
+                id: 28,
+                equation: "Which of the following is not an equation?",
+                options: ["3 = 10x + 3", "10x = 3", "6(x + 5)", "x x x = 0", "8/x = 12"],
+                correct: 2,
+                explanation: "An equation must have an equals sign (=). '6(x + 5)' is an expression, not an equation, because it has no equals sign."
+            },
+            {
+                id: 29,
+                equation: "The value of h in the equation 7 - h = 10 is:",
+                options: [3, 17, 10, -17, -3],
+                correct: 4,
+                explanation: "To solve 7 - h = 10: subtract 7 from both sides (-h = 3), then multiply by -1 (h = -3)."
+            },
+            {
+                id: 30,
+                equation: "In the equation (1-2x)/3 = -3, to solve the equation the first step is to multiply both sides by 3, the next step is to:",
+                options: ["add 1 to both sides", "subtract 1 from both sides", "add 2 to both sides", "subtract 2 from both sides", "multiply both sides by -2"],
+                correct: 1,
+                explanation: "After multiplying by 3: 1 - 2x = -9. The next step is to subtract 1 from both sides: -2x = -10."
+            },
+            {
+                id: 31,
+                equation: "If (3w - 21) / 2 = 18, w = :",
+                options: [15, 6, 9, 19, 12],
+                correct: 3,
+                explanation: "Multiply both sides by 2: 3w - 21 = 36. Add 21 to both sides: 3w = 57. Divide by 3: w = 19."
+            },
+            {
+                id: 32,
+                equation: "Solve 3j / 5 = 9 for j:",
+                options: [15, 27, 8, 9, 13],
+                correct: 0,
+                explanation: "Multiply both sides by 5: 3j = 45. Divide by 3: j = 15."
+            },
+            {
+                id: 33,
+                equation: "Solve (g + 7) / 4 = 17 for g:",
+                options: [27, 68, 61, 18, 44],
+                correct: 2,
+                explanation: "Multiply both sides by 4: g + 7 = 68. Subtract 7 from both sides: g = 61."
+            },
+            {
+                id: 34,
+                equation: "Solve -6g - 12 = 18 for g:",
+                options: [1, 5, -5, -1, -3],
+                correct: 2,
+                explanation: "Add 12 to both sides: -6g = 30. Divide by -6: g = -5."
+            },
+            {
+                id: 35,
+                equation: "Solve 2x - 9 = x - 12 for x:",
+                options: [-3, 7, 3, -1, 21],
+                correct: 0,
+                explanation: "Subtract x from both sides: x - 9 = -12. Add 9 to both sides: x = -3."
+            },
+            {
+                id: 36,
+                equation: "Which of the following equations is true for all values of n?",
+                options: ["n + 0 = 9", "n + n = 2n", "n - 9 = n", "n / 4 = 2", "3n = n"],
+                correct: 1,
+                explanation: "n + n = 2n simplifies to 2n = 2n, which is an identity true for all values of n."
+            }
+        ];
+
+        let questions = [];
+        let timerInterval;
+        let isSubmitted = false;
+        let selectedAnswers = {};
+
+        function generateQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            questions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.innerHTML = `
+                    <div class="question-title">Question ${question.id}</div>
+                    <div class="equation">${question.equation}</div>
+                    <div class="options">
+                        ${question.options.map((option, optionIndex) => `
+                            <div class="option" data-question="${question.id}" data-option="${optionIndex}" onclick="selectOption(${question.id}, ${optionIndex})">
+                                ${option}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function selectOption(questionId, optionIndex) {
+            if (isSubmitted) return;
+            
+            // Remove previous selection for this question
+            const questionOptions = document.querySelectorAll(`[data-question="${questionId}"]`);
+            questionOptions.forEach(option => option.classList.remove('selected'));
+            
+            // Add selection to clicked option
+            const selectedOption = document.querySelector(`[data-question="${questionId}"][data-option="${optionIndex}"]`);
+            selectedOption.classList.add('selected');
+            
+            // Store the answer
+            selectedAnswers[questionId] = optionIndex;
+            
+            updateProgress();
+        }
+
+        function startTimer() {
+            const timerElement = document.getElementById('timer');
+            let timeLeft = 1800; // 30 minutes in seconds
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                
+                timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitAnswers();
+                }
+            }, 1000);
+        }
+
+        function updateProgress() {
+            const progressFill = document.getElementById('progressFill');
+            const answeredCount = Object.keys(selectedAnswers).length;
+            const totalCount = questions.length;
+            const percentage = (answeredCount / totalCount) * 100;
+            
+            progressFill.style.width = `${percentage}%`;
+            
+            // Update stats
+            document.getElementById('answeredCount').textContent = answeredCount;
+            document.getElementById('totalCount').textContent = totalCount;
+        }
+
+        function submitAnswers() {
+            if (isSubmitted) return;
+            isSubmitted = true;
+            
+            clearInterval(timerInterval);
+            
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitted';
+            
+            let correct = 0;
+            let total = questions.length;
+            
+            // Show correct/incorrect answers
+            questions.forEach(question => {
+                const userAnswer = selectedAnswers[question.id];
+                const isCorrect = userAnswer === question.correct;
+                
+                if (isCorrect) correct++;
+                
+                // Highlight options
+                const questionOptions = document.querySelectorAll(`[data-question="${question.id}"]`);
+                questionOptions.forEach((option, index) => {
+                    if (index === question.correct) {
+                        option.classList.add('correct');
+                    } else if (index === userAnswer && !isCorrect) {
+                        option.classList.add('incorrect');
+                    }
+                });
+            });
+            
+            displayResults(correct, total);
+        }
+
+        function displayResults(correct, total) {
+            const resultsContainer = document.getElementById('resultsContainer');
+            const scoreElement = document.getElementById('score');
+            const feedbackElement = document.getElementById('feedback');
+            
+            const percentage = Math.round((correct / total) * 100);
+            let grade = '';
+            let gradeColor = '';
+            
+            if (percentage >= 90) {
+                grade = 'Excellent! 🌟';
+                gradeColor = '#28a745';
+            } else if (percentage >= 80) {
+                grade = 'Very Good! 👍';
+                gradeColor = '#20c997';
+            } else if (percentage >= 70) {
+                grade = 'Good! ✅';
+                gradeColor = '#17a2b8';
+            } else if (percentage >= 60) {
+                grade = 'Satisfactory 📚';
+                gradeColor = '#ffc107';
+            } else {
+                grade = 'Keep Practicing! 💪';
+                gradeColor = '#dc3545';
+            }
+            
+            scoreElement.innerHTML = `
+                <div style="color: ${gradeColor};">${grade}</div>
+                <div>Score: ${correct}/${total} (${percentage}%)</div>
+            `;
+            
+            let feedbackHTML = '';
+            questions.forEach(question => {
+                const userAnswer = selectedAnswers[question.id];
+                const isCorrect = userAnswer === question.correct;
+                const statusClass = isCorrect ? 'correct' : 'incorrect';
+                const statusText = isCorrect ? '✓ Correct' : '✗ Incorrect';
+                const userAnswerText = userAnswer !== undefined ? question.options[userAnswer] : 'Not answered';
+                
+                feedbackHTML += `
+                    <div class="feedback-item ${statusClass}">
+                        <strong>Question ${question.id}: ${question.equation}</strong><br>
+                        <strong>Your answer:</strong> ${userAnswerText}<br>
+                        <strong>Correct answer:</strong> ${question.options[question.correct]}<br>
+                        <strong>Status:</strong> ${statusText}
+                        ${!isCorrect ? `<div class="explanation">${question.explanation}</div>` : ''}
+                    </div>
+                `;
+            });
+            
+            feedbackElement.innerHTML = feedbackHTML;
+            resultsContainer.style.display = 'block';
+            resultsContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            const yearSelect = document.getElementById('yearSelect');
+            const timerElement = document.getElementById('timer');
+            const progressFill = document.getElementById('progressFill');
+
+            yearSelect.addEventListener('change', function() {
+                // Reset UI/state
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                }
+                isSubmitted = false;
+                selectedAnswers = {};
+                document.getElementById('resultsContainer').style.display = 'none';
+                document.getElementById('submitBtn').disabled = false;
+                document.getElementById('submitBtn').textContent = 'Submit Answers';
+                timerElement.textContent = '30:00';
+                progressFill.style.width = '0%';
+                document.getElementById('stats').style.display = 'none';
+
+                // Load selected year
+                if (this.value === '6') {
+                    questions = questionsYear6;
+                    generateQuestions();
+                    startTimer();
+                    updateProgress();
+                    
+                    // Show submit button and stats after year selection
+                    document.querySelector('.submit-container').style.display = 'block';
+                    document.getElementById('stats').style.display = 'flex';
+                } else {
+                    questions = [];
+                    const container = document.getElementById('questionsContainer');
+                    container.innerHTML = '';
+                    
+                    // Hide submit button and stats when no year is selected
+                    document.querySelector('.submit-container').style.display = 'none';
+                    document.getElementById('stats').style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
