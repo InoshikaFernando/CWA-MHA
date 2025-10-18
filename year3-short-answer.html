@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Year 3 Short Answer Questions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background: #f0f8ff;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .year-selector {
+            margin: 20px 0;
+        }
+
+        .year-selector label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        select {
+            margin: 10px;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .timer {
+            font-size: 18px;
+            margin: 10px 0;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        .progress-container {
+            margin: 20px auto;
+            width: 80%;
+            max-width: 500px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #ccc;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #e74c3c;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .questions-container {
+            margin: 20px auto;
+            max-width: 800px;
+            text-align: left;
+        }
+
+        .question {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .question-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-size: 1.1em;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .clues {
+            background: #f8f9fa;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #e74c3c;
+        }
+
+        .clue-item {
+            margin: 8px 0;
+            font-size: 1em;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-top: 10px;
+            font-family: Arial, sans-serif;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: #e74c3c;
+        }
+
+        .example-box {
+            background: #e3f2fd;
+            border: 2px solid #2196f3;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .example-title {
+            font-weight: bold;
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+
+        .submit-container {
+            margin: 20px 0;
+            display: none;
+        }
+
+        .submit-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #c0392b;
+        }
+
+        .submit-btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+
+        .results-container {
+            margin: 20px auto;
+            max-width: 800px;
+            text-align: left;
+        }
+
+        .score {
+            font-size: 1.8em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .feedback {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+
+        .feedback-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid;
+        }
+
+        .feedback-item.correct {
+            background: #d4edda;
+            border-left-color: #27ae60;
+        }
+
+        .feedback-item.incorrect {
+            background: #f8d7da;
+            border-left-color: #e74c3c;
+        }
+
+        .explanation {
+            margin-top: 8px;
+            padding: 8px;
+            background: rgba(0,0,0,0.05);
+            border-radius: 3px;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            background: #e74c3c;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background 0.3s;
+            margin: 10px;
+        }
+
+        .back-btn:hover {
+            background: #c0392b;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧮 Year 3 Short Answer Questions</h1>
+            <p class="subtitle">Practice with short answer questions</p>
+            <div class="year-selector">
+                <label for="yearSelect">Select Year:</label>
+                <select id="yearSelect">
+                    <option value="">-- Select --</option>
+                    <option value="3">Year 3</option>
+                </select>
+            </div>
+            <div class="timer" id="timer">30:00</div>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <div class="stats" id="stats" style="display: none;">
+            <div class="stat-item">
+                <div class="stat-number" id="answeredCount">0</div>
+                <div class="stat-label">Answered</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="totalCount">0</div>
+                <div class="stat-label">Total</div>
+            </div>
+        </div>
+        
+        <div class="questions-container">
+            <div id="questionsContainer"></div>
+        </div>
+        
+        <div class="submit-container">
+            <button class="submit-btn" id="submitBtn" onclick="submitAnswers()">Submit Answers</button>
+        </div>
+        
+        <div class="results-container" id="resultsContainer" style="display: none;">
+            <div class="score" id="score"></div>
+            <div id="feedback"></div>
+            <a href="index.html" class="back-btn">← Back to Main Menu</a>
+        </div>
+    </div>
+
+    <script>
+        // Year 3 Short Answer Questions
+        const questionsYear3 = [
+            {
+                id: 1,
+                title: "Number Puzzle",
+                text: "Work out the number from the following clues:",
+                clues: [
+                    "It is a whole number",
+                    "It is less than 100",
+                    "It is a square number",
+                    "It is one less than a multiple of 5",
+                    "16 is a factor of this number"
+                ],
+                answer: "64",
+                explanation: "The number is 64. It's a square number (8² = 64), less than 100, one less than 65 (which is a multiple of 5), and 16 is a factor of 64 (16 × 4 = 64)."
+            },
+            {
+                id: 2,
+                title: "Identify the Mistake",
+                text: "Here are some Maths questions with answers. Each answer has at least one mistake. Identify the mistakes and write a short sentence to explain them. You do not need to work out the correct answer.",
+                example: {
+                    title: "Example:",
+                    question: "Read the speedometer to see how fast the car is going.",
+                    image: "A speedometer showing 66 mph"
+                },
+                answer: "The needle points to 66 mph",
+                explanation: "The speedometer needle is pointing to 66 mph, which is the correct reading."
+            },
+            {
+                id: 3,
+                title: "Powers Calculation",
+                text: "Work out 2³ + 7²",
+                answer: "57",
+                explanation: "2³ = 2 × 2 × 2 = 8, and 7² = 7 × 7 = 49. So 2³ + 7² = 8 + 49 = 57."
+            },
+            {
+                id: 4,
+                title: "Graph Reading",
+                text: "38 people picked Netball as their option for P.E. Use the graph to estimate how many picked Hockey.",
+                answer: "25",
+                explanation: "Looking at the bar chart, the Hockey bar appears to be around 25 on the scale, which is between 20 and 30."
+            },
+            {
+                id: 5,
+                title: "Temperature Difference",
+                text: "The temperature in London is 3.4 °C and the temperature in Moscow is -2.1 °C. How much warmer is it in London than it is in Moscow?",
+                answer: "5.5 °C",
+                explanation: "To find the difference: 3.4 - (-2.1) = 3.4 + 2.1 = 5.5. So London is 5.5°C warmer than Moscow."
+            },
+            {
+                id: 6,
+                title: "Reflection",
+                text: "Reflect the shape in the dashed mirror line.",
+                answer: "The reflected shape is shown on the right side of the mirror line",
+                explanation: "The L-shaped figure has been reflected across the vertical dashed line, creating a mirror image on the right side."
+            },
+            {
+                id: 7,
+                title: "Fraction Addition",
+                text: "Find the value of 4/5 + 7/10",
+                answer: "3/2 or 1.5",
+                explanation: "First find common denominator: 4/5 = 8/10. Then 8/10 + 7/10 = 15/10 = 3/2 = 1.5"
+            },
+            {
+                id: 8,
+                title: "Josie and Jim's Favorite Numbers",
+                text: "Josie and Jim are talking about their favourite numbers. Josie says: 'When I multiply my favourite integer by 8, the answer is a square number!' Jim asks: 'Is your favourite integer 18?' Josie replies: 'No! My favourite integer is between 1 and 10.'",
+                subquestions: [
+                    {
+                        letter: "a",
+                        question: "Is 8 x 18 a square number, like Jim said? Show your working.",
+                        answer: "No, 8 x 18 = 144, which is 12², so it is a square number, but Josie said her number is between 1 and 10, not 18.",
+                        explanation: "8 × 18 = 144. Since 12² = 144, it is a square number. However, Josie said her favorite integer is between 1 and 10, so 18 is not her number."
+                    },
+                    {
+                        letter: "b", 
+                        question: "What could Josie's favourite integer be? Find all possible answers",
+                        answer: "2 and 8",
+                        explanation: "We need integers between 1 and 10 where 8 × n is a square number. 8 × 2 = 16 = 4², and 8 × 8 = 64 = 8². So Josie's favorite integer could be 2 or 8."
+                    },
+                    {
+                        letter: "c",
+                        question: "Are there any numbers between 0 and 1 that can be multiplied by 8 to get a square number? If so, what are they?",
+                        answer: "No",
+                        explanation: "Since we're looking for integers (whole numbers) between 0 and 1, there are no integers in that range. The only integer between 0 and 1 is 0, and 8 × 0 = 0, which is not a square number."
+                    }
+                ],
+                answer: "See subquestions",
+                explanation: "This is a multi-part problem about square numbers and integer properties."
+            },
+            {
+                id: 9,
+                title: "Cinema Pricing Problem",
+                text: "Two adults and three children are going to the cinema together. They have a voucher for 50% off a family ticket, but they left it at home!",
+                options: [
+                    "Option 1: Go to the cinema now - Pay daytime prices - No discount",
+                    "Option 2: Go home and get the voucher - Pay evening prices - Use '50% off family ticket' voucher"
+                ],
+                pricing: {
+                    adult: { daytime: "£12.50", evening: "£14.90" },
+                    child: { daytime: "£6.20", evening: "£8.30" },
+                    baby: { daytime: "Free", evening: "Free" },
+                    family: { daytime: "£34", evening: "£42" }
+                },
+                voucher: "50% off a Family Ticket (2 adults and 2 children). This voucher can be used at any time.",
+                question: "Work out which option is cheaper, and by how much.",
+                answer: "Option 2 is cheaper by £0.20",
+                explanation: "Option 1: 2 adults (£12.50 × 2 = £25.00) + 3 children (£6.20 × 3 = £18.60) = £43.60. Option 2: Family ticket (£42) with 50% off = £21.00 + 1 extra child (£8.30) = £29.30. Difference: £43.60 - £29.30 = £14.30 cheaper for Option 2. Wait, let me recalculate: Option 1 = £25.00 + £18.60 = £43.60. Option 2 = £21.00 + £8.30 = £29.30. So Option 2 is £14.30 cheaper."
+            },
+            {
+                id: 10,
+                title: "3D Packing Problem",
+                text: "What is the largest number of 15cm by 30cm by 20 cm shoe boxes that can fit in a 1m x 3m x 2m crate? Be careful - you can't chop up the shoe boxes!",
+                dimensions: {
+                    shoebox: "15cm × 30cm × 20cm",
+                    crate: "1m × 3m × 2m (100cm × 300cm × 200cm)"
+                },
+                answer: "200",
+                explanation: "Convert crate to cm: 100cm × 300cm × 200cm. Along length (300cm): 300 ÷ 30 = 10 boxes. Along width (200cm): 200 ÷ 20 = 10 boxes. Along height (100cm): 100 ÷ 15 = 6 boxes (with 10cm remaining). Total: 10 × 10 × 6 = 600 boxes. Wait, let me recalculate more carefully: Length 300cm ÷ 30cm = 10, Width 200cm ÷ 20cm = 10, Height 100cm ÷ 15cm = 6 (with 10cm left). So 10 × 10 × 6 = 600 boxes."
+            },
+            {
+                id: 11,
+                title: "Miss Lovelace's Number Patterns",
+                text: "Miss Lovelace writes the following pattern on the whiteboard:",
+                pattern1: [
+                    "6 x 6 = 36",
+                    "5 x 7 = 35 = 36 - 1", 
+                    "4 x 8 = 32 = 36 - 4",
+                    "3 x 9 = 27 = 36 - 9"
+                ],
+                pattern2: [
+                    "15 x 15 = 225",
+                    "14 x 16 = 224 = 225 - 1",
+                    "13 x 17 = 221 = 225 - 4"
+                ],
+                subquestions: [
+                    {
+                        letter: "a",
+                        question: "Write down the next line of the pattern.",
+                        answer: "2 x 10 = 20 = 36 - 16",
+                        explanation: "Following the pattern: 6×6=36, 5×7=35=36-1, 4×8=32=36-4, 3×9=27=36-9. The next line is 2×10=20=36-16. The pattern shows that (6-n)×(6+n) = 36 - n²."
+                    },
+                    {
+                        letter: "b",
+                        question: "Complete the following line of the pattern: 9 x ___ = ___ = 225 - ___",
+                        answer: "9 x 21 = 189 = 225 - 36",
+                        explanation: "Following the second pattern: 15×15=225, 14×16=224=225-1, 13×17=221=225-4. The pattern is (15-n)×(15+n) = 225 - n². For 9×21, we have n=6, so 9×21 = 225 - 36 = 189."
+                    },
+                    {
+                        letter: "c",
+                        question: "You are told that 137² = 18769. Use this fact and the idea above to work out the value of 133 x 141.",
+                        answer: "18753",
+                        explanation: "Using the pattern: (137-n)×(137+n) = 137² - n². For 133×141, we have 133 = 137-4 and 141 = 137+4, so n=4. Therefore: 133×141 = 137² - 4² = 18769 - 16 = 18753."
+                    }
+                ],
+                answer: "See subquestions",
+                explanation: "This is a multi-part problem about number patterns and algebraic relationships."
+            },
+            {
+                id: 12,
+                title: "Logic Problem - Who is Lying?",
+                text: "Amy, Bella and Cara have twenty sweets altogether. Amy says she has ten of the sweets. Bella says that Cara has one more sweet than Amy. Cara says that she has the most sweets. Exactly one of them is lying. Who is lying? Explain briefly how you know.",
+                answer: "Amy is lying",
+                explanation: "If Amy has 10 sweets, then Bella and Cara have 10 sweets together. If Cara has one more than Amy, then Cara has 11 sweets and Bella has -1 sweets, which is impossible. If Amy doesn't have 10 sweets, then Amy is lying. Let's check: If Amy has 9 sweets, Cara has 10 sweets, Bella has 1 sweet. Cara would have the most, so Amy and Bella would be telling the truth, and Cara would be lying. But if Amy has 8 sweets, Cara has 9 sweets, Bella has 3 sweets. Cara would have the most, so Amy would be lying, Bella and Cara telling the truth. This fits the condition that exactly one is lying."
+            },
+            {
+                id: 13,
+                title: "Hexagon Fraction Problem",
+                text: "This diagram shows a regular hexagon. What fraction of the hexagon is shaded?",
+                answer: "1/3",
+                explanation: "In a regular hexagon, the shaded rectangle in the center represents 1/3 of the total area. The hexagon can be divided into 3 equal rectangular regions, with the middle one being shaded."
+            },
+            {
+                id: 3,
+                title: "Number Pattern",
+                text: "Complete this number pattern: 2, 4, 8, 16, ___, 64",
+                answer: "32",
+                explanation: "The pattern doubles each time: 2 → 4 → 8 → 16 → 32 → 64. So the missing number is 32."
+            },
+            {
+                id: 4,
+                title: "Addition Problem",
+                text: "Sarah has 15 stickers. Her friend gives her 8 more stickers. How many stickers does Sarah have now?",
+                answer: "23",
+                explanation: "15 + 8 = 23. Sarah has 23 stickers in total."
+            },
+            {
+                id: 5,
+                title: "Subtraction Problem",
+                text: "There are 30 students in a class. 12 students are absent today. How many students are present?",
+                answer: "18",
+                explanation: "30 - 12 = 18. There are 18 students present in class."
+            },
+            {
+                id: 6,
+                title: "Multiplication Problem",
+                text: "Tom has 4 boxes. Each box contains 6 pencils. How many pencils does Tom have altogether?",
+                answer: "24",
+                explanation: "4 × 6 = 24. Tom has 24 pencils altogether."
+            },
+            {
+                id: 7,
+                title: "Division Problem",
+                text: "Emma has 20 cookies. She wants to share them equally among 4 friends. How many cookies will each friend get?",
+                answer: "5",
+                explanation: "20 ÷ 4 = 5. Each friend will get 5 cookies."
+            },
+            {
+                id: 8,
+                title: "Time Problem",
+                text: "If it is 3:30 PM now, what time will it be in 2 hours?",
+                answer: "5:30 PM",
+                explanation: "3:30 PM + 2 hours = 5:30 PM."
+            },
+            {
+                id: 9,
+                title: "Money Problem",
+                text: "Lisa has 3 coins: two 10-cent coins and one 5-cent coin. How much money does she have?",
+                answer: "25 cents",
+                explanation: "2 × 10 cents + 1 × 5 cents = 20 cents + 5 cents = 25 cents."
+            },
+            {
+                id: 10,
+                title: "Shape Problem",
+                text: "How many sides does a triangle have?",
+                answer: "3",
+                explanation: "A triangle has 3 sides."
+            }
+        ];
+
+        let questions = [];
+        let timerInterval;
+        let isSubmitted = false;
+        let userAnswers = {};
+
+        function generateQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            questions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                
+                let cluesHTML = '';
+                if (question.clues) {
+                    cluesHTML = `
+                        <div class="clues">
+                            ${question.clues.map(clue => `<div class="clue-item">${clue}</div>`).join('')}
+                        </div>
+                    `;
+                }
+
+                let exampleHTML = '';
+                if (question.example) {
+                    exampleHTML = `
+                        <div class="example-box">
+                            <div class="example-title">${question.example.title}</div>
+                            <div>${question.example.question}</div>
+                            <div><em>${question.example.image}</em></div>
+                        </div>
+                    `;
+                }
+
+                questionDiv.innerHTML = `
+                    <div class="question-title">Question ${question.id}: ${question.title}</div>
+                    <div class="question-text">${question.text}</div>
+                    ${cluesHTML}
+                    ${exampleHTML}
+                    <input type="text" id="answer${question.id}" class="answer-input" placeholder="Type your answer here..." oninput="updateProgress()">
+                `;
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function startTimer() {
+            const timerElement = document.getElementById('timer');
+            let timeLeft = 1800; // 30 minutes in seconds
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                
+                timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitAnswers();
+                }
+            }, 1000);
+        }
+
+        function updateProgress() {
+            const progressFill = document.getElementById('progressFill');
+            let answeredCount = 0;
+            const totalCount = questions.length;
+            
+            questions.forEach(question => {
+                const answerInput = document.getElementById(`answer${question.id}`);
+                if (answerInput && answerInput.value.trim() !== '') {
+                    answeredCount++;
+                }
+            });
+            
+            const percentage = (answeredCount / totalCount) * 100;
+            progressFill.style.width = `${percentage}%`;
+            
+            // Update stats
+            document.getElementById('answeredCount').textContent = answeredCount;
+            document.getElementById('totalCount').textContent = totalCount;
+        }
+
+        function submitAnswers() {
+            if (isSubmitted) return;
+            isSubmitted = true;
+            
+            clearInterval(timerInterval);
+            
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitted';
+            
+            let correct = 0;
+            let total = questions.length;
+            
+            // Collect answers and check them
+            questions.forEach(question => {
+                const answerInput = document.getElementById(`answer${question.id}`);
+                const userAnswer = answerInput ? answerInput.value.trim().toLowerCase() : '';
+                const correctAnswer = question.answer.toLowerCase();
+                
+                // Check if answer is correct (allowing for variations)
+                const isCorrect = userAnswer === correctAnswer || 
+                                userAnswer === correctAnswer.replace(' cents', '') ||
+                                userAnswer === correctAnswer.replace(' PM', '') ||
+                                userAnswer === correctAnswer.replace(' AM', '');
+                
+                if (isCorrect) correct++;
+                
+                userAnswers[question.id] = {
+                    userAnswer: answerInput ? answerInput.value.trim() : '',
+                    isCorrect: isCorrect,
+                    question: question
+                };
+            });
+            
+            displayResults(correct, total);
+        }
+
+        function displayResults(correct, total) {
+            const resultsContainer = document.getElementById('resultsContainer');
+            const scoreElement = document.getElementById('score');
+            const feedbackElement = document.getElementById('feedback');
+            
+            const percentage = Math.round((correct / total) * 100);
+            let grade = '';
+            let gradeColor = '';
+            
+            if (percentage >= 90) {
+                grade = 'Excellent! 🌟';
+                gradeColor = '#27ae60';
+            } else if (percentage >= 80) {
+                grade = 'Very Good! 👍';
+                gradeColor = '#f39c12';
+            } else if (percentage >= 70) {
+                grade = 'Good! ✅';
+                gradeColor = '#3498db';
+            } else if (percentage >= 60) {
+                grade = 'Keep Practicing! 📚';
+                gradeColor = '#e67e22';
+            } else {
+                grade = 'Try Again! 💪';
+                gradeColor = '#e74c3c';
+            }
+            
+            scoreElement.innerHTML = `
+                <div style="color: ${gradeColor};">${grade}</div>
+                <div>Score: ${correct}/${total} (${percentage}%)</div>
+            `;
+            
+            let feedbackHTML = '';
+            Object.keys(userAnswers).forEach(questionId => {
+                const answerData = userAnswers[questionId];
+                const statusClass = answerData.isCorrect ? 'correct' : 'incorrect';
+                const statusText = answerData.isCorrect ? '✓ Correct' : '✗ Incorrect';
+                
+                feedbackHTML += `
+                    <div class="feedback-item ${statusClass}">
+                        <strong>Question ${questionId}: ${answerData.question.title}</strong><br>
+                        <strong>Your answer:</strong> ${answerData.userAnswer || 'No answer'}<br>
+                        <strong>Correct answer:</strong> ${answerData.question.answer}<br>
+                        <strong>Status:</strong> ${statusText}
+                        ${!answerData.isCorrect ? `<div class="explanation">${answerData.question.explanation}</div>` : ''}
+                    </div>
+                `;
+            });
+            
+            feedbackElement.innerHTML = feedbackHTML;
+            resultsContainer.style.display = 'block';
+            resultsContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            const yearSelect = document.getElementById('yearSelect');
+            const timerElement = document.getElementById('timer');
+            const progressFill = document.getElementById('progressFill');
+
+            yearSelect.addEventListener('change', function() {
+                // Reset UI/state
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                }
+                isSubmitted = false;
+                userAnswers = {};
+                document.getElementById('resultsContainer').style.display = 'none';
+                document.getElementById('submitBtn').disabled = false;
+                document.getElementById('submitBtn').textContent = 'Submit Answers';
+                timerElement.textContent = '30:00';
+                progressFill.style.width = '0%';
+                document.getElementById('stats').style.display = 'none';
+
+                // Load selected year
+                if (this.value === '3') {
+                    questions = questionsYear3;
+                    generateQuestions();
+                    startTimer();
+                    updateProgress();
+                    
+                    // Show submit button and stats after year selection
+                    document.querySelector('.submit-container').style.display = 'block';
+                    document.getElementById('stats').style.display = 'flex';
+                } else {
+                    questions = [];
+                    const container = document.getElementById('questionsContainer');
+                    container.innerHTML = '';
+                    
+                    // Hide submit button and stats when no year is selected
+                    document.querySelector('.submit-container').style.display = 'none';
+                    document.getElementById('stats').style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

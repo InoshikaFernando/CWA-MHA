@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Year 3 Mixed Math MCQs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background: #f0f8ff;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .year-selector {
+            margin: 20px 0;
+        }
+
+        .year-selector label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        select {
+            margin: 10px;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .timer {
+            font-size: 18px;
+            margin: 10px 0;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        .progress-container {
+            margin: 20px auto;
+            width: 80%;
+            max-width: 500px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #ccc;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #e74c3c;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .questions-container {
+            margin: 20px auto;
+            max-width: 800px;
+            text-align: left;
+        }
+
+        .question {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .question-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .equation {
+            display: inline-block;
+            font-size: 1.3em;
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 5px;
+            border: 1px solid #e9ecef;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .option {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+
+        .option:hover {
+            background: #e9ecef;
+            border-color: #e74c3c;
+        }
+
+        .option.selected {
+            background: #e74c3c;
+            color: white;
+            border-color: #c0392b;
+        }
+
+        .option.correct {
+            background: #27ae60;
+            color: white;
+            border-color: #229954;
+        }
+
+        .option.incorrect {
+            background: #e74c3c;
+            color: white;
+            border-color: #c0392b;
+        }
+
+        .submit-container {
+            margin: 20px 0;
+            display: none;
+        }
+
+        .submit-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #c0392b;
+        }
+
+        .submit-btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+
+        .results-container {
+            margin: 20px auto;
+            max-width: 800px;
+            text-align: left;
+        }
+
+        .score {
+            font-size: 1.8em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .feedback {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+
+        .feedback-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid;
+        }
+
+        .feedback-item.correct {
+            background: #d4edda;
+            border-left-color: #27ae60;
+        }
+
+        .feedback-item.incorrect {
+            background: #f8d7da;
+            border-left-color: #e74c3c;
+        }
+
+        .explanation {
+            margin-top: 8px;
+            padding: 8px;
+            background: rgba(0,0,0,0.05);
+            border-radius: 3px;
+            font-style: italic;
+            font-size: 14px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            background: #e74c3c;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background 0.3s;
+            margin: 10px;
+        }
+
+        .back-btn:hover {
+            background: #c0392b;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧮 Year 3 Mixed Math MCQs</h1>
+            <p class="subtitle">Multiple Choice Questions - Practice basic math skills</p>
+            <div class="year-selector">
+                <label for="yearSelect">Select Year:</label>
+                <select id="yearSelect">
+                    <option value="">-- Select --</option>
+                    <option value="3">Year 3</option>
+                </select>
+            </div>
+            <div class="timer" id="timer">20:00</div>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <div class="stats" id="stats" style="display: none;">
+            <div class="stat-item">
+                <div class="stat-number" id="answeredCount">0</div>
+                <div class="stat-label">Answered</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="totalCount">0</div>
+                <div class="stat-label">Total</div>
+            </div>
+        </div>
+        
+        <div class="questions-container">
+            <div id="questionsContainer"></div>
+        </div>
+        
+        <div class="submit-container">
+            <button class="submit-btn" id="submitBtn" onclick="submitAnswers()">Submit Answers</button>
+        </div>
+        
+        <div class="results-container" id="resultsContainer" style="display: none;">
+            <div class="score" id="score"></div>
+            <div id="feedback"></div>
+            <a href="index.html" class="back-btn">← Back to Main Menu</a>
+        </div>
+    </div>
+
+    <script>
+        // Year 3 Mixed Math MCQs
+        const questionsYear3 = [
+            {
+                id: 1,
+                equation: "What is 7 + 8?",
+                options: [14, 15, 16, 13, 12],
+                correct: 1,
+                explanation: "7 + 8 = 15. You can count: 7, 8, 9, 10, 11, 12, 13, 14, 15."
+            },
+            {
+                id: 2,
+                equation: "What is 12 - 5?",
+                options: [6, 7, 8, 9, 10],
+                correct: 1,
+                explanation: "12 - 5 = 7. Start at 12 and count backwards 5: 11, 10, 9, 8, 7."
+            },
+            {
+                id: 3,
+                equation: "What is 3 × 4?",
+                options: [10, 11, 12, 13, 14],
+                correct: 2,
+                explanation: "3 × 4 = 12. This means 3 groups of 4: 4 + 4 + 4 = 12."
+            },
+            {
+                id: 4,
+                equation: "What is 15 ÷ 3?",
+                options: [4, 5, 6, 7, 8],
+                correct: 1,
+                explanation: "15 ÷ 3 = 5. This means how many groups of 3 make 15: 3, 6, 9, 12, 15 (5 groups)."
+            },
+            {
+                id: 5,
+                equation: "Which number comes after 29?",
+                options: [28, 30, 31, 32, 33],
+                correct: 1,
+                explanation: "After 29 comes 30. We count: ...27, 28, 29, 30, 31..."
+            },
+            {
+                id: 6,
+                equation: "What is 25 + 15?",
+                options: [35, 40, 45, 50, 55],
+                correct: 1,
+                explanation: "25 + 15 = 40. You can add: 25 + 10 = 35, then 35 + 5 = 40."
+            },
+            {
+                id: 7,
+                equation: "What is 50 - 23?",
+                options: [25, 26, 27, 28, 29],
+                correct: 2,
+                explanation: "50 - 23 = 27. You can subtract: 50 - 20 = 30, then 30 - 3 = 27."
+            },
+            {
+                id: 8,
+                equation: "What is 6 × 5?",
+                options: [25, 30, 35, 40, 45],
+                correct: 1,
+                explanation: "6 × 5 = 30. This means 6 groups of 5: 5 + 5 + 5 + 5 + 5 + 5 = 30."
+            },
+            {
+                id: 9,
+                equation: "What is 24 ÷ 6?",
+                options: [3, 4, 5, 6, 7],
+                correct: 1,
+                explanation: "24 ÷ 6 = 4. This means how many groups of 6 make 24: 6, 12, 18, 24 (4 groups)."
+            },
+            {
+                id: 10,
+                equation: "Which is the smallest number?",
+                options: [45, 54, 35, 53, 34],
+                correct: 4,
+                explanation: "34 is the smallest number. Compare: 34 < 35 < 45 < 53 < 54."
+            },
+            {
+                id: 11,
+                equation: "What is 18 + 22?",
+                options: [38, 39, 40, 41, 42],
+                correct: 2,
+                explanation: "18 + 22 = 40. You can add: 18 + 20 = 38, then 38 + 2 = 40."
+            },
+            {
+                id: 12,
+                equation: "What is 35 - 18?",
+                options: [16, 17, 18, 19, 20],
+                correct: 1,
+                explanation: "35 - 18 = 17. You can subtract: 35 - 15 = 20, then 20 - 3 = 17."
+            },
+            {
+                id: 13,
+                equation: "What is 4 × 7?",
+                options: [26, 27, 28, 29, 30],
+                correct: 2,
+                explanation: "4 × 7 = 28. This means 4 groups of 7: 7 + 7 + 7 + 7 = 28."
+            },
+            {
+                id: 14,
+                equation: "What is 36 ÷ 9?",
+                options: [3, 4, 5, 6, 7],
+                correct: 1,
+                explanation: "36 ÷ 9 = 4. This means how many groups of 9 make 36: 9, 18, 27, 36 (4 groups)."
+            },
+            {
+                id: 15,
+                equation: "Which number is between 67 and 69?",
+                options: [65, 66, 68, 70, 71],
+                correct: 2,
+                explanation: "68 is between 67 and 69. We count: 67, 68, 69."
+            },
+            {
+                id: 16,
+                equation: "What is 42 + 28?",
+                options: [68, 69, 70, 71, 72],
+                correct: 2,
+                explanation: "42 + 28 = 70. You can add: 42 + 20 = 62, then 62 + 8 = 70."
+            },
+            {
+                id: 17,
+                equation: "What is 60 - 35?",
+                options: [23, 24, 25, 26, 27],
+                correct: 2,
+                explanation: "60 - 35 = 25. You can subtract: 60 - 30 = 30, then 30 - 5 = 25."
+            },
+            {
+                id: 18,
+                equation: "What is 8 × 3?",
+                options: [22, 23, 24, 25, 26],
+                correct: 2,
+                explanation: "8 × 3 = 24. This means 8 groups of 3: 3 + 3 + 3 + 3 + 3 + 3 + 3 + 3 = 24."
+            },
+            {
+                id: 19,
+                equation: "What is 45 ÷ 5?",
+                options: [8, 9, 10, 11, 12],
+                correct: 1,
+                explanation: "45 ÷ 5 = 9. This means how many groups of 5 make 45: 5, 10, 15, 20, 25, 30, 35, 40, 45 (9 groups)."
+            },
+            {
+                id: 20,
+                equation: "Which is the largest number?",
+                options: [89, 98, 87, 96, 85],
+                correct: 1,
+                explanation: "98 is the largest number. Compare: 85 < 87 < 89 < 96 < 98."
+            }
+        ];
+
+        let questions = [];
+        let timerInterval;
+        let isSubmitted = false;
+        let selectedAnswers = {};
+
+        function generateQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            questions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.innerHTML = `
+                    <div class="question-title">Question ${question.id}</div>
+                    <div class="equation">${question.equation}</div>
+                    <div class="options">
+                        ${question.options.map((option, optionIndex) => `
+                            <div class="option" data-question="${question.id}" data-option="${optionIndex}" onclick="selectOption(${question.id}, ${optionIndex})">
+                                ${option}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(questionDiv);
+            });
+        }
+
+        function selectOption(questionId, optionIndex) {
+            if (isSubmitted) return;
+            
+            // Remove previous selection for this question
+            const questionOptions = document.querySelectorAll(`[data-question="${questionId}"]`);
+            questionOptions.forEach(option => option.classList.remove('selected'));
+            
+            // Add selection to clicked option
+            const selectedOption = document.querySelector(`[data-question="${questionId}"][data-option="${optionIndex}"]`);
+            selectedOption.classList.add('selected');
+            
+            // Store the answer
+            selectedAnswers[questionId] = optionIndex;
+            
+            updateProgress();
+        }
+
+        function startTimer() {
+            const timerElement = document.getElementById('timer');
+            let timeLeft = 1200; // 20 minutes in seconds
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                
+                timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitAnswers();
+                }
+            }, 1000);
+        }
+
+        function updateProgress() {
+            const progressFill = document.getElementById('progressFill');
+            const answeredCount = Object.keys(selectedAnswers).length;
+            const totalCount = questions.length;
+            const percentage = (answeredCount / totalCount) * 100;
+            
+            progressFill.style.width = `${percentage}%`;
+            
+            // Update stats
+            document.getElementById('answeredCount').textContent = answeredCount;
+            document.getElementById('totalCount').textContent = totalCount;
+        }
+
+        function submitAnswers() {
+            if (isSubmitted) return;
+            isSubmitted = true;
+            
+            clearInterval(timerInterval);
+            
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitted';
+            
+            let correct = 0;
+            let total = questions.length;
+            
+            // Show correct/incorrect answers
+            questions.forEach(question => {
+                const userAnswer = selectedAnswers[question.id];
+                const isCorrect = userAnswer === question.correct;
+                
+                if (isCorrect) correct++;
+                
+                // Highlight options
+                const questionOptions = document.querySelectorAll(`[data-question="${question.id}"]`);
+                questionOptions.forEach((option, index) => {
+                    if (index === question.correct) {
+                        option.classList.add('correct');
+                    } else if (index === userAnswer && !isCorrect) {
+                        option.classList.add('incorrect');
+                    }
+                });
+            });
+            
+            displayResults(correct, total);
+        }
+
+        function displayResults(correct, total) {
+            const resultsContainer = document.getElementById('resultsContainer');
+            const scoreElement = document.getElementById('score');
+            const feedbackElement = document.getElementById('feedback');
+            
+            const percentage = Math.round((correct / total) * 100);
+            let grade = '';
+            let gradeColor = '';
+            
+            if (percentage >= 90) {
+                grade = 'Excellent! 🌟';
+                gradeColor = '#27ae60';
+            } else if (percentage >= 80) {
+                grade = 'Very Good! 👍';
+                gradeColor = '#f39c12';
+            } else if (percentage >= 70) {
+                grade = 'Good! ✅';
+                gradeColor = '#3498db';
+            } else if (percentage >= 60) {
+                grade = 'Keep Practicing! 📚';
+                gradeColor = '#e67e22';
+            } else {
+                grade = 'Try Again! 💪';
+                gradeColor = '#e74c3c';
+            }
+            
+            scoreElement.innerHTML = `
+                <div style="color: ${gradeColor};">${grade}</div>
+                <div>Score: ${correct}/${total} (${percentage}%)</div>
+            `;
+            
+            let feedbackHTML = '';
+            questions.forEach(question => {
+                const userAnswer = selectedAnswers[question.id];
+                const isCorrect = userAnswer === question.correct;
+                const statusClass = isCorrect ? 'correct' : 'incorrect';
+                const statusText = isCorrect ? '✓ Correct' : '✗ Incorrect';
+                const userAnswerText = userAnswer !== undefined ? question.options[userAnswer] : 'Not answered';
+                
+                feedbackHTML += `
+                    <div class="feedback-item ${statusClass}">
+                        <strong>Question ${question.id}: ${question.equation}</strong><br>
+                        <strong>Your answer:</strong> ${userAnswerText}<br>
+                        <strong>Correct answer:</strong> ${question.options[question.correct]}<br>
+                        <strong>Status:</strong> ${statusText}
+                        ${!isCorrect ? `<div class="explanation">${question.explanation}</div>` : ''}
+                    </div>
+                `;
+            });
+            
+            feedbackElement.innerHTML = feedbackHTML;
+            resultsContainer.style.display = 'block';
+            resultsContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            const yearSelect = document.getElementById('yearSelect');
+            const timerElement = document.getElementById('timer');
+            const progressFill = document.getElementById('progressFill');
+
+            yearSelect.addEventListener('change', function() {
+                // Reset UI/state
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                }
+                isSubmitted = false;
+                selectedAnswers = {};
+                document.getElementById('resultsContainer').style.display = 'none';
+                document.getElementById('submitBtn').disabled = false;
+                document.getElementById('submitBtn').textContent = 'Submit Answers';
+                timerElement.textContent = '20:00';
+                progressFill.style.width = '0%';
+                document.getElementById('stats').style.display = 'none';
+
+                // Load selected year
+                if (this.value === '3') {
+                    questions = questionsYear3;
+                    generateQuestions();
+                    startTimer();
+                    updateProgress();
+                    
+                    // Show submit button and stats after year selection
+                    document.querySelector('.submit-container').style.display = 'block';
+                    document.getElementById('stats').style.display = 'flex';
+                } else {
+                    questions = [];
+                    const container = document.getElementById('questionsContainer');
+                    container.innerHTML = '';
+                    
+                    // Hide submit button and stats when no year is selected
+                    document.querySelector('.submit-container').style.display = 'none';
+                    document.getElementById('stats').style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
